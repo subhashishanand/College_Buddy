@@ -1,0 +1,90 @@
+<resources>
+    <string name="app_name">Print Hub</string>
+
+    <string-array name="Hostel">
+
+        <item>PGH</item>
+        <item>KBH</item>
+        <item>NBH</item>
+        <item>DBH</item>
+        <item>MMH</item>
+        <item>HIMGIRI</item>
+        <item>HIMADRI</item>
+        <item>UDAIGIRI</item>
+        <item>AGH</item>
+
+
+    </string-array>
+    <string-array name="Print">
+        <item>1 in 1 page</item>
+        <item>2 in 1 page</item>
+        <item>4 in 1 page</item>
+        <item>6 in 1 page</item>
+        <item>8 in 1 page</item>
+    </string-array>
+
+    <string name="producta"></string>
+
+    <!--Bunk manager -->
+    <string name="ok">Save</string>
+    <string name="cancel">Cancel</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="title_activity_welcome">Home Screen</string>
+    <string name="next">NEXT</string>
+    <string name="skip">SKIP</string>
+    <string name="start">GOT IT</string>
+
+    <string name="slide_1_title">Exclusive Products</string>
+    <string name="slide_1_desc">Get Printouts, Books, Stationery items delivered at your doorsteps !</string>
+
+    <string name="slide_2_title">Cheap Rates</string>
+    <string name="slide_2_desc">Products at such an affordable rates !</string>
+
+    <string name="slide_3_title">Hassle Free Payments</string>
+    <string name="slide_3_desc">With various pay options , you can easily pay in a minute !</string>
+
+    <string name="slide_4_title">Fast Delivery</string>
+    <string name="slide_4_desc">Blazing fast order delivery within time !</string>
+
+    <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
+    <string name="play_again">Play Again</string>
+    <!--Navigation drawer items-->
+    <string name="home">Home</string>
+    <string name="myprofile">Profile</string>
+    <string name="myorders">My Orders</string>
+    <string name="cart">Cart</string>
+    <string name="logout">Logout</string>
+    <string name="feedback">Feedback</string>
+    <string name="aboutus">About Us</string>
+    <string name="rate">Rate Us</string>
+    <string name="helpcentre">Help Center</string>
+    <string name="noconnection">Kindly connect to a WIFI network or enable Mobile Data</string>
+    <string name="help">In case of any query feel free to reach us at : \n    printhubnith@gmail.com\n\nYou can also Call us at our helpline numbers : \n     +91-7979757341 \n     +91-8219730474 \n      +91-6200690081</string>
+    <string name="magic_points">Magic Points</string>
+    <string name="orders_placed">Orders Placed</string>
+    <string name="items_incart">Items inCart</string>
+    <string name="my_profile">My Profile</string>
+    <string name="update_details">Update Details</string>
+    <string name="update">Update</string>
+    <string name="send_otp">Send OTP</string>
+    <string name="back">Back</string>
+    <string name="wishlist">Wishlist</string>
+    <string name="about_activity_title">About Us</string>
+    <string name="domain">Domain</string>
+    <string name="website">BeingDev.com</string>
+    <string name="licence">License</string>
+    <string name="licencedesc">Lorem Ipsum</string>
+    <string name="changelog">Changelog</string>
+    <string name="changes">Lorem Ipsum</string>
+    <string name="about_activity_description"><b>Boost Your Brand and Company Image with Premium Online Printing Services from Us ! </b></string>
+    <string name="orderdetails">Your Order has been Placed Succesfully. \n Here is your Unique Order Id !</string>
+    <string name="title_activity_order">OrderActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+</resources>

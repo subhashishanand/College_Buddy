@@ -1,0 +1,92 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "29.0.2"
+    defaultConfig {
+        applicationId "com.printhub.signup"
+        minSdkVersion 24
+        targetSdkVersion 28
+        versionCode 3
+        versionName "1.1.1"
+        useLibrary 'org.apache.http.legacy'
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            debuggable = true
+            jniDebuggable = true
+            renderscriptDebuggable = true
+        }
+        debug {
+            debuggable = true
+            jniDebuggable = true
+            renderscriptDebuggable = true
+        }
+    }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.google.firebase:firebase-core:17.2.2'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.firebase:firebase-auth:19.2.0'
+    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
+    implementation 'com.google.firebase:firebase-storage:19.1.0'
+    implementation 'com.google.firebase:firebase-database:19.2.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    implementation 'com.google.android.material:material:1.0.0'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation 'com.itextpdf:itextg:5.5.10'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
+    implementation 'com.shreyaspatil:EasyUpiPayment:2.0'
+    implementation 'com.cepheuen.elegant-number-button:lib:1.0.2'
+
+//    bunk
+    implementation 'androidx.navigation:navigation-fragment:2.1.0'
+    implementation 'androidx.navigation:navigation-ui:2.1.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+
+    implementation 'com.airbnb.android:lottie:3.3.1'
+    implementation 'com.daimajia.androidanimations:library:2.3@aar'
+    implementation 'com.daimajia.easing:library:2.0@aar'
+    implementation 'com.geniusforapp.fancydialog:FancyDialog:0.1.4'
+    implementation 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'
+    implementation 'com.github.GrenderG:Toasty:1.4.2'
+    implementation('com.mikepenz:aboutlibraries:6.0.2@aar') {
+        transitive = true
+    }
+    implementation("com.mikepenz:materialdrawer:6.0.3@aar") {
+        transitive = true
+    }
+    implementation('com.mikepenz:crossfadedrawerlayout:1.0.1@aar')
+    implementation 'com.webianks.library:easy-feedback:1.0.5'
+    implementation 'com.tomer:fadingtextview:2.5'
+    implementation 'com.github.smarteist:autoimageslider:1.3.2'
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
+    implementation 'com.jakewharton:butterknife:10.0.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
+    implementation 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+    //radiogroup
+    implementation 'com.github.Gavras:MultiLineRadioGroup:v1.0.0.6'
+    implementation 'com.rengwuxian.materialedittext:library:2.1.4'
+    //Stylish edittextbox
+    implementation 'com.github.florent37:materialtextfield:1.0.7'
+    implementation 'com.android.volley:volley:1.1.0'
+    implementation 'com.kaopiz:kprogresshud:1.1.0'
+    // Dexter runtime permissions
+    implementation 'com.karumi:dexter:4.2.0'
+    implementation 'com.firebaseui:firebase-ui:0.4.4'
+}
+apply plugin: 'com.google.gms.google-services'

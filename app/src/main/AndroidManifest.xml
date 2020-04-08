@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.printhub.printhub">
+
+    <uses-permission android:name="android:name = android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".OrdersActivity"></activity>
+        <activity android:name=".SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".prodcutscategory.Cards"
+            android:theme="@style/WhiteTheme" />
+        <activity
+            android:name=".prodcutscategory.Tshirts"
+            android:theme="@style/WhiteTheme" />
+        <activity
+            android:name=".prodcutscategory.Bags"
+            android:theme="@style/WhiteTheme" />
+        <activity
+            android:name=".prodcutscategory.Calendars"
+            android:theme="@style/WhiteTheme" />
+        <activity
+            android:name=".prodcutscategory.Keychains"
+            android:theme="@style/WhiteTheme" />
+        <activity
+            android:name=".prodcutscategory.Stationary"
+            android:theme="@style/WhiteTheme" />
+        <activity android:name=".MainnewActivity" />
+        <activity android:name=".Profile" />
+        <activity android:name=".Wishlist" />
+        <activity android:name=".Cart" />
+        <activity android:name=".HelpCenter" />
+        <activity android:name=".OrderDetails" />
+        <activity android:name=".OrderPlaced" />
+        <activity android:name=".UpdateData" />
+        <activity android:name=".IndividualProduct" />
+        <activity android:name=".NotificationActivity" />
+        <activity android:name=".WelcomeActivity" />
+        <activity android:name=".AboutusActivity" />
+        <activity android:name=".BunkActivity" />
+        <activity android:name=".DetailActivity" />
+        <activity android:name=".ImageActivity" />
+        <activity android:name=".pdfActivity" />
+        <activity android:name=".EditSub">
+            <intent-filter>
+                <action android:name="android.intent.action.DEFAULT" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+    </application>
+
+</manifest>

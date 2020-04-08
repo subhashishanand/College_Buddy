@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_printouts"
+        android:icon="@drawable/page"
+        android:title="Printouts" />
+
+    <item
+        android:id="@+id/navigation_stationary"
+        android:icon="@drawable/book"
+        android:title="Stationary" />
+
+    <item
+        android:id="@+id/navigation_cabs"
+        android:icon="@drawable/cab"
+        android:title="Cabs" />
+
+    <item
+        android:id="@+id/navigation_old_books"
+        android:icon="@drawable/old"
+        android:title="Old Books" />
+
+</menu>

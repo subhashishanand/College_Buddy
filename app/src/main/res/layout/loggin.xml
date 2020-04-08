@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_google_signin_btn_text_dark_default"
+    tools:context=".MainActivity">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/doctroTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:fontFamily="@font/dancing_script"
+                android:text="Print hub"
+                android:layout_centerHorizontal="true"
+                android:textColor="@android:color/holo_green_dark"
+                android:textSize="80sp"
+                android:textStyle="bold"
+                android:paddingBottom="60dp"/>
+
+            <TextView
+                android:id="@+id/firstLineTextView3"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:text="Save time and money by printing your documents"
+                android:textAlignment="center"
+                android:layout_centerHorizontal="true"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_alignBottom="@+id/doctroTextView"
+                />
+
+            <TextView
+                android:id="@+id/SigninOptionsView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:text="~~~~QUICKLY CONNECT WITH~~~~"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_centerHorizontal="true"
+                android:layout_alignTop="@+id/firstLineTextView3"
+                android:layout_marginVertical="150dp"/>
+
+            <Button
+                android:id="@+id/phone_button"
+                style="@style/FirebaseUI.Button.AccountChooser.PhoneButton"
+                android:layout_width="300dp"
+                android:text="@string/fui_sign_in_with_phone"
+                app:layout_constraintTop_toBottomOf="@+id/SigninOptionsView4"
+                tools:ignore="UnusedIds"
+                android:layout_centerHorizontal="true"
+                android:layout_alignTop="@+id/SigninOptionsView4"
+                android:layout_marginVertical="50dp"/>
+
+            <Button
+                android:id="@+id/google_button"
+                style="@style/FirebaseUI.Button.AccountChooser.GoogleButton"
+                android:layout_width="300dp"
+                android:text="@string/fui_sign_in_with_google"
+                android:layout_alignTop="@+id/phone_button"
+                android:layout_centerHorizontal="true"
+                android:layout_marginVertical="80dp"
+                tools:ignore="UnusedIds" />
+
+            <TextView
+                android:id="@+id/termsTextView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="By signing up or logging in, you agree to our"
+                android:layout_centerHorizontal="true"
+                android:layout_alignTop="@+id/google_button"
+                android:layout_marginVertical="180dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignTop="@+id/termsTextView3"
+                android:layout_marginVertical="20dp">
+
+                <TextView
+                    android:id="@+id/TemsTextView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Terms and Conditions "
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/AndTextView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="and" />
+
+                <TextView
+                    android:id="@+id/privacyTextView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" Privacy Policy"
+                    android:textStyle="bold" />
+
+
+
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

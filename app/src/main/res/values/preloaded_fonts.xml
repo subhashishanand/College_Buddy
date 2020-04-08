@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/aguafina_script</item>
+        <item>@font/allan</item>
+        <item>@font/bangers</item>
+        <item>@font/black_ops_one</item>
+        <item>@font/dancing_script</item>
+    </array>
+</resources>
