@@ -37,6 +37,11 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.barteksc.pdfviewer.PDFView;
+import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
+import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
+import com.github.barteksc.pdfviewer.listener.OnPageErrorListener;
+import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -51,16 +56,19 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.itextpdf.text.pdf.PdfReader;
+import com.shockwave.pdfium.PdfDocument;
 import com.shreyaspatil.EasyUpiPayment.EasyUpiPayment;
 import com.shreyaspatil.EasyUpiPayment.listener.PaymentStatusListener;
 import com.shreyaspatil.EasyUpiPayment.model.TransactionDetails;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.printhub.printhub.MainnewActivity.firebaseUserId;
 
-public class pdfActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class pdfActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener , OnPageChangeListener, OnLoadCompleteListener,
+        OnPageErrorListener {
 
     TextView notification,noOfPages,cost;
     Switch switch1,color;
@@ -90,6 +98,10 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
     ImageView buyNow;
     ImageView notifica;
 
+    PDFView pdfView;
+    Integer pageNumber = 0;
+    String pdfFileName;
+
 
 
     @Override
@@ -117,6 +129,7 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
         chooseAnotherFile =findViewById(R.id.choose_file);
         add_to_cart = findViewById(R.id.add_to_cart);
         custom = findViewById(R.id.custom);
+        pdfView = findViewById(R.id.pdfView);
         ArrayAdapter<CharSequence>adapter=ArrayAdapter.createFromResource(this,R.array.Print, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         custom.setAdapter(adapter);
@@ -449,10 +462,12 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
 
         if (requestCode== 86 && resultCode==RESULT_OK && data!=null){
             pdfUri = data.getData();   //return the uri of selected file.
-            notification.setText("Document: "+data.getData().getLastPathSegment());
+            pdfFileName= pdfUri.getLastPathSegment();
+            notification.setText("Document: "+pdfFileName);
             try {
                 PdfReader document = new PdfReader(pdfActivity.this.getContentResolver().openInputStream(pdfUri));
                 noPages = document.getNumberOfPages();
+                displayFromUri(pdfUri);
                 startPageNo=1;
                 endPageNo = noPages;
                 noOfPages.setText("No of pages: "+noPages);
@@ -465,13 +480,26 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
                 e.printStackTrace();
                 Toast.makeText(pdfActivity.this, "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.i("A Error",e.getMessage());
-                pdfActivity.this.finish();
+                //pdfActivity.this.finish();
             }
         }else if(requestCode== 86 && data==null){
             finish();
         }
 
     }
+
+    private void displayFromUri(Uri pdfUri) {
+        pdfView.fromUri(pdfUri)
+                .defaultPage(pageNumber)
+                .onPageChange(this)
+                .enableAnnotationRendering(true)
+                .onLoad(this)
+                .scrollHandle(new DefaultScrollHandle(this))
+                .spacing(10) // in dp
+                .onPageError(this)
+                .load();
+    }
+
     private String getFileExtension(Uri uri) {
         ContentResolver cR = getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
@@ -654,4 +682,31 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
 
     }
 
+    @Override
+    public void loadComplete(int nbPages) {
+        PdfDocument.Meta meta = pdfView.getDocumentMeta();
+        printBookmarksTree(pdfView.getTableOfContents(), "-");
+
+    }
+
+    public void printBookmarksTree(List<PdfDocument.Bookmark> tree, String sep) {
+        for (PdfDocument.Bookmark b : tree) {
+
+            if (b.hasChildren()) {
+                printBookmarksTree(b.getChildren(), sep + "-");
+            }
+        }
+    }
+
+    @Override
+    public void onPageChanged(int page, int pageCount) {
+        pageNumber = page;
+        setTitle(String.format("%s %s / %s", pdfFileName, page + 1, pageCount));
+
+    }
+
+    @Override
+    public void onPageError(int page, Throwable t) {
+
+    }
 }

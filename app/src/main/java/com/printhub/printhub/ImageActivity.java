@@ -234,7 +234,6 @@ public class ImageActivity extends AppCompatActivity implements AdapterView.OnIt
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
             mImageUri = data.getData();
-
             Picasso.with(this).load(mImageUri).into(mImageView);
             noOfPrints.setText("1");
             updateCost();

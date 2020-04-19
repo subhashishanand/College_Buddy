@@ -88,5 +88,7 @@ dependencies {
     // Dexter runtime permissions
     implementation 'com.karumi:dexter:4.2.0'
     implementation 'com.firebaseui:firebase-ui:0.4.4'
+
+    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 }
 apply plugin: 'com.google.gms.google-services'
