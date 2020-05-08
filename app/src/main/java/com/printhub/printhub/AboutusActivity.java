@@ -5,12 +5,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 import android.text.Html;
-import android.transition.Slide;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.google.firebase.storage.OnPausedListener;
 
 public class AboutusActivity extends AppCompatActivity {
 

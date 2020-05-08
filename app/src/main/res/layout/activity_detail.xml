@@ -1,122 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    tools:context=".DetailActivity">
+    android:background="@color/colorAccent"
+    tools:context=".DetailActivity"
+    android:orientation="vertical">
 
-    <RelativeLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbarwrap"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/background">
+        android:layout_height="wrap_content">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/CustomTheme"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorAccent2"
+            android:gravity="left"
+            app:titleTextColor="@color/colorAccent2">
 
-        <TextView
-            android:id="@+id/headText"
-            android:layout_width="320dp"
+            <TextView
+                android:id="@+id/appname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:text="Print Hub registration"
+                android:textColor="@color/primary"
+                android:textSize="28sp" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="81dp"
-            android:layout_marginBottom="541dp"
-            android:text="Registration Details"
-            android:textColor="@android:color/white"
-            android:textSize="30sp" />
+            android:layout_margin="20dp"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/rollNumberText"
-            android:layout_width="385dp"
+            <EditText
+                android:id="@+id/nameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:hint="Name"
+                android:padding="10dp"
+                android:textSize="22sp" />
+
+            <EditText
+                android:id="@+id/rollNumberText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:hint="Roll Number"
+                android:padding="10dp"
+                android:textSize="22sp" />
+
+            <EditText
+                android:id="@+id/mobileNumberText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:padding="10dp"
+                android:inputType="phone"
+                android:hint="Mobile Number"
+                android:textSize="22sp"/>
+
+            <EditText
+                android:id="@+id/hostelNameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:padding="10dp"
+                android:hint="Hostel Name"
+                android:textSize="22sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="30dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:text="City"
+                    android:textSize="22dp" />
+
+            <Spinner
+                android:id="@+id/citySpinner"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:autofillHints="HostelName"
+                android:padding="10dp"/>
+
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="441dp"
-            android:background="@android:color/black"
-            android:ems="10"
-            android:hint="Roll Number"
-            android:inputType="textPersonName"
-            android:padding="10dp"
-            android:textColor="@android:color/white"
-            android:textColorHint="@android:color/white"
-            android:textSize="22sp" />
+            android:orientation="horizontal"
+            android:layout_marginTop="30dp">
 
-        <EditText
-            android:id="@+id/mobileNumberText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="371dp"
-            android:background="@android:color/white"
-            android:ems="10"
-            android:padding="10dp"
-            android:hint="Mobile Number"
-            android:inputType="number"
-            android:textColor="@android:color/black"
-            android:textColorHint="@android:color/black"
-            android:textSize="22sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="College"
+                android:textSize="22dp" />
 
-        <EditText
-            android:id="@+id/collegeNameText"
-            android:layout_width="377dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="302dp"
-            android:background="@android:color/black"
-            android:ems="10"
-            android:padding="10dp"
-            android:gravity="start|top"
-            android:hint="College Name"
-            android:textColor="@android:color/white"
-            android:textColorHint="@color/cardview_light_background"
-            android:textSize="22sp" />
+            <Spinner
+                android:id="@+id/collegeSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:autofillHints="HostelName"
+                android:padding="10dp"
+                android:outlineAmbientShadowColor="@color/green"
+                android:outlineSpotShadowColor="@color/green"/>
+
+        </LinearLayout>
+
+            <Button
+                android:id="@+id/uploadButton"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="@color/green"
+                android:text="UPLOAD DETAIL"
+                android:textColor="@color/md_white_1000"
+                android:textSize="24dp"/>
 
 
 
-        <Button
-            android:id="@+id/uploadButton"
-            android:layout_width="367dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="152dp"
-            android:background="@color/green"
-            android:text="Upload Detail"
-            android:textColor="@color/cardview_light_background"
-            android:textSize="18sp" />
-
-        <Spinner
-            android:id="@+id/hostel"
-            android:layout_width="wrap_content"
-            android:layout_height="49dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="239dp"
-            android:autofillHints="HostelName"
-            android:background="@android:color/white"
-            android:padding="10dp" />
+        </LinearLayout>
+    </ScrollView>
 
 
-    </RelativeLayout>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

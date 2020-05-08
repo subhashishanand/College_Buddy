@@ -119,26 +119,6 @@
 
                 </LinearLayout>
 
-
-            <TextView
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                style="@style/headingfonts"
-                android:text="Payment Mode :"
-                android:textColor="#424242"/>
-
-            <com.whygraphics.multilineradiogroup.MultiLineRadioGroup
-                xmlns:multi_line_radio_group="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/main_activity_multi_line_radio_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                multi_line_radio_group:max_in_row="2"
-                multi_line_radio_group:default_button="UPI"
-                multi_line_radio_group:radio_buttons="@array/radio_buttons" />
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/view_width_small"
@@ -146,15 +126,6 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="5dp"/>
 
-
-            <TextView
-                android:id="@+id/delivery_message"
-                android:paddingTop="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Delivery message"
-                style="@style/fonts"
-                android:textColor="#424242"/>
 
             <ImageView
                 android:layout_width="70dp"

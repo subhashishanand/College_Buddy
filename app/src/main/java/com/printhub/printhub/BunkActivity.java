@@ -11,12 +11,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.security.PrivateKey;
 import java.util.ArrayList;
 
 public class BunkActivity extends AppCompatActivity {
@@ -131,13 +129,5 @@ public class BunkActivity extends AppCompatActivity {
         startActivity(intent);
         super.onBackPressed();
     }
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-////        setRecyclerViewData();
-////        recyclerAdapter.notifyDataSetChanged();
-//
-//    }
 
 }

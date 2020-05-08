@@ -1,35 +1,29 @@
 package com.printhub.printhub;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.mikepenz.aboutlibraries.Libs;
-import com.mikepenz.aboutlibraries.LibsBuilder;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.mikepenz.crossfadedrawerlayout.view.CrossfadeDrawerLayout;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -39,30 +33,17 @@ import com.mikepenz.materialdrawer.MiniDrawer;
 import com.mikepenz.materialdrawer.interfaces.ICrossfader;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.util.DrawerUIUtils;
 import com.mikepenz.materialize.util.UIUtils;
 import com.printhub.printhub.prodcutscategory.Bags;
-import com.printhub.printhub.prodcutscategory.Calendars;
-import com.printhub.printhub.prodcutscategory.Cards;
 import com.printhub.printhub.prodcutscategory.Keychains;
 import com.printhub.printhub.prodcutscategory.Stationary;
-import com.printhub.printhub.prodcutscategory.Tshirts;
-import com.printhub.printhub.usersession.UserSession;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
-import com.smarteist.autoimageslider.SliderViewAdapter;
 import com.webianks.easy_feedback.EasyFeedback;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -81,32 +62,37 @@ public class MainnewActivity extends AppCompatActivity {
     SliderView sliderView;
     SharedPreferences prefs = null;
 
-    public static String firebaseUserId=null;
+    public static String firebaseUserId=null,cityName= null, collegeName= null;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     SharedPreferences detail = null;
     DatabaseReference mref;
 
-    TextView timeTest;
-
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainnew);
 
-//        timeTest = findViewById(R.id.timeCheck);
-//        Date currentTime = Calendar.getInstance().getTime();
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-//        timeTest.setText(dateFormat.format(currentTime));
-
         //check Internet Connection
         new CheckInternetConnection(this).checkConnection();
+        firebaseUserId=user.getUid();
         mref= FirebaseDatabase.getInstance().getReference();
         detail = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
 
         Typeface typeface = ResourcesCompat.getFont(this, R.font.blacklist);
         TextView appname = findViewById(R.id.appname);
         appname.setTypeface(typeface);
+
+        db.collection("users").document(firebaseUserId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    cityName = documentSnapshot.getString("cityName");
+                    collegeName = documentSnapshot.getString("collegeName");
+                }
+            }
+        });
 
         sliderView = findViewById(R.id.slider);
 
@@ -137,6 +123,7 @@ public class MainnewActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        new CheckInternetConnection(this).checkConnection();
         firebaseUserId = user.getUid();
         if (prefs.getBoolean("firstrun", true)) {
             // Do first run stuff here then set 'firstrun' as false
@@ -214,61 +201,14 @@ public class MainnewActivity extends AppCompatActivity {
                     }).start();
 
     }
-//
-//
-//    private void getValues() {
-//
-//        //create new session object by passing application context
-//        session = new UserSession(getApplicationContext());
-//
-//        //validating session
-//       session.isLoggedIn();
-////
-////        //get User details if logged in
-//       user = session.getUserDetails();
-////
-////        name = user.get(UserSession.KEY_NAME);
-////        email = user.get(UserSession.KEY_EMAIL);
-////        mobile = user.get(UserSession.KEY_MOBiLE);
-////        photo = user.get(UserSession.KEY_PHOTO);
-//    }
-//
-//
-//    private void inflateImageSlider() {
-//
-//        // Using Image Slider -----------------------------------------------------------------------
-//        sliderShow = findViewById(R.id.slider);
-//
-//        //populating Image slider
-//        ArrayList<String> sliderImages = new ArrayList<>();
-//        sliderImages.add("https://www.printstop.co.in/images/flashgallary/large/Business_stationery_home_banner.jpg");
-//        sliderImages.add("https://www.printstop.co.in/images/flashgallary/large/calendar-diaries-home-banner.jpg");
-//        sliderImages.add("https://www.printstop.co.in/images/flashgallary/large/calendar-diaries-banner.jpg");
-//        sliderImages.add("https://www.printstop.co.in/images/flashgallary/large/free-visiting-cards-home-banner.JPG");
-//
-//        for (String s : sliderImages) {
-//            DefaultSliderView sliderView = new DefaultSliderView(this);
-//            sliderView.image(s);
-//            sliderShow.addSlider(sliderView);
-//        }
-//
-//        sliderShow.setPresetIndicator(SliderLayout.PresetIndicators.Right_Bottom);
-//
-//    }
-////
+
     private void inflateNavDrawer() {
 
         //set Custom toolbar to activity -----------------------------------------------------------
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Create the AccountHeader ----------------------------------------------------------------
 
-        //Profile Making
-//        IProfile profile = new ProfileDrawerItem()
-//                .withName(name)
-//                .withEmail(email)
-//                .withIcon(photo);
 
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
@@ -429,14 +369,7 @@ public class MainnewActivity extends AppCompatActivity {
         });
     }
 
-//
-//    @Override
-//    protected void onStop() {
-//        sliderShow.stopAutoCycle();
-//        super.onStop();
-//
-//    }
-//
+
     @Override
     public void onBackPressed() {
         if (result != null && result.isDrawerOpen()) {
@@ -453,16 +386,7 @@ public class MainnewActivity extends AppCompatActivity {
    public void viewCart(View view) {
         startActivity(new Intent(MainnewActivity.this, Cart.class));
     }
-//
-//    @Override
-//    protected void onResume() {
-//
-//        //check Internet Connection
-//        new CheckInternetConnection(this).checkConnection();
-//        sliderShow.startAutoCycle();
-//        super.onResume();
-//    }
-//
+
     public void Notifications(View view) {
         startActivity(new Intent(MainnewActivity.this, NotificationActivity.class));
     }
