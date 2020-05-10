@@ -6,22 +6,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import butterknife.BindView;
 import es.dmoral.toasty.Toasty;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -29,7 +25,6 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -42,29 +37,25 @@ import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
 import com.github.barteksc.pdfviewer.listener.OnPageErrorListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.itextpdf.text.pdf.PdfReader;
 import com.shockwave.pdfium.PdfDocument;
-import com.shreyaspatil.EasyUpiPayment.EasyUpiPayment;
-import com.shreyaspatil.EasyUpiPayment.listener.PaymentStatusListener;
-import com.shreyaspatil.EasyUpiPayment.model.TransactionDetails;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
+import static com.printhub.printhub.MainnewActivity.cityName;
+import static com.printhub.printhub.MainnewActivity.collegeName;
 import static com.printhub.printhub.MainnewActivity.firebaseUserId;
 
 public class pdfActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener , OnPageChangeListener, OnLoadCompleteListener,
@@ -101,6 +92,8 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
     PDFView pdfView;
     Integer pageNumber = 0;
     String pdfFileName;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
 
@@ -348,11 +341,6 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
 
     public void uploadFile(final Uri pdfUri) {
         if(isConnectionAvailable(this)) {
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-            ref.child("User").child(firebaseUserId).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    rollNo = dataSnapshot.child("rollNumber").getValue().toString();
 
                     progressDialog = new ProgressDialog(pdfActivity.this);
                     progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -361,42 +349,44 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
                     progressDialog.setCancelable(false);
                     progressDialog.show();
 
-                    String key = ref.push().getKey();
+                    String key = UUID.randomUUID().toString();
 
-                    final String fileName = key +"@"+ rollNo+ ".pdf";
-                    final String fileName1 = key+"@"+rollNo ;
+                    final String fileName = key +".pdf";
+                    final String fileName1 = key ;
                     StorageReference storageReference = storage.getReference();       //returns root path
                     storageReference.child(fileName).putFile(pdfUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
                             String type = "."+ getFileExtension(pdfUri);  //type
-                            //Store the url in realtime database.
-                            DatabaseReference reference = database.getReference();        //return the path to root
-
-                            reference.child("printCart").child(firebaseUserId).child(fileName1).child("doubleSided").setValue(doubleSided);
-                            reference.child("printCart").child(firebaseUserId).child(fileName1).child("custom").setValue(customString);
-                            reference.child("printCart").child(firebaseUserId).child(fileName1).child("color").setValue(colorPrint);
-                            reference.child("printCart").child(firebaseUserId).child(fileName1).child("startPageNo").setValue(startPageNo+"");
-                            reference.child("printCart").child(firebaseUserId).child(fileName1).child("endPageNo").setValue(endPageNo+"");
-                            reference.child("printCart").child(firebaseUserId).child(fileName1).child("fileName").setValue(pdfUri.getLastPathSegment());
-                            reference.child("printCart").child(firebaseUserId).child(fileName1).child("Cost").setValue(costValue+"");
-                            reference.child("printCart").child(firebaseUserId).child(fileName1).child("Copy").setValue(copies+"");
-                            reference.child("printCart").child(firebaseUserId).child(fileName1).child("type").setValue(type).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            Map<String, Object> pdfDescription = new HashMap<>();
+                            pdfDescription.put("userId", firebaseUserId);
+                            pdfDescription.put("doubleSided", doubleSided);
+                            pdfDescription.put("customString", customString);
+                            pdfDescription.put("color", colorPrint);
+                            pdfDescription.put("startPageNo", startPageNo+"");
+                            pdfDescription.put("endPageNo", endPageNo+"");
+                            pdfDescription.put("fileName", pdfUri.getLastPathSegment());
+                            pdfDescription.put("cost", costValue+"");
+                            pdfDescription.put("copy", copies+"");
+                            pdfDescription.put("type",type);
+                            pdfDescription.put("retriveName", fileName1);
+                            db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId)
+                                    .collection("printCart").document(fileName1).set(pdfDescription).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
-                                public void onComplete(@NonNull Task<Void> task) {
+                                public void onSuccess(Void aVoid) {
                                     progressDialog.dismiss();
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(pdfActivity.this, "File successfully uploaded", Toast.LENGTH_SHORT).show();
-                                        switch1.setChecked(false);
-                                        color.setChecked(false);
-                                        colorPrint ="No";
-                                        doubleSided = "No";
-                                        Toasty.success(pdfActivity.this,"File added to your cart").show();
-                                    } else {
-                                        Toasty.error(pdfActivity.this, "file not uploaded", Toast.LENGTH_SHORT).show();
-                                    }
-
+                                    Toast.makeText(pdfActivity.this, "File successfully uploaded", Toast.LENGTH_SHORT).show();
+                                    switch1.setChecked(false);
+                                    color.setChecked(false);
+                                    colorPrint ="No";
+                                    doubleSided = "No";
+                                    Toasty.success(pdfActivity.this,"File added to your cart").show();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    progressDialog.dismiss();
+                                    Toasty.error(pdfActivity.this, "file not uploaded", Toast.LENGTH_SHORT).show();
                                 }
                             });
 
@@ -416,13 +406,6 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
                             progressDialog.setProgress((int) currentProgress);
                         }
                     });
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
         }else{
             Toast.makeText(pdfActivity.this, "Check your connection",Toast.LENGTH_SHORT).show();
         }
@@ -546,123 +529,6 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
             }
         }
 
-    }
-
-    private void payment(){
-        final EasyUpiPayment easyUpiPayment = new EasyUpiPayment.Builder()
-                .with(pdfActivity.this)
-                .setPayeeVpa("7979757341@paytm")
-                .setPayeeName("subhashish anand")
-                .setTransactionId(String.valueOf(System.currentTimeMillis()))
-                .setTransactionRefId(String.valueOf(System.currentTimeMillis()))
-                .setDescription("check")
-                //.setAmount(String.valueOf(totalCostValue))
-                .build();
-        easyUpiPayment.startPayment();
-
-        easyUpiPayment.setPaymentStatusListener(new PaymentStatusListener() {
-            @Override
-            public void onTransactionCompleted(TransactionDetails transactionDetails) {
-
-                Log.d("TransactionDetails", transactionDetails.toString());
-            }
-
-            @Override
-            public void onTransactionSuccess() {
-                easyUpiPayment.detachListener();
-                Toast.makeText(pdfActivity.this, "Success", Toast.LENGTH_SHORT).show();
-                parentShifting();
-                finish();
-            }
-
-            @Override
-            public void onTransactionSubmitted() {
-                Toast.makeText(pdfActivity.this, "Pending | Submitted", Toast.LENGTH_SHORT).show();
-                clearData();
-            }
-
-            @Override
-            public void onTransactionFailed() {
-                easyUpiPayment.detachListener();
-                Toast.makeText(pdfActivity.this, "Failed", Toast.LENGTH_SHORT).show();
-                clearData();
-            }
-
-            @Override
-            public void onTransactionCancelled() {
-                easyUpiPayment.detachListener();
-                Toast.makeText(pdfActivity.this, "Cancelled", Toast.LENGTH_SHORT).show();
-                clearData();
-
-            }
-
-            @Override
-            public void onAppNotFound() {
-                easyUpiPayment.detachListener();
-                Toast.makeText(pdfActivity.this, "No App Found", Toast.LENGTH_SHORT).show();
-                clearData();
-            }
-        });
-    }
-
-//    private void alertBox(){
-//     AlertDialog.Builder builder = new AlertDialog.Builder(pdfActivity.this);
-//     builder.setMessage("Total Cost: "+totalCostValue).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//         @Override
-//         public void onClick(DialogInterface dialogInterface, int i) {
-//             payment();
-//         }
-//     }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//         @Override
-//         public void onClick(DialogInterface dialogInterface, int i) {
-//             clearData();
-//         }
-//     }).setCancelable(false);
-//     AlertDialog alertDialog=builder.create();
-//     alertDialog.show();
-//    }
-
-    private void clearData(){
-        pdfUri=null;
-        notification.setText("No document selected");
-        noOfPages.setText("No of pages: ...");
-        cost.setText("Cost: ...");
-    }
-
-
-//    private void updateTotalCost(){
-//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("orders").child("Payment pending").child(getIntent().getStringExtra("uploadkey"));
-//        reference.orderByChild("user").equalTo(firebaseUserId).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                totalCostValue = 0;
-//                for(DataSnapshot datas: dataSnapshot.getChildren()) {
-//                    double value = Double.valueOf(datas.child("Cost").getValue().toString().trim());
-//                    totalCostValue = totalCostValue + value;
-//                    totalCost.setText("Previous total cost: "+totalCostValue);
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
-
-    private void parentShifting(){
-        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("orders").child("Payment pending").child(getIntent().getStringExtra("uploadkey"));
-        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("orders").child("pending").child(getIntent().getStringExtra("uploadkey"));
-        reference.orderByChild("user").equalTo(firebaseUserId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ref.setValue(dataSnapshot.getValue());
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
     }
 
     @Override

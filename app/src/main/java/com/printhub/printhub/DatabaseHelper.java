@@ -5,10 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.nfc.Tag;
-import android.util.Log;
-
-import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper{
     public static final String database_name = "Attendance_manager.db";

@@ -1,44 +1,28 @@
 package com.printhub.printhub.prodcutscategory;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.net.Uri;
 import android.os.Bundle;
-//import android.support.v7.app.AppCompatActivity;
-//import android.support.v7.widget.RecyclerView;
-//import android.support.v7.widget.StaggeredGridLayoutManager;
-//import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
-//import com.beingdev.magicprint.Cart;
-//import com.beingdev.magicprint.IndividualProduct;
-//import com.beingdev.magicprint.NotificationActivity;
-//import com.beingdev.magicprint.R;
-//import com.beingdev.magicprint.models.GenericProductModel;
-//import com.beingdev.magicprint.networksync.CheckInternetConnection;
-//import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.annotations.Nullable;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.printhub.printhub.Cart;
+import com.printhub.printhub.CheckInternetConnection;
 import com.printhub.printhub.IndividualProduct;
 import com.printhub.printhub.NotificationActivity;
 import com.printhub.printhub.R;
-import com.printhub.printhub.networksync.CheckInternetConnection;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -46,15 +30,14 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-/**
- * Created by kshitij on 22/1/18.
- */
+import static com.printhub.printhub.MainnewActivity.cityName;
+import static com.printhub.printhub.MainnewActivity.collegeName;
+
+
 
 public class Stationary extends AppCompatActivity {
 
@@ -64,9 +47,15 @@ public class Stationary extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private StaggeredGridLayoutManager mLayoutManager;
     private LottieAnimationView tv_no_item;
+    Boolean isScrolling = false;
+    int totalItems, scrolledOutItems;
+    private LinearLayoutManager manager;
+    Query query;
 
     //Getting reference to Firebase Database
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
+   // FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private DocumentSnapshot lastDocumentSnapshot;
 
 
     @Override
@@ -94,88 +83,59 @@ public class Stationary extends AppCompatActivity {
             mRecyclerView.setHasFixedSize(true);
         }
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.child("products").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if (tv_no_item.getVisibility() == View.VISIBLE) {
-                    tv_no_item.setVisibility(View.GONE);
-                }
-                //actually called for indiv items at the database reference...
-                final String productName = dataSnapshot.child("ProductName").getValue().toString();
-                final String key = dataSnapshot.getKey();
-                String price = dataSnapshot.child("price").getValue().toString();
-                String mrp = dataSnapshot.child("mrp").getValue().toString();
-                String discount = dataSnapshot.child("discount").getValue().toString();
-                String productImage = dataSnapshot.child("productImage").getValue().toString();
+        LoadData();
 
-                ((MyAdapter) mRecyclerView.getAdapter()).update(productName, key, price, mrp, discount, productImage);
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(Stationary.this));
+        manager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(manager);
         MyAdapter myAdapter= new MyAdapter(mRecyclerView, Stationary.this, new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(),new ArrayList<String>(), new ArrayList<String>());
         mRecyclerView.setAdapter(myAdapter);
-//
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        MyAdapter myAdapter= new MyAdapter(recyclerView, getActivity(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(),new ArrayList<String>());
-//        recyclerView.setAdapter(myAdapter);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
+                    isScrolling = true;
+                }
+            }
 
-//        //using staggered grid pattern in recyclerview
-//        mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-//        mRecyclerView.setLayoutManager(mLayoutManager);
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                totalItems = manager.getItemCount();
+                scrolledOutItems =manager.findLastVisibleItemPosition();
+                if(isScrolling && scrolledOutItems+1>=totalItems){
+                    isScrolling = false;
+                    LoadData();
+                }
+            }
+        });
 
-        //Say Hello to our new FirebaseUI android Element, i.e., FirebaseRecyclerAdapter
-//        final FirebaseRecyclerAdapter<GenericProductModel, Cards.MovieViewHolder> adapter = new FirebaseRecyclerAdapter<GenericProductModel, Cards.MovieViewHolder>(
-//                GenericProductModel.class,
-//                R.layout.cards_cardview_layout,
-//                Cards.MovieViewHolder.class,
-//                //referencing the node where we want the database to store the data from our Object
-//                mDatabaseReference.child("Products").child("Stationary").getRef()
-//        ) {
-//            @Override
-//            protected void populateViewHolder(final Cards.MovieViewHolder viewHolder, final GenericProductModel model, final int position) {
-//                if (tv_no_item.getVisibility() == View.VISIBLE) {
-//                    tv_no_item.setVisibility(View.GONE);
-//                }
-//                viewHolder.cardname.setText(model.getCardname());
-//                viewHolder.cardprice.setText("₹ " + Float.toString(model.getCardprice()));
-//                Picasso.with(Stationary.this).load(model.getCardimage()).into(viewHolder.cardimage);
-//
-//                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Intent intent = new Intent(Stationary.this, IndividualProduct.class);
-//                        intent.putExtra("product", getItem(position));
-//                        startActivity(intent);
-//                    }
-//                });
-//            }
-//        };
-//
-//
-//        mRecyclerView.setAdapter(adapter);
+    }
 
+    private void LoadData() {
+        if(lastDocumentSnapshot == null){
+            query = db.collection(cityName).document(collegeName).collection("products").limit(10);
+        }else{
+            query = db.collection(cityName).document(collegeName).collection("products").startAfter(lastDocumentSnapshot).limit(10);
+        }
+        query.get().addOnSuccessListener(this,new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
+                    lastDocumentSnapshot = documentSnapshot;
+                    if (tv_no_item.getVisibility() == View.VISIBLE) {
+                        tv_no_item.setVisibility(View.GONE);
+                    }
+                    String productName = documentSnapshot.getString("productName");
+                    String key = documentSnapshot.getId();
+                    String price = documentSnapshot.getString("price");
+                    String mrp = documentSnapshot.getString("mrp");
+                    String discount = documentSnapshot.getString("discount");
+                    String productImage = documentSnapshot.getString("productImage");
+                    ((MyAdapter) mRecyclerView.getAdapter()).update(productName, key, price, mrp, discount, productImage);
+                }
+            }
+        });
     }
 
     public void viewCart(View view) {
@@ -282,10 +242,11 @@ public class Stationary extends AppCompatActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder{
 
-            TextView productName, price, mrp, discount;
+            TextView quantity,productName, price, mrp, discount;
             ImageView productImage;
             public ViewHolder(@NonNull final View itemView) {
                 super(itemView);
+                quantity = itemView.findViewById(R.id.quantityTextView);
                 productName=itemView.findViewById(R.id.productname);
                 price=itemView.findViewById(R.id.price);
                 mrp= itemView.findViewById(R.id.mrp);

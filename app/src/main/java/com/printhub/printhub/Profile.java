@@ -6,43 +6,26 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.mikepenz.crossfadedrawerlayout.view.CrossfadeDrawerLayout;
-import com.mikepenz.materialdrawer.Drawer;
-import com.squareup.picasso.Picasso;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.printhub.printhub.MainnewActivity.cityName;
+import static com.printhub.printhub.MainnewActivity.collegeName;
 import static com.printhub.printhub.MainnewActivity.firebaseUserId;
 
 public class Profile extends AppCompatActivity {
 
-    private Drawer result;
-    private CrossfadeDrawerLayout crossfadeDrawerLayout = null;
-    private TextView mobileNo;
-
-    private TextView rollNo, hostelName;
+    private TextView name, mobileNo, detail;
     private CircleImageView primage;
     private TextView updateDetails;
     private LinearLayout addressview;
 
-
-    //to get user session data
-    //private UserSession session;
-    private HashMap<String,String> user;
-    private String name,email,photo,mobile;
-    //private SliderLayout sliderShow;
-
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,26 +45,14 @@ public class Profile extends AppCompatActivity {
         //check Internet Connection
         new CheckInternetConnection(this).checkConnection();
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("User").child(firebaseUserId);
-        reference.addValueEventListener(new ValueEventListener() {
+        db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId).get().addOnSuccessListener(this,new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                rollNo.setText(dataSnapshot.child("rollNumber").getValue().toString());
-                mobileNo.setText(dataSnapshot.child("mobileNumber").getValue().toString());
-                hostelName.setText(dataSnapshot.child("hostelName").getValue().toString());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                name.setText(documentSnapshot.getString("name")+"\n"+documentSnapshot.getString("rollNumber"));
+                mobileNo.setText(documentSnapshot.getString("mobileNumber"));
+                detail.setText(documentSnapshot.getString("hostelName")+"\n"+collegeName+", "+cityName);
             }
         });
-
-        //retrieve session values and display on listviews
-        //getValues();
-
-        //ImageSLider
-        //inflateImageSlider();
 
     }
 
@@ -89,9 +60,9 @@ public class Profile extends AppCompatActivity {
 
         addressview = findViewById(R.id.addressview);
         primage=findViewById(R.id.profilepic);
-        hostelName = findViewById(R.id.emailview);
+        detail = findViewById(R.id.detailview);
         mobileNo=findViewById(R.id.mobileview);
-        rollNo=findViewById(R.id.Roll_No);
+        name =findViewById(R.id.nameText);
         updateDetails=findViewById(R.id.updatedetails);
 
         updateDetails.setOnClickListener(new View.OnClickListener() {
@@ -110,32 +81,6 @@ public class Profile extends AppCompatActivity {
         });
     }
 
-
-//    private void getValues() {
-//
-//        //create new session object by passing application context
-//        session = new UserSession(getApplicationContext());
-//
-//        //validating session
-//        session.isLoggedIn();
-//
-//        //get User details if logged in
-//        user = session.getUserDetails();
-//
-//        name=user.get(UserSession.KEY_NAME);
-//        email=user.get(UserSession.KEY_EMAIL);
-//        mobile=user.get(UserSession.KEY_MOBiLE);
-//        photo=user.get(UserSession.KEY_PHOTO);
-//
-//        //setting values
-//        tvemail.setText(email);
-//        tvphone.setText(mobile);
-//        namebutton.setText(name);
-//
-//        Picasso.with(Profile.this).load(photo).into(primage);
-//
-//
-//    }
 
 
     @Override
@@ -160,11 +105,4 @@ public class Profile extends AppCompatActivity {
         startActivity(new Intent(Profile.this,NotificationActivity.class));
         finish();
     }
-
-//    @Override
-//    protected void onStop() {
-//        sliderShow.stopAutoCycle();
-//        super.onStop();
-//
-//    }
 }

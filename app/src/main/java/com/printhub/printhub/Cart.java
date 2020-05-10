@@ -1,33 +1,25 @@
 package com.printhub.printhub;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.annotations.Nullable;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,36 +29,28 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import es.dmoral.toasty.Toasty;
 
+import static com.printhub.printhub.MainnewActivity.cityName;
+import static com.printhub.printhub.MainnewActivity.collegeName;
 import static com.printhub.printhub.MainnewActivity.firebaseUserId;
 
 public class Cart extends AppCompatActivity {
 
-    //to get user session data
-    //private UserSession session;
-    private HashMap<String,String> user;
-    private String name,email,photo,mobile;
+
     private RecyclerView mRecyclerView;
     private StaggeredGridLayoutManager mLayoutManager;
 
-    //Getting reference to Firebase Database
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference mDatabaseReference = database.getReference();
+
     private LottieAnimationView tv_no_item;
-    private LinearLayout activitycartlist;
+   // private LinearLayout activitycartlist;
     private LottieAnimationView emptycart;
 
-    //private ArrayList<SingleProductModel> cartcollect;
     private float totalcost=0;
 
-    ChildEventListener childListener, printChildListener;
-    DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference();
     public static MyAdapter myAdapter;
-    String cost;
 
-    ValueEventListener stockCheck;
-
-    String quantity;
     boolean stock = true;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +79,7 @@ public class Cart extends AppCompatActivity {
 
         mRecyclerView = findViewById(R.id.recyclerview);
         tv_no_item = findViewById(R.id.tv_no_cards);
-        activitycartlist = findViewById(R.id.activity_cart_list);
+        //activitycartlist = findViewById(R.id.activity_cart_list);
         //emptycart = findViewById(R.id.empty_cart);
         //cartcollect = new ArrayList<>();
 
@@ -108,87 +92,52 @@ public class Cart extends AppCompatActivity {
         mLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        childListener=databaseReference.child("cart").child(firebaseUserId).addChildEventListener(new ChildEventListener() {
+        db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId)
+        .collection("productCart").get().addOnSuccessListener(this, new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                //actually called for indiv items at the database reference...
-                if (tv_no_item.getVisibility() == View.VISIBLE) {
-                    tv_no_item.setVisibility(View.GONE);
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
+                    if (tv_no_item.getVisibility() == View.VISIBLE) {
+                        tv_no_item.setVisibility(View.GONE);
+                    }
+                    String cartKey =documentSnapshot.getId();
+                    String quantity =documentSnapshot.getString("quantity");
+                    String cost =documentSnapshot.getString("cost");
+                    totalcost = totalcost + Float.parseFloat(cost);
+                    String productName = documentSnapshot.getString("productName");
+                    String price = documentSnapshot.getString("price");
+                    String mrp = documentSnapshot.getString("mrp");
+                    String discount = documentSnapshot.getString("discount");
+                    String productImage = documentSnapshot.getString("productImage");
+                    ((MyAdapter) mRecyclerView.getAdapter()).update(productName, cartKey, price, mrp, discount, productImage, quantity,cost,"notUse");
                 }
-                String cartKey = dataSnapshot.getKey();
-                String quantity = dataSnapshot.child("quantity").getValue().toString();
-                String cost = dataSnapshot.child("Cost").getValue().toString();
-                totalcost = totalcost+Float.parseFloat(cost);
-                String productName = dataSnapshot.child("ProductName").getValue().toString();
-                String price = dataSnapshot.child("price").getValue().toString();
-                String mrp = dataSnapshot.child("mrp").getValue().toString();
-                String discount = dataSnapshot.child("discount").getValue().toString();
-                String productImage = dataSnapshot.child("productImage").getValue().toString();
-                ((MyAdapter) mRecyclerView.getAdapter()).update(productName, cartKey, price, mrp, discount, productImage, quantity,cost,"notUse");
-                //productName=pdfName   cartKey=orderKey   price=startingPageNo   mrp==endPageNo  discount=doubleSided  productImage=custom quantity=copy cost,color
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
-        printChildListener=databaseReference.child("printCart").child(firebaseUserId).addChildEventListener(new ChildEventListener() {
+//
+
+        db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId)
+        .collection("printCart").get().addOnSuccessListener(this, new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @androidx.annotation.Nullable String s) {
-                if (tv_no_item.getVisibility() == View.VISIBLE) {
-                    tv_no_item.setVisibility(View.GONE);
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
+                    if (tv_no_item.getVisibility() == View.VISIBLE) {
+                        tv_no_item.setVisibility(View.GONE);
+                    }
+                    String fileName = documentSnapshot.getString("fileName");
+                    String key = documentSnapshot.getId();
+                    String color = documentSnapshot.getString("color");
+                    String startingPageNo = documentSnapshot.getString("startPageNo");
+                    String endingPageNo = documentSnapshot.getString("endPageNo");
+                    String doubleSided = documentSnapshot.getString("doubleSided");
+                    String custom = documentSnapshot.getString("custom");
+                    String copy = documentSnapshot.getString("copy");
+                    String cost = documentSnapshot.getString("cost");
+                    totalcost = totalcost+Float.parseFloat(cost);
+                    ((MyAdapter) mRecyclerView.getAdapter()).update(fileName,key,startingPageNo,endingPageNo,doubleSided,custom,copy,cost,color);
                 }
-                String fileName = dataSnapshot.child("fileName").getValue().toString();
-                String key = dataSnapshot.getKey();
-                String color = dataSnapshot.child("color").getValue().toString();
-                String startingPageNo = dataSnapshot.child("startPageNo").getValue().toString();
-                String endingPageNo = dataSnapshot.child("endPageNo").getValue().toString();
-                String doubleSided = dataSnapshot.child("doubleSided").getValue().toString();
-                String custom = dataSnapshot.child("custom").getValue().toString();
-                String copy = dataSnapshot.child("Copy").getValue().toString();
-                String cost = dataSnapshot.child("Cost").getValue().toString();
-                totalcost = totalcost+Float.parseFloat(cost);
-
-                ((MyAdapter) mRecyclerView.getAdapter()).update(fileName,key,startingPageNo,endingPageNo,doubleSided,custom,copy,cost,color);
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @androidx.annotation.Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @androidx.annotation.Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(Cart.this));
         myAdapter= new MyAdapter(mRecyclerView, Cart.this, new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(),new ArrayList<String>(), new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>());
         mRecyclerView.setAdapter(myAdapter);
@@ -248,22 +197,32 @@ public class Cart extends AppCompatActivity {
             for(int i =0; i<myAdapter.colors.size();i++){
                 if(myAdapter.colors.get(i).equals("notUse")){
                     int finalI = i;
-                    stockCheck=databaseReference.child("products").child(myAdapter.keys.get(i)).addValueEventListener(new ValueEventListener() {
+                    db.collection(cityName).document(collegeName).collection("products")
+                            .document(myAdapter.keys.get(i)).get().addOnSuccessListener(this, new OnSuccessListener<DocumentSnapshot>() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            int intStock = Integer.parseInt(dataSnapshot.child("stock").getValue().toString());
-                            databaseReference.child("products").child(myAdapter.keys.get(finalI)).removeEventListener(stockCheck);
-                            if(intStock<Integer.parseInt(myAdapter.quantities.get(finalI))){
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if(!documentSnapshot.getString("stock").equals("available")){
                                 stock = false;
-                                Toasty.normal(Cart.this, finalI+" th item is out of Stock");
+                                Toasty.error(Cart.this, "Item no "+finalI+" not present at selected amount" );
                             }
                         }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
                     });
+//                    stockCheck=databaseReference.child("products").child(myAdapter.keys.get(i)).addValueEventListener(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                            int intStock = Integer.parseInt(dataSnapshot.child("stock").getValue().toString());
+//                            databaseReference.child("products").child(myAdapter.keys.get(finalI)).removeEventListener(stockCheck);
+//                            if(intStock<Integer.parseInt(myAdapter.quantities.get(finalI))){
+//                                stock = false;
+//                                Toasty.normal(Cart.this, finalI+" th item is out of Stock");
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                        }
+//                    });
                 }
             }
             new Handler().postDelayed(new Runnable() {
@@ -287,51 +246,14 @@ public class Cart extends AppCompatActivity {
         }
 
     }
-//
-//    //viewHolder for our Firebase UI
-//    public static class MovieViewHolder extends RecyclerView.ViewHolder{
-//
-//        TextView cardname;
-//        ImageView cardimage;
-//        TextView cardprice;
-//        TextView cardcount;
-//        ImageView carddelete;
-//
-//        View mView;
-//        public MovieViewHolder(View v) {
-//            super(v);
-//            mView = v;
-//            cardname = v.findViewById(R.id.cart_prtitle);
-//            cardimage = v.findViewById(R.id.image_cartlist);
-//            cardprice = v.findViewById(R.id.cart_prprice);
-//            cardcount = v.findViewById(R.id.cart_prcount);
-//            carddelete = v.findViewById(R.id.deletecard);
-//        }
-//    }
 
 
-//    private void getValues() {
-//
-//        //create new session object by passing application context
-//        session = new UserSession(getApplicationContext());
-//
-//        //validating session
-//        session.isLoggedIn();
-//
-//        //get User details if logged in
-//        user = session.getUserDetails();
-//
-//        name = user.get(UserSession.KEY_NAME);
-//        email = user.get(UserSession.KEY_EMAIL);
-//        mobile = user.get(UserSession.KEY_MOBiLE);
-//        photo = user.get(UserSession.KEY_PHOTO);
-//    }
+
+
 
 
     @Override
     protected void onPause() {
-        databaseReference.child("cart").child(firebaseUserId).removeEventListener(childListener);
-        databaseReference.child("printCart").child(firebaseUserId).removeEventListener(printChildListener);
         super.onPause();
     }
 
@@ -354,11 +276,7 @@ public class Cart extends AppCompatActivity {
         new CheckInternetConnection(this).checkConnection();
     }
 
-    public void Notifications(View view) {
 
-        startActivity(new Intent(Cart.this,NotificationActivity.class));
-        finish();
-    }
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         RecyclerView recyclerView;
@@ -423,8 +341,8 @@ public class Cart extends AppCompatActivity {
                 holder.delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        DatabaseReference deleteRef = FirebaseDatabase.getInstance().getReference();
-                        deleteRef.child("printCart").child(firebaseUserId).child(keys.get(position)).removeValue();
+                        db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId)
+                                .collection("printCart").document(keys.get(position)).delete();
                         refersh();
                     }
                 });
@@ -439,8 +357,8 @@ public class Cart extends AppCompatActivity {
                 holder.delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        DatabaseReference deleteRef = FirebaseDatabase.getInstance().getReference();
-                        deleteRef.child("cart").child(firebaseUserId).child(keys.get(position)).removeValue();
+                        db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId)
+                                .collection("productCart").document(keys.get(position)).delete();
                         refersh();
                     }
                 });
@@ -467,18 +385,6 @@ public class Cart extends AppCompatActivity {
                 cartPrCount = itemView.findViewById(R.id.cart_prcount);
                 cost= itemView.findViewById(R.id.cost);
                 delete = itemView.findViewById(R.id.delete);
-//                itemView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        int position = recyclerView.getChildAdapterPosition(view);
-//                        if(colors.get(position).equals("notUse")) {
-//                            Intent intent = new Intent(Cart.this, IndividualProduct.class);
-//                            intent.putExtra("key", keys.get(position));
-//                            startActivity(intent);
-//                        }
-//                    }
-//                });
-
             }
         }
     }

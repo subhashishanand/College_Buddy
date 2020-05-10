@@ -41,6 +41,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
     implementation 'com.google.firebase:firebase-storage:19.1.0'
     implementation 'com.google.firebase:firebase-database:19.2.0'
+    implementation 'com.google.firebase:firebase-firestore:17.1.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     implementation 'com.google.android.material:material:1.0.0'
@@ -90,5 +91,10 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui:0.4.4'
 
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+
+    // paytm dependency
+    implementation('com.paytm:pgplussdk:1.4.4') {
+        transitive = true;
+    }
 }
 apply plugin: 'com.google.gms.google-services'

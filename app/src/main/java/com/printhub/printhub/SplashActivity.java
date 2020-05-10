@@ -46,11 +46,6 @@ public class SplashActivity extends AppCompatActivity {
 
             new Handler().postDelayed(new Runnable() {
 
-            /*
-             * Showing splash screen with a timer. This will be useful when you
-             * want to show case your app logo / company
-             */
-
                 @Override
                 public void run() {
                     // This method will be executed once the timer is over
@@ -59,7 +54,7 @@ public class SplashActivity extends AppCompatActivity {
                     startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
                     finish();}
                     else{
-                        if (!detail.getBoolean("fillDetail", false)) {
+                        if (!detail.getBoolean("fillDetails", false)) {
                             Intent detailFill = new Intent(SplashActivity.this,DetailActivity.class);
                             startActivity(detailFill);
                             finish();}

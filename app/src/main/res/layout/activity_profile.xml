@@ -98,7 +98,7 @@
                         android:visibility="visible"/>
 
                     <TextView
-                        android:id="@+id/Roll_No"
+                        android:id="@+id/nameText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
@@ -110,7 +110,7 @@
                         android:paddingRight="20dp"
                         android:paddingBottom="10dp"
                         android:textColor="@color/gen_white"
-                        android:textSize="25dp"
+                        android:textSize="15dp"
                         android:textStyle="bold" />
 
                 </RelativeLayout>
@@ -119,36 +119,6 @@
                 android:layout_height="@dimen/view_width_small"
                 android:background="@color/grey_light"
                 android:layout_marginTop="30dp"/>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp">
-
-                <ImageView
-                    android:layout_gravity="center"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/home"/>
-
-                <TextView
-                    android:id="@+id/emailview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="30dp"
-                    style="@style/fonts"
-                    android:textColor="#424242"/>
-
-            </LinearLayout>
-
-            <View android:layout_width="match_parent"
-                android:layout_height="@dimen/view_width_small"
-                android:background="@color/grey_light"
-                android:layout_marginTop="2dp"/>
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -182,6 +152,39 @@
                 android:layout_marginTop="2dp"/>
 
             <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/home"/>
+
+                <TextView
+                    android:id="@+id/detailview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="30dp"
+                    style="@style/fonts"
+                    android:textColor="#424242"/>
+
+            </LinearLayout>
+
+            <View android:layout_width="match_parent"
+                android:layout_height="@dimen/view_width_small"
+                android:background="@color/grey_light"
+                android:layout_marginTop="2dp"/>
+
+
+            <LinearLayout
                 android:id="@+id/addressview"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -208,11 +211,11 @@
                     android:textColor="#424242"/>
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="match_parent"
-                    android:gravity="right"
+                    android:layout_width="14dp"
+                    android:layout_height="43dp"
                     android:layout_weight="0.1"
-                    android:src="@drawable/rightarrow"/>
+                    android:gravity="right"
+                    android:src="@drawable/rightarrow" />
 
             </LinearLayout>
 

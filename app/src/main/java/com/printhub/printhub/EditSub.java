@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
-
 public class EditSub extends AppCompatActivity {
 
     TextView t;
@@ -50,9 +48,6 @@ public class EditSub extends AppCompatActivity {
                 extraatd++;
                 calpercentage();
                 setData();
-//                db.incatd(subname,attendance);
-//                recyclerAdapter.setRecyclerViewData(db);
-//                recyclerAdapter.notifyDataSetChanged();
             }
         });
 
@@ -62,8 +57,6 @@ public class EditSub extends AppCompatActivity {
                 extrabnk++;
                 calpercentage();
                 setData();
-//                recyclerAdapter.setRecyclerViewData(db);
-//                recyclerAdapter.notifyDataSetChanged();
             }
         });
 
@@ -78,8 +71,6 @@ public class EditSub extends AppCompatActivity {
                     calpercentage();
                     setData();
                 }
-//                recyclerAdapter.setRecyclerViewData(db);
-//                recyclerAdapter.notifyDataSetChanged();
             }
         });
 
@@ -94,8 +85,6 @@ public class EditSub extends AppCompatActivity {
                     calpercentage();
                     setData();
                 }
-//                recyclerAdapter.setRecyclerViewData(db);
-//                recyclerAdapter.notifyDataSetChanged();
             }
         });
 
@@ -103,8 +92,6 @@ public class EditSub extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 db.resetsub(subname);
-                //recyclerAdapter.setRecyclerViewData(db);
-                //recyclerAdapter.notifyDataSetChanged();
                 startActivities(new Intent[]{new  Intent(getApplicationContext(), BunkActivity.class)});
                 finish();
             }
@@ -114,8 +101,6 @@ public class EditSub extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 db.deletesub(subname);
-                //recyclerAdapter.setRecyclerViewData(db);
-                //recyclerAdapter.notifyDataSetChanged();
                 startActivities(new Intent[]{new  Intent(getApplicationContext(), BunkActivity.class)});
                 finish();
             }
