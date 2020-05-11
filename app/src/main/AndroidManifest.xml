@@ -48,7 +48,6 @@
         <activity android:name=".HelpCenter" />
         <activity android:name=".OrderDetails" />
         <activity android:name=".OrderPlaced" />
-        <activity android:name=".UpdateData" />
         <activity android:name=".IndividualProduct" />
         <activity android:name=".NotificationActivity" />
         <activity android:name=".WelcomeActivity" />

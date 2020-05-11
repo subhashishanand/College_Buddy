@@ -79,7 +79,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -90,9 +91,9 @@
 
                 <EditText
                     android:id="@+id/noOfPrint"
-                    android:layout_width="wrap_content"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
-                    android:hint="No of Copies"
+                    android:hint="No"
                     android:inputType="number"
                     android:padding="15dp"/>
                 <View
@@ -120,7 +121,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -134,7 +136,7 @@
 
                 <Spinner
                     android:id="@+id/custom"
-                    android:layout_width="181dp"
+                    android:layout_width="110dp"
                     android:layout_height="match_parent"
                     android:autofillHints="Print"/>
 
