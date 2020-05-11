@@ -96,5 +96,8 @@ dependencies {
     implementation('com.paytm:pgplussdk:1.4.4') {
         transitive = true;
     }
+
+    //algolia dependency
+    implementation 'com.algolia:algoliasearch-android:3.+'
 }
 apply plugin: 'com.google.gms.google-services'

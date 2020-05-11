@@ -12,7 +12,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.printhub.printhub.MainnewActivity.cityName;
 import static com.printhub.printhub.MainnewActivity.collegeName;
@@ -21,7 +20,6 @@ import static com.printhub.printhub.MainnewActivity.firebaseUserId;
 public class Profile extends AppCompatActivity {
 
     private TextView name, mobileNo, detail;
-    private CircleImageView primage;
     private TextView updateDetails;
     private LinearLayout addressview;
 
@@ -59,7 +57,6 @@ public class Profile extends AppCompatActivity {
     private void initialize() {
 
         addressview = findViewById(R.id.addressview);
-        primage=findViewById(R.id.profilepic);
         detail = findViewById(R.id.detailview);
         mobileNo=findViewById(R.id.mobileview);
         name =findViewById(R.id.nameText);

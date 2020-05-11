@@ -18,18 +18,19 @@
             android:background="@color/colorAccent"
             android:minHeight="?attr/actionBarSize">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:text="Showcase"/>
-
 
             <LinearLayout
                 android:orientation="horizontal"
-                android:gravity="right"
+                android:gravity="right|center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+                <SearchView
+                    android:id="@+id/product_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="60dp"
+                    android:queryHint="Search here.."/>
 
                 <ImageView
                     android:layout_width="20dp"

@@ -300,7 +300,7 @@ public class MainnewActivity extends AppCompatActivity {
                                 break;
                             case 10:
                                 new EasyFeedback.Builder(MainnewActivity.this)
-                                        .withEmail("doctro3000@gmail.com")
+                                        .withEmail("printhub.connect@gmail.com")
                                         .withSystemInfo()
                                         .build()
                                         .start();
