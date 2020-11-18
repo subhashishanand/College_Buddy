@@ -26,6 +26,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.printhub.printhub.HomeScreen.MainnewActivity;
+import com.printhub.printhub.registration.DetailActivity;
 
 import java.util.Arrays;
 import java.util.List;

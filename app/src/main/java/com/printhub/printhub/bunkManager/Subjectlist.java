@@ -1,4 +1,4 @@
-package com.printhub.printhub;
+package com.printhub.printhub.bunkManager;
 
 public class Subjectlist {
 

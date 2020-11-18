@@ -17,6 +17,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.printhub.printhub.sidebar.Profile;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -29,9 +30,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import es.dmoral.toasty.Toasty;
 
-import static com.printhub.printhub.MainnewActivity.cityName;
-import static com.printhub.printhub.MainnewActivity.collegeName;
-import static com.printhub.printhub.MainnewActivity.firebaseUserId;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.firebaseUserId;
 
 public class Cart extends AppCompatActivity {
 
@@ -264,7 +265,7 @@ public class Cart extends AppCompatActivity {
     }
 
     public void viewProfile(View view) {
-        startActivity(new Intent(Cart.this,Profile.class));
+        startActivity(new Intent(Cart.this, Profile.class));
         finish();
     }
 

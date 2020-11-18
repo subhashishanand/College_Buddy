@@ -1,4 +1,4 @@
-package com.printhub.printhub;
+package com.printhub.printhub.openingaActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -10,6 +10,10 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.printhub.printhub.HomeScreen.MainnewActivity;
+import com.printhub.printhub.R;
+import com.printhub.printhub.WelcomeActivity;
+import com.printhub.printhub.registration.DetailActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
@@ -55,7 +59,7 @@ public class SplashActivity extends AppCompatActivity {
                     finish();}
                     else{
                         if (!detail.getBoolean("fillDetails", false)) {
-                            Intent detailFill = new Intent(SplashActivity.this,DetailActivity.class);
+                            Intent detailFill = new Intent(SplashActivity.this, DetailActivity.class);
                             startActivity(detailFill);
                             finish();}
                         else{

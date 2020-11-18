@@ -1,4 +1,4 @@
-package com.printhub.printhub;
+package com.printhub.printhub.HomeScreen;
 
 
 import android.content.Context;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.printhub.printhub.R;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 
 public class SliderAdapterExample extends SliderViewAdapter<SliderAdapterExample.SliderAdapterVH> {

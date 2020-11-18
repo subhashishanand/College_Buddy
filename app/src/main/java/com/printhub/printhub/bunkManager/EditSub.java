@@ -1,4 +1,4 @@
-package com.printhub.printhub;
+package com.printhub.printhub.bunkManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,8 @@ import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.printhub.printhub.R;
 
 public class EditSub extends AppCompatActivity {
 

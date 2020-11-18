@@ -1,4 +1,5 @@
-package com.printhub.printhub;
+package com.printhub.printhub.sidebar.oldOrders;
+
 
 import android.content.Context;
 import android.graphics.Paint;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -22,14 +24,18 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.printhub.printhub.CheckInternetConnection;
+import com.printhub.printhub.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import static com.printhub.printhub.MainnewActivity.cityName;
-import static com.printhub.printhub.MainnewActivity.collegeName;
-import static com.printhub.printhub.MainnewActivity.firebaseUserId;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.firebaseUserId;
 
-public class printoutFragment extends Fragment {
+
+public class stationaryFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private LottieAnimationView tv_no_item;
@@ -45,7 +51,7 @@ public class printoutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_printout, container, false);
+        View v = inflater.inflate(R.layout.fragment_stationary, container, false);
         mRecyclerView = v.findViewById(R.id.my_recycler_view);
         tv_no_item = v.findViewById(R.id.tv_no_cards);
         //check Internet Connection
@@ -58,30 +64,8 @@ public class printoutFragment extends Fragment {
 
         LoadData();
 
-        db.collection(cityName).document(collegeName).collection("printOrders").whereEqualTo("userId",firebaseUserId).get().addOnSuccessListener(getActivity(), new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
-                    if (tv_no_item.getVisibility() == View.VISIBLE) {
-                        tv_no_item.setVisibility(View.GONE);
-                    }
-                    String fileName = documentSnapshot.getString("fileName");
-                    String custom = documentSnapshot.getString("custom") ;
-                    String status = documentSnapshot.getString("status");
-                    String color = documentSnapshot.getString("color");
-                    String doubleSide = documentSnapshot.getString("doubleSided");
-                    String start = documentSnapshot.getString("startPageNo");
-                    String end = documentSnapshot.getString("endPageNo");
-                    String orderId = documentSnapshot.getString("orderId");
-                    String quantity = documentSnapshot.getString("copy");
-                    ((PrintAdapter)mRecyclerView.getAdapter()).update(fileName,custom,status,color,doubleSide,start,end, orderId, quantity);
-                    //quantity-copies,
-                }
-            }
-        });
-
         mRecyclerView.setLayoutManager(manager);
-        PrintAdapter myAdapter = new PrintAdapter(mRecyclerView, getContext(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
+        OrderAdapter myAdapter= new OrderAdapter(mRecyclerView, getContext(),new ArrayList<String>(),new ArrayList<String>() , new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(),new ArrayList<String>(), new ArrayList<String>());
         mRecyclerView.setAdapter(myAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -108,75 +92,69 @@ public class printoutFragment extends Fragment {
 
     private void LoadData() {
         if(lastDocumentSnapshot == null){
-            query = db.collection(cityName).document(collegeName).collection("printOrders").whereEqualTo("userId",firebaseUserId).limit(10);
+            query = db.collection(cityName).document(collegeName).collection("productOrders").whereEqualTo("userId",firebaseUserId).limit(10);
         }else{
-            query = db.collection(cityName).document(collegeName).collection("printOrders").whereEqualTo("userId",firebaseUserId).startAfter(lastDocumentSnapshot).limit(10);
+            query = db.collection(cityName).document(collegeName).collection("productOrders").whereEqualTo("userId",firebaseUserId).startAfter(lastDocumentSnapshot).limit(10);
         }
         query.get().addOnSuccessListener(getActivity(), new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
+                    lastDocumentSnapshot = documentSnapshot;
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
-                    String fileName = documentSnapshot.getString("fileName");
-                    String custom = documentSnapshot.getString("custom") ;
+                    String productName = documentSnapshot.getString("productName");
+                    String quantity = documentSnapshot.getString("quantity");
                     String status = documentSnapshot.getString("status");
-                    String color = documentSnapshot.getString("color");
-                    String doubleSide = documentSnapshot.getString("doubleSided");
-                    String start = documentSnapshot.getString("startPageNo");
-                    String end = documentSnapshot.getString("endPageNo");
+                    String price = documentSnapshot.getString("price");
+                    String mrp = documentSnapshot.getString("mrp");
+                    String discount = documentSnapshot.getString("discount");
+                    String productImage = documentSnapshot.getString("productImage");
                     String orderId = documentSnapshot.getString("orderId");
-                    String quantity = documentSnapshot.getString("copy");
-                    ((PrintAdapter)mRecyclerView.getAdapter()).update(fileName,custom,status,color,doubleSide,start,end, orderId, quantity);
+                    ((OrderAdapter)mRecyclerView.getAdapter()).update(productName,quantity,status,price,mrp,discount,productImage, orderId);
                     //quantity-copies,
                 }
             }
         });
     }
 
-    private class PrintAdapter extends RecyclerView.Adapter<PrintAdapter.ViewHolder> {
+    private class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         RecyclerView recyclerView;
         Context context;
-        ArrayList<String> fileNames=new ArrayList<>();
-        ArrayList<String>  customs= new ArrayList<>();
+        ArrayList<String> productNames=new ArrayList<>();
+        ArrayList<String>  quantities= new ArrayList<>();
         ArrayList<String>  statuses= new ArrayList<>();
-        ArrayList<String> colors= new ArrayList<>();
-        ArrayList<String> doubles= new ArrayList<>();
-        ArrayList<String> starts= new ArrayList<>();
-        ArrayList<String> ends= new ArrayList<>();
+        ArrayList<String> prices= new ArrayList<>();
+        ArrayList<String> mrps= new ArrayList<>();
+        ArrayList<String> discounts= new ArrayList<>();
+        ArrayList<String> productImages= new ArrayList<>();
         ArrayList<String> orderIds= new ArrayList<>();
-        ArrayList<String> quantities = new ArrayList<>();
 
-        public void update(String fileName, String custom, String status, String color, String doubleSide, String start, String end, String orderId, String quantity){
-            fileNames.add(fileName);
-            customs.add(custom);
-            statuses.add(status);
-            colors.add(color);
-            doubles.add(doubleSide);
-            starts.add(start);
-            ends.add(end);
-            orderIds.add(orderId);
+        public void update(String productName, String quantity, String status, String price, String mrp, String discount, String productImage, String orderId){
+            productNames.add(productName);
             quantities.add(quantity);
+            statuses.add(status);
+            prices.add(price);
+            mrps.add(mrp);
+            discounts.add(discount);
+            productImages.add(productImage);
+            orderIds.add(orderId);
             notifyDataSetChanged();  //refershes the recyler view automatically...
         }
 
-        public PrintAdapter(RecyclerView recyclerView, Context context, ArrayList<String> fileNames, ArrayList<String> customs, ArrayList<String> statuses, ArrayList<String> colors, ArrayList<String> doubles, ArrayList<String> starts, ArrayList<String> ends, ArrayList<String> orderIds, ArrayList<String> quantities) {
+        public OrderAdapter(RecyclerView recyclerView, Context context, ArrayList<String> productNames, ArrayList<String> quantities, ArrayList<String> statuses, ArrayList<String> prices, ArrayList<String> mrps, ArrayList<String> discounts,ArrayList<String> productImages, ArrayList<String> orderIds) {
             this.recyclerView = recyclerView;
             this.context = context;
-            this.fileNames = fileNames;
-            this.customs = customs;
-            this.statuses = statuses;
-            this.colors = colors;
-            this.doubles = doubles;
-            this.starts = starts;
-            this.ends = ends;
-            this.orderIds =  orderIds;
+            this.productNames = productNames;
             this.quantities = quantities;
+            this.statuses = statuses;
+            this.prices = prices;
+            this.mrps = mrps;
+            this.discounts = discounts;
+            this.productImages = productImages;
+            this.orderIds =  orderIds;
         }
-
-
-
 
         @NonNull
         @Override
@@ -186,34 +164,38 @@ public class printoutFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull PrintAdapter.ViewHolder holder, int position) {
-            holder.fileName.setText(fileNames.get(position));
-            holder.quantity.setText("Copy: " + quantities.get(position));
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            holder.productName.setText(productNames.get(position));
+            holder.quantity.setText("Quantity: " + quantities.get(position));
             holder.status.setText("Status: "+ statuses.get(position));
+            holder.price.setText("Rs. "+prices.get(position));
+            holder.mrp.setText(mrps.get(position));
+            holder.discount.setText(discounts.get(position)+"% off");
             holder.orderNo.setText(orderIds.get(position));
-            holder.price.setText("custom: "+customs.get(position)+"  Color: " + colors.get(position) +"\nfrom "+ starts.get(position)+" to "+ ends.get(position)+ "   Double sided: "+ doubles.get(position));
+            Picasso.with(context).load(productImages.get(position)).into(holder.productImage);
         }
 
         @Override
         public int getItemCount() {
-            return fileNames.size();
+            return productNames.size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            TextView quantity, status, fileName, price, mrp, discount, orderNo;
+            TextView quantity, status, productName, price, mrp, discount, orderNo;
+            ImageView productImage;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
-                fileName=itemView.findViewById(R.id.productname);
+                productName=itemView.findViewById(R.id.productname);
                 quantity = itemView.findViewById(R.id.quantityTextView);
                 status = itemView.findViewById(R.id.statusTextView);
                 price=itemView.findViewById(R.id.price);
                 mrp= itemView.findViewById(R.id.mrp);
                 mrp.setPaintFlags(mrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 discount= itemView.findViewById(R.id.discount);
+                productImage = itemView.findViewById(R.id.productimage);
                 orderNo = itemView.findViewById(R.id.orderid);
             }
         }
     }
-
 }

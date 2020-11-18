@@ -1,4 +1,4 @@
-package com.printhub.printhub;
+package com.printhub.printhub.sidebar.aboutus;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.text.Html;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.printhub.printhub.R;
+import com.printhub.printhub.sidebar.aboutus.SliderAdapter;
 
 public class AboutusActivity extends AppCompatActivity {
 

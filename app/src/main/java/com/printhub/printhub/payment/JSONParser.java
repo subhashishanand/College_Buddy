@@ -1,4 +1,4 @@
-package com.printhub.printhub;
+package com.printhub.printhub.payment;
 
 import android.content.Context;
 import android.os.Handler;

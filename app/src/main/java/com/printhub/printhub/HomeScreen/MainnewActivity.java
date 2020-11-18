@@ -1,4 +1,4 @@
-package com.printhub.printhub;
+package com.printhub.printhub.HomeScreen;
 
 
 import android.content.Intent;
@@ -37,6 +37,19 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.util.DrawerUIUtils;
 import com.mikepenz.materialize.util.UIUtils;
+import com.printhub.printhub.sidebar.aboutus.AboutusActivity;
+import com.printhub.printhub.bunkManager.BunkActivity;
+import com.printhub.printhub.Cart;
+import com.printhub.printhub.CheckInternetConnection;
+import com.printhub.printhub.sidebar.HelpCenter;
+import com.printhub.printhub.image.ImageActivity;
+import com.printhub.printhub.NotificationActivity;
+import com.printhub.printhub.sidebar.oldOrders.OrdersActivity;
+import com.printhub.printhub.sidebar.Profile;
+import com.printhub.printhub.R;
+import com.printhub.printhub.WelcomeActivity;
+import com.printhub.printhub.sidebar.Wishlist;
+import com.printhub.printhub.pdf.pdfActivity;
 import com.printhub.printhub.prodcutscategory.Bags;
 import com.printhub.printhub.prodcutscategory.Keychains;
 import com.printhub.printhub.prodcutscategory.Stationary;
@@ -392,14 +405,14 @@ public class MainnewActivity extends AppCompatActivity {
     }
 
     public void cardsActivity(View view) {
-        Intent intent= new Intent(MainnewActivity.this,ImageActivity.class);
+        Intent intent= new Intent(MainnewActivity.this, ImageActivity.class);
         String uploadkey = mref.push().getKey();
         intent.putExtra("uploadkey",uploadkey);
         startActivity(intent);
     }
 
     public void tshirtActivity(View view) {
-        Intent intent= new Intent(MainnewActivity.this ,pdfActivity.class);
+        Intent intent= new Intent(MainnewActivity.this , pdfActivity.class);
         String uploadkey = mref.push().getKey();
         intent.putExtra("uploadkey",uploadkey);
         startActivity(intent);
@@ -418,7 +431,7 @@ public class MainnewActivity extends AppCompatActivity {
 
     public void calendarsActivity(View view) {
 
-        startActivity(new Intent(MainnewActivity.this,BunkActivity.class));
+        startActivity(new Intent(MainnewActivity.this, BunkActivity.class));
     }
 
     public void keychainsActivity(View view) {

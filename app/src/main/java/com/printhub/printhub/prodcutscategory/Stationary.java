@@ -44,8 +44,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import static com.printhub.printhub.MainnewActivity.cityName;
-import static com.printhub.printhub.MainnewActivity.collegeName;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
 
 
 public class Stationary extends AppCompatActivity {

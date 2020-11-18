@@ -1,4 +1,4 @@
-package com.printhub.printhub;
+package com.printhub.printhub.sidebar.aboutus;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
+
+import com.printhub.printhub.R;
 
 public class SliderAdapter extends PagerAdapter {
 

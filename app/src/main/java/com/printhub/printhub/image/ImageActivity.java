@@ -1,4 +1,4 @@
-package com.printhub.printhub;
+package com.printhub.printhub.image;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,15 +38,19 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+import com.printhub.printhub.Cart;
+import com.printhub.printhub.HomeScreen.MainnewActivity;
+import com.printhub.printhub.NotificationActivity;
+import com.printhub.printhub.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.printhub.printhub.MainnewActivity.cityName;
-import static com.printhub.printhub.MainnewActivity.collegeName;
-import static com.printhub.printhub.MainnewActivity.firebaseUserId;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.firebaseUserId;
 
 public class ImageActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 

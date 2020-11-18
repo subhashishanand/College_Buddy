@@ -15,6 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.paytm.pgsdk.PaytmOrder;
 import com.paytm.pgsdk.PaytmPGService;
 import com.paytm.pgsdk.PaytmPaymentTransactionCallback;
+import com.printhub.printhub.payment.JSONParser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,9 +34,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.printhub.printhub.Cart.myAdapter;
-import static com.printhub.printhub.MainnewActivity.cityName;
-import static com.printhub.printhub.MainnewActivity.collegeName;
-import static com.printhub.printhub.MainnewActivity.firebaseUserId;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.firebaseUserId;
 
 public class OrderDetails extends AppCompatActivity implements PaytmPaymentTransactionCallback {
 

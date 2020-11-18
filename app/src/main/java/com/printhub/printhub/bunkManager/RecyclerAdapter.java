@@ -1,4 +1,4 @@
-package com.printhub.printhub;
+package com.printhub.printhub.bunkManager;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,6 +13,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.printhub.printhub.R;
 
 public  class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>  { //Implemented onclicklistener to get
     //context

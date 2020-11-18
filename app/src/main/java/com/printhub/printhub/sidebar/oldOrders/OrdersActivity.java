@@ -1,4 +1,4 @@
-package com.printhub.printhub;
+package com.printhub.printhub.sidebar.oldOrders;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +9,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.printhub.printhub.CheckInternetConnection;
+import com.printhub.printhub.R;
+//import com.printhub.printhub.cabsFragment;
+
 
 public class OrdersActivity extends AppCompatActivity {
 
@@ -43,9 +47,9 @@ public class OrdersActivity extends AppCompatActivity {
                 case R.id.navigation_stationary:
                     selectedFragment = new stationaryFragment();
                     break;
-                case R.id.navigation_cabs:
-                    selectedFragment = new cabsFragment();
-                    break;
+//                case R.id.navigation_cabs:
+//                    selectedFragment = new cabsFragment();
+//                    break;
                 case R.id.navigation_old_books:
                     selectedFragment = new oldBooksFragment();
                     break;

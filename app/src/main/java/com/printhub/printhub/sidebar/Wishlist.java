@@ -1,4 +1,4 @@
-package com.printhub.printhub;
+package com.printhub.printhub.sidebar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mikepenz.crossfadedrawerlayout.view.CrossfadeDrawerLayout;
 import com.mikepenz.materialdrawer.Drawer;
+import com.printhub.printhub.CheckInternetConnection;
+import com.printhub.printhub.NotificationActivity;
+import com.printhub.printhub.R;
 
 import java.util.HashMap;
 
@@ -73,7 +76,7 @@ public class Wishlist extends AppCompatActivity {
     }
 
     public void viewProfile(View view) {
-        startActivity(new Intent(Wishlist.this,Profile.class));
+        startActivity(new Intent(Wishlist.this, Profile.class));
         finish();
     }
 
@@ -88,7 +91,7 @@ public class Wishlist extends AppCompatActivity {
 
     public void Notifications(View view) {
 
-        startActivity(new Intent(Wishlist.this,NotificationActivity.class));
+        startActivity(new Intent(Wishlist.this, NotificationActivity.class));
         finish();
     }
 }

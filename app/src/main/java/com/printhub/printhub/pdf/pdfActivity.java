@@ -1,4 +1,4 @@
-package com.printhub.printhub;
+package com.printhub.printhub.pdf;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,6 +46,9 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.itextpdf.text.pdf.PdfReader;
+import com.printhub.printhub.Cart;
+import com.printhub.printhub.NotificationActivity;
+import com.printhub.printhub.R;
 import com.shockwave.pdfium.PdfDocument;
 
 import java.io.IOException;
@@ -54,9 +57,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.printhub.printhub.MainnewActivity.cityName;
-import static com.printhub.printhub.MainnewActivity.collegeName;
-import static com.printhub.printhub.MainnewActivity.firebaseUserId;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.firebaseUserId;
 
 public class pdfActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener , OnPageChangeListener, OnLoadCompleteListener,
         OnPageErrorListener {
@@ -164,7 +167,7 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
         notifica.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(pdfActivity.this,NotificationActivity.class));
+                startActivity(new Intent(pdfActivity.this, NotificationActivity.class));
                 finish();
             }
         });

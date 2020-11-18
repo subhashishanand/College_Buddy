@@ -1,4 +1,4 @@
-package com.printhub.printhub;
+package com.printhub.printhub.registration;
 
 public class user {
 

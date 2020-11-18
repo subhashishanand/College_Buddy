@@ -14,8 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".OrdersActivity"></activity>
-        <activity android:name=".SplashActivity">
+        <activity android:name=".sidebar.oldOrders.OrdersActivity"></activity>
+        <activity android:name=".openingaActivity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,17 +23,11 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".prodcutscategory.Cards"
-            android:theme="@style/WhiteTheme" />
-        <activity
-            android:name=".prodcutscategory.Tshirts"
-            android:theme="@style/WhiteTheme" />
+<!--        <activity-->
+<!--            android:name=".prodcutscategory.Cards"-->
+<!--            android:theme="@style/WhiteTheme" />-->
         <activity
             android:name=".prodcutscategory.Bags"
-            android:theme="@style/WhiteTheme" />
-        <activity
-            android:name=".prodcutscategory.Calendars"
             android:theme="@style/WhiteTheme" />
         <activity
             android:name=".prodcutscategory.Keychains"
@@ -41,22 +35,22 @@
         <activity
             android:name=".prodcutscategory.Stationary"
             android:theme="@style/WhiteTheme" />
-        <activity android:name=".MainnewActivity" />
-        <activity android:name=".Profile" />
-        <activity android:name=".Wishlist" />
+        <activity android:name=".HomeScreen.MainnewActivity" />
+        <activity android:name=".sidebar.Profile" />
+        <activity android:name=".sidebar.Wishlist" />
         <activity android:name=".Cart" />
-        <activity android:name=".HelpCenter" />
+        <activity android:name=".sidebar.HelpCenter" />
         <activity android:name=".OrderDetails" />
         <activity android:name=".OrderPlaced" />
         <activity android:name=".IndividualProduct" />
         <activity android:name=".NotificationActivity" />
         <activity android:name=".WelcomeActivity" />
-        <activity android:name=".AboutusActivity" />
-        <activity android:name=".BunkActivity" />
-        <activity android:name=".DetailActivity" />
-        <activity android:name=".ImageActivity" />
-        <activity android:name=".pdfActivity" />
-        <activity android:name=".EditSub">
+        <activity android:name=".sidebar.aboutus.AboutusActivity" />
+        <activity android:name=".bunkManager.BunkActivity" />
+        <activity android:name=".registration.DetailActivity" />
+        <activity android:name=".image.ImageActivity" />
+        <activity android:name=".pdf.pdfActivity" />
+        <activity android:name=".bunkManager.EditSub">
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT" />
 

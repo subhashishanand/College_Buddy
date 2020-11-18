@@ -1,4 +1,4 @@
-package com.printhub.printhub;
+package com.printhub.printhub.sidebar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,13 +9,18 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.printhub.printhub.Cart;
+import com.printhub.printhub.CheckInternetConnection;
+import com.printhub.printhub.registration.DetailActivity;
+import com.printhub.printhub.NotificationActivity;
+import com.printhub.printhub.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import static com.printhub.printhub.MainnewActivity.cityName;
-import static com.printhub.printhub.MainnewActivity.collegeName;
-import static com.printhub.printhub.MainnewActivity.firebaseUserId;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.firebaseUserId;
 
 public class Profile extends AppCompatActivity {
 
@@ -65,7 +70,7 @@ public class Profile extends AppCompatActivity {
         updateDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Profile.this,DetailActivity.class));
+                startActivity(new Intent(Profile.this, DetailActivity.class));
                 finish();
             }
         });
@@ -87,7 +92,7 @@ public class Profile extends AppCompatActivity {
     }
 
     public void viewCart(View view) {
-        startActivity(new Intent(Profile.this,Cart.class));
+        startActivity(new Intent(Profile.this, Cart.class));
         finish();
     }
 
@@ -99,7 +104,7 @@ public class Profile extends AppCompatActivity {
     }
 
     public void Notifications(View view) {
-        startActivity(new Intent(Profile.this,NotificationActivity.class));
+        startActivity(new Intent(Profile.this, NotificationActivity.class));
         finish();
     }
 }
