@@ -8,6 +8,43 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:830621214130:android:24ff1655b886d1abc5b0ab",
+        "android_client_info": {
+          "package_name": "com.example.doctersappoint"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "830621214130-4d5gel61s3drsn28l0mqe73ab4qce0eh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.doctersappoint",
+            "certificate_hash": "7b5776d685696d92ac6e637128959b7a2c2856c9"
+          }
+        },
+        {
+          "client_id": "830621214130-o4cjf8c12sbfi5bl3r73a6lsia2cekmg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdCdMTIMNsfPIjJPtzlSUx4dMLVwVUC84"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "830621214130-o4cjf8c12sbfi5bl3r73a6lsia2cekmg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:830621214130:android:2628cf9f830c9ee7c5b0ab",
         "android_client_info": {
           "package_name": "com.example.merchant"
@@ -101,6 +138,80 @@
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.printmerapp",
+            "certificate_hash": "7b5776d685696d92ac6e637128959b7a2c2856c9"
+          }
+        },
+        {
+          "client_id": "830621214130-o4cjf8c12sbfi5bl3r73a6lsia2cekmg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdCdMTIMNsfPIjJPtzlSUx4dMLVwVUC84"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "830621214130-o4cjf8c12sbfi5bl3r73a6lsia2cekmg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830621214130:android:bac8ed644c0c0c88c5b0ab",
+        "android_client_info": {
+          "package_name": "com.example.productcart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "830621214130-dpfi5etqd82sok8nprgsmm6lr0juh1dc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.productcart",
+            "certificate_hash": "7b5776d685696d92ac6e637128959b7a2c2856c9"
+          }
+        },
+        {
+          "client_id": "830621214130-o4cjf8c12sbfi5bl3r73a6lsia2cekmg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdCdMTIMNsfPIjJPtzlSUx4dMLVwVUC84"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "830621214130-o4cjf8c12sbfi5bl3r73a6lsia2cekmg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830621214130:android:73b12e673394643bc5b0ab",
+        "android_client_info": {
+          "package_name": "com.example.seller"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "830621214130-2ic8hfnspuvsq8k3dfitcimuuqd2u1qo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.seller",
             "certificate_hash": "7b5776d685696d92ac6e637128959b7a2c2856c9"
           }
         },
@@ -231,6 +342,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "830621214130-5p0856gg6jtqul41nbc24mmjechqksqm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.printhub.signup",
+            "certificate_hash": "7b5776d685696d92ac6e637128959b7a2c2856c9"
+          }
+        },
         {
           "client_id": "830621214130-a6809j73t013fssstj2bpmr68qejtcj8.apps.googleusercontent.com",
           "client_type": 1,
