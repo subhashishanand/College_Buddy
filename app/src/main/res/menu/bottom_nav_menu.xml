@@ -12,11 +12,6 @@
         android:title="Stationary" />
 
     <item
-        android:id="@+id/navigation_cabs"
-        android:icon="@drawable/cab"
-        android:title="Cabs" />
-
-    <item
         android:id="@+id/navigation_old_books"
         android:icon="@drawable/old"
         android:title="Old Books" />

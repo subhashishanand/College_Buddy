@@ -18,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.printhub.printhub.sidebar.Profile;
+import com.printhub.printhub.sidebar.Wishlist;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -266,6 +267,11 @@ public class Cart extends AppCompatActivity {
 
     public void viewProfile(View view) {
         startActivity(new Intent(Cart.this, Profile.class));
+        finish();
+    }
+    public void Notifications(View view) {
+
+        startActivity(new Intent(Cart.this, NotificationActivity.class));
         finish();
     }
 

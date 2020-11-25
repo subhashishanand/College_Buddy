@@ -39,7 +39,8 @@
                     android:src="@drawable/notification"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="15dp"
-                    android:onClick="Notifications"/>
+                    android:onClick="Notifications"
+                    android:visibility="gone"/>
 
 
                 <ImageView
@@ -49,7 +50,8 @@
                     android:src="@drawable/profile"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="15dp"
-                    android:onClick="viewProfile"/>
+                    android:onClick="viewProfile"
+                    android:visibility="gone"/>
 
 
             </LinearLayout>
