@@ -108,6 +108,7 @@ public class Cart extends AppCompatActivity {
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
+                    emptycart.setVisibility(View.GONE);
                     String cartKey =documentSnapshot.getId();
                     String quantity =documentSnapshot.getString("quantity");
                     String cost =documentSnapshot.getString("cost");
@@ -137,6 +138,7 @@ public class Cart extends AppCompatActivity {
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
+                    emptycart.setVisibility(View.GONE);
                     String fileName = documentSnapshot.getString("fileName");
                     String key = documentSnapshot.getId();
                     String color = documentSnapshot.getString("color");
