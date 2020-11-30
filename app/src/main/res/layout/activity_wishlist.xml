@@ -24,7 +24,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                android:text="Wishlist"/>
+                android:text="My Wishlist"/>
+
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -57,14 +58,21 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <LinearLayout
+        android:layout_below="@id/toolbarwrap"
+        android:id="@+id/activity_cart_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="10">
 
         <FrameLayout
             android:padding="5dp"
-            android:layout_below="@id/toolbarwrap"
             android:layout_marginTop="10dp"
             android:id="@+id/frame_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_weight="9.5">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerview"
@@ -73,6 +81,10 @@
                 android:layout_width="match_parent"/>
 
         </FrameLayout>
+
+
+
+    </LinearLayout>
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/tv_no_cards"
@@ -87,12 +99,13 @@
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/empty_cart"
         android:layout_width="match_parent"
-        app:lottie_fileName="empty_box.json"
+        app:lottie_fileName="empty_list.json"
         android:layout_height="match_parent"
         android:foregroundGravity="center"
         android:src="@drawable/cartempty"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:lottie_loop="true"
         app:lottie_autoPlay="true"/>
+
 
 </RelativeLayout>
