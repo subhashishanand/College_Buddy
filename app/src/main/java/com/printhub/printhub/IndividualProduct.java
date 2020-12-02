@@ -18,7 +18,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.printhub.printhub.prodcutscategory.Stationary;
 import com.squareup.picasso.Picasso;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -154,7 +153,7 @@ public class IndividualProduct extends AppCompatActivity {
     public void addToCart(View view) {
 
 
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = finalDocumentSnapshot.getData();
         map.put("quantity",quantity+"");
         map.put("cost",quantity*price+"");
         map.put("productId", key);
@@ -174,7 +173,7 @@ public class IndividualProduct extends AppCompatActivity {
     }
 
     public void goToCart(View view) {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = finalDocumentSnapshot.getData();
         map.put("quantity",quantity+"");
         map.put("cost",quantity*price+"");
         map.put("productId",key);

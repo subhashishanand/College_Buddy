@@ -78,5 +78,7 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="no_data">Currently You have no Orders.Go and Place your first Order</string>
+
 
 </resources>

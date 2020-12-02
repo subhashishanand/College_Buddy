@@ -114,7 +114,7 @@
         android:layout_height="match_parent"
         android:foregroundGravity="center"
         android:src="@drawable/cartempty"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:lottie_loop="true"
         app:lottie_autoPlay="true"/>
 

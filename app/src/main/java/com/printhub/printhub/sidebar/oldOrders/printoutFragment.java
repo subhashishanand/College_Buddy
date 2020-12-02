@@ -41,6 +41,7 @@ public class printoutFragment extends Fragment {
     Query query;
     private DocumentSnapshot lastDocumentSnapshot;
     Boolean isScrolling = false;
+    LottieAnimationView noData;
 
 
     @Override
@@ -50,6 +51,7 @@ public class printoutFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_printout, container, false);
         mRecyclerView = v.findViewById(R.id.my_recycler_view);
         tv_no_item = v.findViewById(R.id.tv_no_cards);
+        noData =  v.findViewById(R.id.no_data);
         //check Internet Connection
         new CheckInternetConnection(getContext()).checkConnection();
 
@@ -63,6 +65,12 @@ public class printoutFragment extends Fragment {
         db.collection(cityName).document(collegeName).collection("printOrders").whereEqualTo("userId",firebaseUserId).get().addOnSuccessListener(getActivity(), new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(queryDocumentSnapshots.isEmpty()){
+                    if (tv_no_item.getVisibility() == View.VISIBLE) {
+                        tv_no_item.setVisibility(View.GONE);
+                    }
+                    noData.setVisibility(View.VISIBLE);
+                }
                 for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
@@ -117,6 +125,12 @@ public class printoutFragment extends Fragment {
         query.get().addOnSuccessListener(getActivity(), new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(queryDocumentSnapshots.isEmpty()){
+                    if (tv_no_item.getVisibility() == View.VISIBLE) {
+                        tv_no_item.setVisibility(View.GONE);
+                    }
+                    noData.setVisibility(View.VISIBLE);
+                }
                 for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);

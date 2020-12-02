@@ -82,7 +82,7 @@ public class Cart extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recyclerview);
         tv_no_item = findViewById(R.id.tv_no_cards);
         //activitycartlist = findViewById(R.id.activity_cart_list);
-        //emptycart = findViewById(R.id.empty_cart);
+        emptycart = findViewById(R.id.empty_cart);
         //cartcollect = new ArrayList<>();
 
         if (mRecyclerView != null) {
@@ -98,10 +98,17 @@ public class Cart extends AppCompatActivity {
         .collection("productCart").get().addOnSuccessListener(this, new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(queryDocumentSnapshots.isEmpty()){
+                    if (tv_no_item.getVisibility() == View.VISIBLE) {
+                        tv_no_item.setVisibility(View.GONE);
+                    }
+                    emptycart.setVisibility(View.VISIBLE);
+                }
                 for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
+                    emptycart.setVisibility(View.GONE);
                     String cartKey =documentSnapshot.getId();
                     String quantity =documentSnapshot.getString("quantity");
                     String cost =documentSnapshot.getString("cost");
@@ -121,10 +128,17 @@ public class Cart extends AppCompatActivity {
         .collection("printCart").get().addOnSuccessListener(this, new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(queryDocumentSnapshots.isEmpty()){
+                    if (tv_no_item.getVisibility() == View.VISIBLE) {
+                        tv_no_item.setVisibility(View.GONE);
+                    }
+                    emptycart.setVisibility(View.VISIBLE);
+                }
                 for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
+                    emptycart.setVisibility(View.GONE);
                     String fileName = documentSnapshot.getString("fileName");
                     String key = documentSnapshot.getId();
                     String color = documentSnapshot.getString("color");

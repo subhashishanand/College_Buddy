@@ -27,6 +27,17 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent"/>
 
+
+
     </FrameLayout>
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/no_data"
+        android:layout_width="match_parent"
+        app:lottie_fileName="no_order.json"
+        android:layout_height="match_parent"
+        android:foregroundGravity="center"
+        android:visibility="gone"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"/>
 
 </RelativeLayout>
