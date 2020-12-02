@@ -113,12 +113,17 @@ public class Cart extends AppCompatActivity {
                     String quantity =documentSnapshot.getString("quantity");
                     String cost =documentSnapshot.getString("cost");
                     totalcost = totalcost + Float.parseFloat(cost);
-                    String productName = documentSnapshot.getString("productName");
-                    String price = documentSnapshot.getString("price");
-                    String mrp = documentSnapshot.getString("mrp");
-                    String discount = documentSnapshot.getString("discount");
-                    String productImage = documentSnapshot.getString("productImage");
-                    ((MyAdapter) mRecyclerView.getAdapter()).update(productName, cartKey, price, mrp, discount, productImage, quantity,cost,"notUse");
+                    db.collection(cityName).document(collegeName).collection("products").document(cartKey).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            String productName = documentSnapshot.getString("productName");
+                            String price = documentSnapshot.getString("price");
+                            String mrp = documentSnapshot.getString("mrp");
+                            String discount = documentSnapshot.getString("discount");
+                            String productImage = documentSnapshot.getString("productImage");
+                      ((MyAdapter) mRecyclerView.getAdapter()).update(productName, cartKey, price, mrp, discount, productImage, quantity,cost,"notUse");
+                        }
+                    });
                 }
             }
         });
