@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".image.MultipleImages">
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbarwrap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="fill_parent"
+            android:layout_height="58dp"
+            android:background="@color/colorAccent"
+            android:minHeight="?attr/actionBarSize">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="Image prints"/>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:outlineAmbientShadowColor="@color/black"
+        android:padding="5dp" />
+    <ImageSwitcher
+        android:id="@+id/imageIs"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:padding="5dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:showDividers="middle"
+            android:orientation="horizontal">
+            <View
+                android:layout_width="10dp"
+                android:layout_height="match_parent"
+                android:padding="5dp" />
+            <Button
+                android:id="@+id/previousBtn"
+                android:text="Previous"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_below="@id/imageIs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+            <View
+                android:layout_width="170dp"
+                android:layout_height="match_parent"
+                android:padding="5dp" />
+
+            <Button
+                android:text="Next"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:id="@+id/nextBtn"
+                android:layout_alignParentEnd="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imageIs"
+                android:layout_alignParentRight="true" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+            <View
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:padding="5dp" />
+            <Switch
+                android:id="@+id/color_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:padding="10dp"
+                android:text="Color   "
+                android:textOff="No"
+                android:textOn="Yes" />
+            <View
+                android:layout_width="10dp"
+                android:layout_height="match_parent"
+                android:padding="5dp" />
+            <Switch
+                android:id="@+id/poster"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Poster "
+                android:textOff="No"
+                android:textOn="Yes" />
+            <View
+                android:layout_width="10dp"
+                android:layout_height="match_parent"
+                android:padding="5dp" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:id="@+id/editCopies"
+                android:layout_height="40dp"
+                android:hint="New Copies"
+                android:inputType="number"/>
+        </LinearLayout>
+
+    </LinearLayout>
+    <Button
+        android:id="@+id/pickImagesBtn"
+        android:text="Pick Images"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="TotalCost"
+            android:textColor="@color/black"
+            android:textSize="25dp"/>
+
+        <View
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:outlineAmbientShadowColor="@color/black"
+            android:padding="5dp" />
+        <TextView
+            android:layout_width="80dp"
+            android:id="@+id/totalCost"
+            android:layout_height="30dp"
+            android:text="0"
+            android:textSize="25dp"
+            />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/checkout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CheckOut" />
+
+
+</LinearLayout>
