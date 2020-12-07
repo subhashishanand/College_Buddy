@@ -37,6 +37,7 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.util.DrawerUIUtils;
 import com.mikepenz.materialize.util.UIUtils;
+import com.printhub.printhub.image.MultipleImages;
 import com.printhub.printhub.sidebar.aboutus.AboutusActivity;
 import com.printhub.printhub.bunkManager.BunkActivity;
 import com.printhub.printhub.Cart;
@@ -405,7 +406,7 @@ public class MainnewActivity extends AppCompatActivity {
     }
 
     public void cardsActivity(View view) {
-        Intent intent= new Intent(MainnewActivity.this, ImageActivity.class);
+        Intent intent= new Intent(MainnewActivity.this, MultipleImages.class);
         String uploadkey = mref.push().getKey();
         intent.putExtra("uploadkey",uploadkey);
         startActivity(intent);

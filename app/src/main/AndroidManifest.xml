@@ -14,18 +14,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".sidebar.oldOrders.OrdersActivity"></activity>
+        <activity android:name=".image.MultipleImages"></activity>
+        <activity android:name=".sidebar.oldOrders.OrdersActivity" />
         <activity android:name=".openingaActivity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-<!--        <activity-->
-<!--            android:name=".prodcutscategory.Cards"-->
-<!--            android:theme="@style/WhiteTheme" />-->
+        </activity> <!-- <activity -->
+        <!-- android:name=".prodcutscategory.Cards" -->
+        <!-- android:theme="@style/WhiteTheme" /> -->
         <activity
             android:name=".prodcutscategory.Bags"
             android:theme="@style/WhiteTheme" />
