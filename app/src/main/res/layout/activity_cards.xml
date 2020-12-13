@@ -64,8 +64,7 @@
         app:lottie_loop="true"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        app:lottie_autoPlay="true"
-        android:onClick="Notifications"/>
+        app:lottie_autoPlay="true" />
 
 
     <FrameLayout

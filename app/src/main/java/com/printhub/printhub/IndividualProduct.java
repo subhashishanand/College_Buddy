@@ -15,6 +15,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.printhub.printhub.prodcutscategory.Stationary;
 import com.squareup.picasso.Picasso;
 
@@ -100,6 +102,20 @@ public class IndividualProduct extends AppCompatActivity {
                 Picasso.with(IndividualProduct.this).load(documentSnapshot.getString("productImage")).into(productimage);
             }
         });
+
+        db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId)
+                .collection("Wishlist").get().addOnSuccessListener(this, new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
+                    if(documentSnapshot.getId().equals(getIntent().getStringExtra("key"))){
+                        addToWishlist.playAnimation();
+                    }
+
+                }
+            }
+        });
+
     }
 
 
@@ -168,8 +184,19 @@ public class IndividualProduct extends AppCompatActivity {
 }
 
     public void addToWishList(View view) {
-
         addToWishlist.playAnimation();
+        Map<String, Object> map = finalDocumentSnapshot.getData();
+        map.put("price",price+"");
+        map.put("productId", key);
+        map.put("userId",firebaseUserId);
+        documentReference.collection("users").document(firebaseUserId)
+                .collection("Wishlist").document(key).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toasty.success(IndividualProduct.this, "Added to Wishlist").show();
+            }
+        });
+
     }
 
     public void goToCart(View view) {
