@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ public class MultipleImages extends AppCompatActivity {
     private ArrayList<Boolean> posterPrint;
     private ArrayList<Integer> eachCost;
 
+    ProgressDialog progressDialog;
 
     private static final int PICK_IMAGES_CODE=0;
     int copies = 1;

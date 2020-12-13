@@ -178,7 +178,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
         private ProgressDialog dialog = new ProgressDialog(OrderDetails.this);
 
         //private String orderId , mid, custid, amt;
-        String url ="https://printhubnith.000webhostapp.com/Paytm_App_Checksum_Kit_PHP-master/generateChecksum.php";
+        String url ="https://collegebuddy39.000webhostapp.com/paytm/generateChecksum.php";
         String varifyurl = "https://pguat.paytm.com/paytmchecksum/paytmCallback.jsp";
         // "https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID"+orderId;
         String CHECKSUMHASH ="";
