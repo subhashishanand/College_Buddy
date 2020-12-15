@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +66,7 @@ public class stationaryFragment extends Fragment {
         }
 
         LoadData();
-
+        manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
         OrderAdapter myAdapter= new OrderAdapter(mRecyclerView, getContext(),new ArrayList<String>(),new ArrayList<String>() , new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(),new ArrayList<String>(), new ArrayList<String>());
         mRecyclerView.setAdapter(myAdapter);
@@ -149,6 +150,7 @@ public class stationaryFragment extends Fragment {
             productImages.add(productImage);
             orderIds.add(orderId);
             notifyDataSetChanged();  //refershes the recyler view automatically...
+
         }
 
         public OrderAdapter(RecyclerView recyclerView, Context context, ArrayList<String> productNames, ArrayList<String> quantities, ArrayList<String> statuses, ArrayList<String> prices, ArrayList<String> mrps, ArrayList<String> discounts,ArrayList<String> productImages, ArrayList<String> orderIds) {
