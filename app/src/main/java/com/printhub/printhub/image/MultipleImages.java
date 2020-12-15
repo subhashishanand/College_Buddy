@@ -269,6 +269,7 @@ public class MultipleImages extends AppCompatActivity {
                     noOfCopies.add(1);
                     colorPrint.add(false);
                     posterPrint.add(false);
+                    eachCost.add(2);
 
                     imageIs.setImageURI(imageUris.get(0));
                     editCopies.setText(noOfCopies.get(0).toString());
