@@ -344,12 +344,12 @@ public class MultipleImages extends AppCompatActivity {
                             imageDescription.put("userId", firebaseUserId);
                             imageDescription.put("doubleSided", "No");
                             imageDescription.put("custom", customString);
-                            if (posterPrint.get(finalJ).equals("Yes") && colorPrint.get(finalJ).equals("Yes")) {
+                            if (posterPrint.get(finalJ).equals(1) && colorPrint.get(finalJ).equals(0)) {
                                 imageDescription.put("color", "Color poster");
-                            } else if (posterPrint.get(finalJ).equals("Yes") && colorPrint.get(finalJ).equals("No")) {
+                            } else if (posterPrint.get(finalJ).equals(1) && colorPrint.get(finalJ).equals(0)) {
                                 imageDescription.put("color", "B&W poster");
                             } else {
-                                imageDescription.put("color", colorPrint.get(finalJ));
+                                imageDescription.put("color", "No");
                             }
                             imageDescription.put("startPageNo", 1 + "");
                             imageDescription.put("endPageNo", 1 + "");
