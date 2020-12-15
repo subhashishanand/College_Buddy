@@ -1,17 +1,24 @@
 package com.printhub.printhub.image;
 
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import es.dmoral.toasty.Toasty;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageSwitcher;
@@ -21,10 +28,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.printhub.printhub.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.firebaseUserId;
 
 public class MultipleImages extends AppCompatActivity {
 
@@ -40,7 +62,11 @@ public class MultipleImages extends AppCompatActivity {
     private ArrayList<Boolean> posterPrint;
     private ArrayList<Integer> eachCost;
 
-    ProgressDialog progressDialog;
+    private StorageReference mStorageRef;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    String customString="1 in 1 page";
+    private StorageTask mUploadTask;
+
 
     private static final int PICK_IMAGES_CODE=0;
     int copies = 1;
@@ -71,6 +97,8 @@ public class MultipleImages extends AppCompatActivity {
         posterPrint=new ArrayList<>();
         eachCost=new ArrayList<>();
 
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+
         // Setup image Switcher
         imageIs.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
@@ -84,6 +112,7 @@ public class MultipleImages extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 sumTotal(noOfCopies,colorPrint,posterPrint,totalCost);
+                uploadImages();
             }
         });
 
@@ -269,5 +298,118 @@ public class MultipleImages extends AppCompatActivity {
 
         Integer temp=new Integer(sum);
         tv.setText(temp.toString());
+    }
+    public static boolean isConnectionAvailable(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
+            return netInfo != null && netInfo.isConnected()
+                    && netInfo.isConnectedOrConnecting()
+                    && netInfo.isAvailable();
+        }
+        return false;
+    }
+    private String getFileExtension(Uri uri) {
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+    private void uploadImages() {
+        if(imageUris.size()==0){
+            Toast.makeText(MultipleImages.this, "No file selected", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        ProgressDialog progressDialog = new ProgressDialog(MultipleImages.this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setCancelable(false);
+        progressDialog.setTitle("("+0+"/"+imageUris.size()+") Uploading file...");
+        progressDialog.setProgress(0);
+        progressDialog.show();
+        for (int j = 0; j < imageUris.size(); j++) {
+            if (isConnectionAvailable(this)) {
+                if (imageUris.get(j) != null) {
+                    final String fileName1 = UUID.randomUUID().toString();
+                    final String type = "." + getFileExtension(imageUris.get(j));
+                    final StorageReference fileReference = mStorageRef.child(fileName1
+                            + type);
+
+                    int finalJ = j;
+                    mUploadTask = fileReference.putFile(imageUris.get(j)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                            String type = "." + getFileExtension(imageUris.get(finalJ));  //type
+                            Map<String, Object> imageDescription = new HashMap<>();
+                            imageDescription.put("userId", firebaseUserId);
+                            imageDescription.put("doubleSided", "No");
+                            imageDescription.put("custom", customString);
+                            if (posterPrint.get(finalJ).equals("Yes") && colorPrint.get(finalJ).equals("Yes")) {
+                                imageDescription.put("color", "Color poster");
+                            } else if (posterPrint.get(finalJ).equals("Yes") && colorPrint.get(finalJ).equals("No")) {
+                                imageDescription.put("color", "B&W poster");
+                            } else {
+                                imageDescription.put("color", colorPrint.get(finalJ));
+                            }
+                            imageDescription.put("startPageNo", 1 + "");
+                            imageDescription.put("endPageNo", 1 + "");
+                            imageDescription.put("fileName", imageUris.get(finalJ).getLastPathSegment());
+                            imageDescription.put("cost", eachCost.get(finalJ)+"");
+                            imageDescription.put("copy", noOfCopies.get(finalJ) + "");
+                            imageDescription.put("type", type);
+                            imageDescription.put("retriveName", fileName1);
+
+                            db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId)
+                                    .collection("printCart").document(fileName1).set(imageDescription).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    if(finalJ==(imageUris.size()-1)){
+                                        progressDialog.dismiss();
+                                        Toasty.success(MultipleImages.this, "File added to your cart").show();
+                                    }else{
+                                        progressDialog.setTitle("("+finalJ+"/"+imageUris.size()+") Uploading file...");
+                                        progressDialog.setProgress(0);
+                                    }
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    if(finalJ==(imageUris.size()-1)){
+                                        progressDialog.dismiss();
+                                        Toasty.error(MultipleImages.this, finalJ+1+" file not uploaded", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        Toasty.error(MultipleImages.this, finalJ+1+" file not uploaded", Toast.LENGTH_SHORT).show();
+                                        progressDialog.setTitle("("+finalJ+"/"+imageUris.size()+") Uploading file...");
+                                        progressDialog.setProgress(0);
+                                    }
+                                }
+                            });
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    if(finalJ==(imageUris.size()-1)){
+                                        progressDialog.dismiss();
+                                        Toasty.error(MultipleImages.this, finalJ+1+" file not uploaded", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        Toasty.error(MultipleImages.this, finalJ+1+" file not uploaded", Toast.LENGTH_SHORT).show();
+                                        progressDialog.setTitle("("+finalJ+"/"+imageUris.size()+") Uploading file...");
+                                        progressDialog.setProgress(0);
+                                    }
+                                }
+                    }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                            double currentProgress = (100.00 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                            progressDialog.setProgress((int) currentProgress);
+                        }
+                    });
+                }
+            } else {
+                progressDialog.dismiss();
+                Toast.makeText(MultipleImages.this, "Check your connection", Toast.LENGTH_SHORT).show();
+                break;
+            }
+        }
     }
 }
