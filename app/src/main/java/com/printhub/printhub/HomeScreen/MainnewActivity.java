@@ -25,6 +25,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -42,6 +44,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.util.DrawerUIUtils;
 import com.mikepenz.materialize.util.UIUtils;
 import com.printhub.printhub.image.MultipleImages;
+import com.printhub.printhub.image.docCategoryChooser;
 import com.printhub.printhub.sidebar.aboutus.AboutusActivity;
 import com.printhub.printhub.bunkManager.BunkActivity;
 import com.printhub.printhub.Cart;
@@ -54,7 +57,8 @@ import com.printhub.printhub.sidebar.Profile;
 import com.printhub.printhub.R;
 import com.printhub.printhub.WelcomeActivity;
 import com.printhub.printhub.sidebar.Wishlist;
-import com.printhub.printhub.pdf.pdfActivity;
+import com.printhub.printhub.pdf
+        .pdfActivity;
 import com.printhub.printhub.prodcutscategory.Bags;
 import com.printhub.printhub.prodcutscategory.Keychains;
 import com.printhub.printhub.prodcutscategory.Stationary;
@@ -68,6 +72,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
+
+import java.util.ArrayList;
+
 import es.dmoral.toasty.Toasty;
 
 public class MainnewActivity extends AppCompatActivity {
@@ -86,6 +93,8 @@ public class MainnewActivity extends AppCompatActivity {
     DatabaseReference mref;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db2 = FirebaseFirestore.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +117,9 @@ public class MainnewActivity extends AppCompatActivity {
                 if(documentSnapshot.exists()){
                     cityName = documentSnapshot.getString("cityName");
                     collegeName = documentSnapshot.getString("collegeName");
+                    Log.e("rahul",cityName+" "+collegeName);
+                    setSlider();
+
                 }
             }
         });
@@ -129,18 +141,6 @@ public class MainnewActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
 
-        final SliderAdapterExample adapter = new SliderAdapterExample(this);
-        adapter.setCount(5);
-
-        sliderView.setSliderAdapter(adapter);
-
-        sliderView.setIndicatorAnimation(IndicatorAnimations.DROP); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
-        sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
-        sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
-        sliderView.setIndicatorSelectedColor(Color.WHITE);
-        sliderView.setIndicatorUnselectedColor(Color.GRAY);
-        sliderView.setScrollTimeInSec(4); //set scroll delay in seconds :
-        sliderView.startAutoCycle();
 
         
 //
@@ -201,7 +201,7 @@ public class MainnewActivity extends AppCompatActivity {
                                     .tintTarget(true)
                                     .transparentTarget(true)
                                     .outerCircleColor(R.color.second),
-                            TapTarget.forView(findViewById(R.id.visitingcards), "Categories", "Product Categories have been listed here !")
+                            TapTarget.forView(findViewById(R.id.visitingcards), "Collab Projects", "Connect with Friends for Your Project!")
                                     .targetCircleColor(R.color.colorAccent)
                                     .titleTextColor(R.color.colorAccent)
                                     .titleTextSize(25)
@@ -422,17 +422,9 @@ public class MainnewActivity extends AppCompatActivity {
         startActivity(new Intent(MainnewActivity.this, NotificationActivity.class));
     }
 
-    public void cardsActivity(View view) {
-        Intent intent= new Intent(MainnewActivity.this, MultipleImages.class);
-        String uploadkey = mref.push().getKey();
-        intent.putExtra("uploadkey",uploadkey);
-        startActivity(intent);
-    }
 
     public void tshirtActivity(View view) {
-        Intent intent= new Intent(MainnewActivity.this , pdfActivity.class);
-        String uploadkey = mref.push().getKey();
-        intent.putExtra("uploadkey",uploadkey);
+        Intent intent= new Intent(MainnewActivity.this , docCategoryChooser.class);
         startActivity(intent);
     }
 
@@ -455,6 +447,37 @@ public class MainnewActivity extends AppCompatActivity {
     public void keychainsActivity(View view) {
 
         startActivity(new Intent(MainnewActivity.this, Keychains.class));
+    }
+    public void setSlider() {
+        ArrayList<String> sliderImage=new ArrayList<>();
+        ArrayList<String> sliderAbout=new ArrayList<>();
+
+        db2.collection(cityName).document(collegeName).collection("slider").get().addOnSuccessListener(this, new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
+                    Log.e("rahul2",documentSnapshot.getString("about")+" "+collegeName);
+                    sliderAbout.add(documentSnapshot.getString("about"));
+                    sliderImage.add(documentSnapshot.getString("image"));
+                    final SliderAdapterExample adapter = new SliderAdapterExample(MainnewActivity.this,sliderAbout,sliderImage);
+                    adapter.setCount(sliderAbout.size());
+                    sliderView.setSliderAdapter(adapter);
+
+
+
+                }
+            }
+        });
+        sliderView.setIndicatorAnimation(IndicatorAnimations.DROP); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
+        sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
+        sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
+        sliderView.setIndicatorSelectedColor(Color.WHITE);
+        sliderView.setIndicatorUnselectedColor(Color.GRAY);
+        sliderView.setScrollTimeInSec(4); //set scroll delay in seconds :
+        sliderView.startAutoCycle();
+
+
+
     }
 
 }

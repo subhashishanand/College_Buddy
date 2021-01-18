@@ -94,6 +94,7 @@
                 app:sliderAutoCycleEnabled="true"
                 app:sliderIndicatorSelectedColor="#5A5A5A"
                 app:sliderIndicatorUnselectedColor="#FFF"
+                android:layout_margin="10dp"
                 app:sliderScrollTimeInSec="1"
                 app:sliderStartAutoCycle="true" />
 
@@ -103,129 +104,72 @@
                 android:orientation="vertical"
                 android:padding="10dp">
 
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:weightSum="10">
 
-                    <androidx.cardview.widget.CardView
-                        style="@style/homegridcard"
-                        android:onClick="cardsActivity"
-                        card_view:cardCornerRadius="@dimen/card_album_radius">
+
 
                         <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center">
+                            android:id="@+id/visitingcards"
+                            style="@style/homegridcard"
+                            android:onClick="keychainsActivity"
+                            android:background="@drawable/button_back"
+                            >
 
                             <ImageView
-                                android:id="@+id/visitingcards"
+                                android:id="@+id/keychain"
                                 style="@style/homegridimage"
-                                android:src="@drawable/image" />
-
-                            <TextView
-                                android:id="@+id/timeCheck"
-                                style="@style/homegridtext"
-                                android:layout_below="@id/visitingcards"
-                                android:text="Image Prints" />
-
-                        </RelativeLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        style="@style/homegridcard"
-                        android:onClick="tshirtActivity"
-                        card_view:cardCornerRadius="@dimen/card_album_radius">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:id="@+id/tshirts"
-                                style="@style/homegridimage"
-                                android:src="@drawable/pdf" />
+                                android:src="@drawable/team" />
 
                             <TextView
                                 style="@style/homegridtext"
-                                android:layout_below="@id/tshirts"
-                                android:text="PDF Prints" />
+                                android:layout_below="@id/keychain"
+                                android:text="Collab Project" />
 
                         </RelativeLayout>
-                    </androidx.cardview.widget.CardView>
 
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="10">
-
-                    <androidx.cardview.widget.CardView
-                        style="@style/homegridcard"
-                        android:onClick="bagsActivity"
-                        card_view:cardCornerRadius="@dimen/card_album_radius">
 
                         <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            style="@style/homegridcard"
+                            android:onClick="bagsActivity"
+                            android:background="@drawable/button_back"
+                            >
 
                             <ImageView
                                 android:id="@+id/bags"
                                 style="@style/homegridimage"
-                                android:src="@drawable/bags" />
+                                android:src="@drawable/mentalhealth" />
 
                             <TextView
                                 style="@style/homegridtext"
                                 android:layout_below="@id/bags"
-                                android:text="Bags" />
+                                android:text="Club Activities" />
 
                         </RelativeLayout>
 
-                    </androidx.cardview.widget.CardView>
 
-                    <androidx.cardview.widget.CardView
-                        style="@style/homegridcard"
-                        android:onClick="stationaryAcitivity"
-                        card_view:cardCornerRadius="@dimen/card_album_radius">
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:id="@+id/Stationary"
-                                style="@style/homegridimage"
-                                android:src="@drawable/pens" />
-
-                            <TextView
-                                style="@style/homegridtext"
-                                android:layout_below="@id/Stationary"
-                                android:text="Stationary" />
-
-                        </RelativeLayout>
-                    </androidx.cardview.widget.CardView>
 
                 </LinearLayout>
+
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:weightSum="10">
+                    android:weightSum="10"
+                    android:background="@color/fui_transparent">
 
-                    <androidx.cardview.widget.CardView
-                        style="@style/homegridcard"
-                        android:onClick="calendarsActivity"
-                        card_view:cardCornerRadius="@dimen/card_album_radius">
 
                         <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            style="@style/homegridcard"
+                            android:onClick="calendarsActivity"
+                            android:background="@drawable/button_back"
+                            >
 
                             <ImageView
                                 android:id="@+id/calendars"
@@ -239,32 +183,59 @@
 
                         </RelativeLayout>
 
-                    </androidx.cardview.widget.CardView>
 
-                    <androidx.cardview.widget.CardView
-                        style="@style/homegridcard"
-                        android:onClick="keychainsActivity"
-                        card_view:cardCornerRadius="@dimen/card_album_radius">
+
+
 
                         <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            style="@style/homegridcard"
+                            android:onClick="tshirtActivity"
+                            android:background="@drawable/button_back"
+                            >
 
                             <ImageView
-                                android:id="@+id/keychain"
+                                android:id="@+id/tshirts"
                                 style="@style/homegridimage"
-                                android:src="@drawable/keychain" />
+                                android:src="@drawable/pdf" />
 
                             <TextView
                                 style="@style/homegridtext"
-                                android:layout_below="@id/keychain"
-                                android:text="Love Key" />
+                                android:layout_below="@id/tshirts"
+                                android:text="Printout" />
 
                         </RelativeLayout>
 
-                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+
+
+
+                        <RelativeLayout
+                            style="@style/homegridcard"
+                            android:onClick="stationaryAcitivity"
+                            android:background="@drawable/button_back"
+                            >
+
+                            <ImageView
+                                android:id="@+id/Stationary"
+                                style="@style/homegridimage"
+                                android:src="@drawable/pens" />
+
+                            <TextView
+                                style="@style/homegridtext"
+                                android:layout_below="@id/Stationary"
+                                android:text="Purchase Stationary" />
+
+                        </RelativeLayout>
 
                 </LinearLayout>
+
 
             </LinearLayout>
 

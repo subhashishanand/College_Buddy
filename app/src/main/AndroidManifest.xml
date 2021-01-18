@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".image.MultipleImages"></activity>
+        <activity android:name=".image.docCategoryChooser"></activity>
+        <activity android:name=".image.MultipleImages" />
         <activity android:name=".sidebar.oldOrders.OrdersActivity" />
         <activity android:name=".openingaActivity.SplashActivity">
             <intent-filter>
@@ -25,26 +26,21 @@
         </activity> <!-- <activity -->
         <!-- android:name=".prodcutscategory.Cards" -->
         <!-- android:theme="@style/WhiteTheme" /> -->
-
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/notification"/>
+            android:resource="@drawable/notification" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/title_notifications" />
 
         <service android:name=".MessangingService.MyFirebaseMessagingService">
-        <intent-filter>
-        <action android:name="com.google.firebase.MESSAGING_EVENT" />
-        </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
         </service>
-
-
 
         <activity
             android:name=".prodcutscategory.Bags"

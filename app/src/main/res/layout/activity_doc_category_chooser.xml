@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".image.docCategoryChooser"
+    android:background="@drawable/choos_file_back">
+
+
+
+    <Button
+        android:id="@+id/imageButton"
+        android:layout_width="110dp"
+        android:layout_height="60dp"
+        android:text="@string/images"
+        android:padding="16dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginTop="330dp"
+        android:textColor="#ffffff"
+        android:background="@drawable/round_button"/>
+
+
+    <Button
+        android:id="@+id/pdfButton"
+        android:layout_width="110dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        android:padding="16dp"
+        android:text="@string/pdf"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold"
+        android:layout_marginBottom="50dp"
+        android:textColor="#ffffff"
+        android:background="@drawable/round_button"/>
+</LinearLayout>

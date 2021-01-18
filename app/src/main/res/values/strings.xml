@@ -76,6 +76,9 @@
     <string name="orderdetails">Your Order has been Placed Succesfully. \n Here is your Unique Order Id !</string>
     <string name="title_activity_order">OrderActivity</string>
     <string name="title_home">Home</string>
+    <string name="images">Image</string>
+    <string name="choose_file">Choose File Type</string>
+    <string name="pdf">Pdf</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="no_data">Currently You have no Orders.Go and Place your first Order</string>

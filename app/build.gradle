@@ -93,6 +93,8 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui:0.4.4'
 
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+    implementation 'com.google.firebase:firebase-messaging'
+
 
     // paytm dependency
     implementation('com.paytm:pgplussdk:1.4.4') {
