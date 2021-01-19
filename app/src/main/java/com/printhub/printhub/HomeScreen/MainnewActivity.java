@@ -43,6 +43,8 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.util.DrawerUIUtils;
 import com.mikepenz.materialize.util.UIUtils;
+import com.printhub.printhub.clubEvents.clubActivity;
+import com.printhub.printhub.clubEvents.postEvent;
 import com.printhub.printhub.image.MultipleImages;
 import com.printhub.printhub.image.docCategoryChooser;
 import com.printhub.printhub.sidebar.aboutus.AboutusActivity;
@@ -424,8 +426,8 @@ public class MainnewActivity extends AppCompatActivity {
 
 
     public void tshirtActivity(View view) {
-        Intent intent= new Intent(MainnewActivity.this , docCategoryChooser.class);
-        startActivity(intent);
+        startActivity(new Intent(MainnewActivity.this, docCategoryChooser.class));
+
     }
 
 
@@ -446,7 +448,7 @@ public class MainnewActivity extends AppCompatActivity {
 
     public void keychainsActivity(View view) {
 
-        startActivity(new Intent(MainnewActivity.this, Keychains.class));
+        startActivity(new Intent(MainnewActivity.this, clubActivity.class));
     }
     public void setSlider() {
         ArrayList<String> sliderImage=new ArrayList<>();

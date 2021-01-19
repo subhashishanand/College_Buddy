@@ -14,8 +14,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".image.docCategoryChooser"></activity>
+        <activity android:name=".clubEvents.postEvent"></activity>
+        <activity android:name=".clubEvents.clubActivity" />
         <activity android:name=".image.MultipleImages" />
+        <activity android:name=".image.docCategoryChooser" />
         <activity android:name=".sidebar.oldOrders.OrdersActivity" />
         <activity android:name=".openingaActivity.SplashActivity">
             <intent-filter>

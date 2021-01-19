@@ -29,7 +29,7 @@
                     android:id="@+id/cardimage"
                     android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
-                    android:src="@drawable/image"
+                    android:src="@drawable/icon"
                     android:scaleType="fitCenter"
                     android:layout_height="match_parent"/>
 
