@@ -1,0 +1,75 @@
+Index: app/src/main/java/com/printhub/printhub/clubEvents/postEvent.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.printhub.printhub.clubEvents;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.content.Intent;\r\nimport android.net.Uri;\r\nimport android.os.Bundle;\r\nimport android.text.TextUtils;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.ImageView;\r\nimport android.widget.ProgressBar;\r\nimport android.widget.Toast;\r\n\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.OnFailureListener;\r\nimport com.google.android.gms.tasks.OnSuccessListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.firestore.DocumentReference;\r\nimport com.google.firebase.firestore.FieldValue;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.google.firebase.storage.FirebaseStorage;\r\nimport com.google.firebase.storage.StorageReference;\r\nimport com.google.firebase.storage.UploadTask;\r\nimport com.printhub.printhub.R;\r\nimport com.squareup.picasso.Picasso;\r\n\r\nimport java.util.HashMap;\r\nimport java.util.Map;\r\n\r\nimport static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;\r\nimport static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;\r\nimport static com.printhub.printhub.HomeScreen.MainnewActivity.firebaseUserId;\r\n\r\npublic class postEvent extends AppCompatActivity {\r\n    private ImageView postImage;\r\n    private EditText postDes,clubName;\r\n    private Button postButton;\r\n    private static final int PICK_IMAGE_REQUEST = 1;\r\n    private Uri mImageUri=null;\r\n    private ProgressBar progressBar;\r\n\r\n    private FirebaseAuth firebaseAuth;\r\n    private StorageReference storageReference;\r\n    private String currUserId;\r\n    private FirebaseFirestore firebaseFirestore;\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_post_event);\r\n\r\n\r\n        storageReference= FirebaseStorage.getInstance().getReference();\r\n        firebaseFirestore=FirebaseFirestore.getInstance();\r\n        firebaseAuth=FirebaseAuth.getInstance();\r\n        currUserId=firebaseAuth.getCurrentUser().getUid();\r\n        clubName=findViewById(R.id.clubName);\r\n        postImage=findViewById(R.id.newPostImage);\r\n        postDes=findViewById(R.id.newPostDes);\r\n        postButton=findViewById(R.id.postEvent);\r\n        progressBar=findViewById(R.id.progress_bar);\r\n        postImage.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                openFileChooser();\r\n            }\r\n        });\r\n\r\n        postButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                String desc=postDes.getText().toString();\r\n                if(null!=mImageUri && !TextUtils.isEmpty(desc)){\r\n                    progressBar.setVisibility(View.VISIBLE);\r\n                    String random= FieldValue.serverTimestamp().toString();\r\n                    StorageReference filepath= storageReference.child(\"clubEventImages\").child(random+\".jpg\");\r\n                    filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {\r\n                        @Override\r\n                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {\r\n                             filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {\r\n                                 @Override\r\n                                 public void onSuccess(Uri uri) {\r\n                                     Map<String,Object> postMap=new HashMap<>();\r\n                                     Uri url = uri;\r\n                                     postMap.put(\"imageUrl\",url.toString());\r\n                                     postMap.put(\"description\",desc);\r\n                                     postMap.put(\"user_id\",currUserId);\r\n                                     postMap.put(\"timestamp\",FieldValue.serverTimestamp());\r\n\r\n                                     firebaseFirestore.collection(cityName).document(collegeName).collection(\"collab\").add(postMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {\r\n                                         @Override\r\n                                         public void onSuccess(DocumentReference documentReference) {\r\n                                             Toast.makeText(postEvent.this, \"Everthing works fine\", Toast.LENGTH_LONG).show();\r\n                                             progressBar.setVisibility(View.INVISIBLE);\r\n                                             Intent intent=new Intent(getApplicationContext(),clubActivity.class);\r\n                                             startActivity(intent);\r\n                                         }\r\n                                     });\r\n                                 }\r\n                             }).addOnFailureListener(new OnFailureListener() {\r\n                                 @Override\r\n                                 public void onFailure(@NonNull Exception e) {\r\n                                     Toast.makeText(postEvent.this, \"Image is Added to storage but uri cant be featched\", Toast.LENGTH_LONG).show();\r\n                                 }\r\n                             });\r\n                        }\r\n                    }).addOnFailureListener(new OnFailureListener() {\r\n                        @Override\r\n                        public void onFailure(@NonNull Exception e) {\r\n                            Toast.makeText(postEvent.this, \"Image is not added to the storage\", Toast.LENGTH_LONG).show();\r\n                        }\r\n                    });\r\n                }\r\n            }\r\n        });\r\n\r\n    }\r\n\r\n    private void openFileChooser() {\r\n        Intent intent = new Intent();\r\n        intent.setType(\"image/*\");\r\n        intent.setAction(Intent.ACTION_GET_CONTENT);\r\n        startActivityForResult(intent, PICK_IMAGE_REQUEST);\r\n    }\r\n\r\n    @Override\r\n    protected void onActivityResult(int requestCode, int resultCode, Intent data) {\r\n        super.onActivityResult(requestCode, resultCode, data);\r\n\r\n        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK\r\n                && data != null && data.getData() != null) {\r\n            mImageUri = data.getData();\r\n            Picasso.with(this).load(mImageUri).into(postImage);\r\n        } else if (requestCode == PICK_IMAGE_REQUEST && data == null) {\r\n            finish();\r\n        }\r\n\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/printhub/printhub/clubEvents/postEvent.java	(revision b676c599bd7caa6cbfbe71a6bcc9c34d0243e60c)
++++ app/src/main/java/com/printhub/printhub/clubEvents/postEvent.java	(date 1611141064988)
+@@ -4,9 +4,11 @@
+ import androidx.appcompat.app.AppCompatActivity;
+ 
+ import android.content.Intent;
++import android.graphics.Bitmap;
+ import android.net.Uri;
+ import android.os.Bundle;
+ import android.text.TextUtils;
++import android.util.Log;
+ import android.view.View;
+ import android.widget.Button;
+ import android.widget.EditText;
+@@ -28,9 +30,14 @@
+ import com.printhub.printhub.R;
+ import com.squareup.picasso.Picasso;
+ 
++import java.io.ByteArrayOutputStream;
++import java.io.File;
++import java.io.IOException;
+ import java.util.HashMap;
+ import java.util.Map;
+ 
++import id.zelory.compressor.Compressor;
++
+ import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
+ import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
+ import static com.printhub.printhub.HomeScreen.MainnewActivity.firebaseUserId;
+@@ -47,6 +54,7 @@
+     private StorageReference storageReference;
+     private String currUserId;
+     private FirebaseFirestore firebaseFirestore;
++
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+@@ -80,7 +88,11 @@
+                     filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                         @Override
+                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+-                             filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
++
++
++
++
++                            filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                  @Override
+                                  public void onSuccess(Uri uri) {
+                                      Map<String,Object> postMap=new HashMap<>();
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>apply plugin: 'com.android.application'\r\n\r\nandroid {\r\n    compileSdkVersion 29\r\n    buildToolsVersion \"29.0.2\"\r\n    defaultConfig {\r\n        applicationId \"com.printhub.signup\"\r\n        minSdkVersion 24\r\n        targetSdkVersion 29\r\n        versionCode 3\r\n        versionName \"1.1.1\"\r\n        useLibrary 'org.apache.http.legacy'\r\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n    buildTypes {\r\n        release {\r\n            debuggable = true\r\n            jniDebuggable = true\r\n            renderscriptDebuggable = true\r\n        }\r\n        debug {\r\n            debuggable = true\r\n            jniDebuggable = true\r\n            renderscriptDebuggable = true\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility = 1.8\r\n        targetCompatibility = 1.8\r\n\r\n    }\r\n}\r\n\r\ndependencies {\r\n    implementation fileTree(dir: 'libs', include: ['*.jar'])\r\n    implementation 'androidx.appcompat:appcompat:1.1.0'\r\n    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'\r\n    implementation 'com.google.firebase:firebase-core:17.2.2'\r\n    implementation 'androidx.legacy:legacy-support-v4:1.0.0'\r\n    implementation 'com.google.firebase:firebase-auth:19.2.0'\r\n    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'\r\n    implementation 'com.google.firebase:firebase-storage:19.1.0'\r\n    implementation 'com.google.firebase:firebase-database:19.2.0'\r\n    implementation 'com.google.firebase:firebase-firestore:17.1.2'\r\n    implementation 'com.google.firebase:firebase-messaging:21.0.0'\r\n    implementation 'com.google.firebase:firebase-analytics:18.0.0'\r\n    testImplementation 'junit:junit:4.12'\r\n    androidTestImplementation 'androidx.test.ext:junit:1.1.1'\r\n    implementation 'com.google.android.material:material:1.0.0'\r\n    androidTestImplementation 'androidx.test:runner:1.2.0'\r\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'\r\n    implementation 'com.itextpdf:itextg:5.5.10'\r\n    implementation 'com.squareup.picasso:picasso:2.5.2'\r\n    implementation 'com.github.bumptech.glide:glide:4.10.0'\r\n    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'\r\n    implementation 'com.shreyaspatil:EasyUpiPayment:2.0'\r\n    implementation 'com.cepheuen.elegant-number-button:lib:1.0.2'\r\n\r\n//    bunk\r\n    implementation 'androidx.navigation:navigation-fragment:2.1.0'\r\n    implementation 'androidx.navigation:navigation-ui:2.1.0'\r\n    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'\r\n\r\n    implementation 'com.airbnb.android:lottie:3.3.1'\r\n    implementation 'com.daimajia.androidanimations:library:2.3@aar'\r\n    implementation 'com.daimajia.easing:library:2.0@aar'\r\n    implementation 'com.geniusforapp.fancydialog:FancyDialog:0.1.4'\r\n    implementation 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'\r\n    implementation 'com.github.GrenderG:Toasty:1.4.2'\r\n    implementation('com.mikepenz:aboutlibraries:6.0.2@aar') {\r\n        transitive = true\r\n    }\r\n    implementation(\"com.mikepenz:materialdrawer:6.0.3@aar\") {\r\n        transitive = true\r\n    }\r\n    implementation('com.mikepenz:crossfadedrawerlayout:1.0.1@aar')\r\n    implementation 'com.webianks.library:easy-feedback:1.0.5'\r\n    implementation 'com.tomer:fadingtextview:2.5'\r\n    implementation 'com.github.smarteist:autoimageslider:1.3.2'\r\n    implementation 'de.hdodenhof:circleimageview:3.0.0'\r\n    implementation 'com.jakewharton:butterknife:10.0.0'\r\n    annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'\r\n    implementation 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'\r\n    //radiogroup\r\n    implementation 'com.github.Gavras:MultiLineRadioGroup:v1.0.0.6'\r\n    implementation 'com.rengwuxian.materialedittext:library:2.1.4'\r\n    //Stylish edittextbox\r\n    implementation 'com.github.florent37:materialtextfield:1.0.7'\r\n    implementation 'com.android.volley:volley:1.1.0'\r\n    implementation 'com.kaopiz:kprogresshud:1.1.0'\r\n    // Dexter runtime permissions\r\n    implementation 'com.karumi:dexter:4.2.0'\r\n    implementation 'com.firebaseui:firebase-ui:0.4.4'\r\n\r\n    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'\r\n    implementation 'com.google.firebase:firebase-messaging'\r\n\r\n    //Compressor and Crop Image\r\n    implementation 'id.zelory:compressor:3.0.0'\r\n    api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'\r\n\r\n    // paytm dependency\r\n    implementation('com.paytm:pgplussdk:1.4.4') {\r\n        transitive = true;\r\n    }\r\n\r\n    //algolia dependency\r\n    implementation 'com.algolia:algoliasearch-android:3.+'\r\n}\r\napply plugin: 'com.google.gms.google-services'\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/build.gradle	(revision b676c599bd7caa6cbfbe71a6bcc9c34d0243e60c)
++++ app/build.gradle	(date 1611139166299)
+@@ -96,7 +96,7 @@
+     implementation 'com.google.firebase:firebase-messaging'
+ 
+     //Compressor and Crop Image
+-    implementation 'id.zelory:compressor:3.0.0'
++    implementation 'id.zelory:compressor:2.1.0'
+     api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+ 
+     // paytm dependency

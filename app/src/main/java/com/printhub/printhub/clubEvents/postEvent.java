@@ -1,15 +1,18 @@
 package com.printhub.printhub.clubEvents;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -33,7 +36,12 @@ import com.google.firebase.storage.UploadTask;
 import com.paytm.pgsdk.easypay.actions.CustomProgressDialog;
 import com.printhub.printhub.R;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -43,6 +51,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import es.dmoral.toasty.Toasty;
+import id.zelory.compressor.Compressor;
 
 import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
 import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
@@ -54,6 +63,7 @@ public class postEvent extends AppCompatActivity {
     private Button postButton;
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri mImageUri=null;
+    private Bitmap compressedImageFile;
     private ProgressDialog progressDialog;
     Calendar myCalendar = Calendar.getInstance();
 
@@ -140,12 +150,7 @@ public class postEvent extends AppCompatActivity {
 
 
 
-        postImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openFileChooser();
-            }
-        });
+
 
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,6 +163,36 @@ public class postEvent extends AppCompatActivity {
                     filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+//                            //Compressing Image File
+//                            File newImageFile=new File(mImageUri.getPath());
+//                            try {
+//                                compressedImageFile = new Compressor(postEvent.this)
+//                                        .setQuality(75)
+//                                        .compressToBitmap(newImageFile);
+//                            } catch (IOException e) {
+//                                Log.e("Error ","The compress functionality is not working correctly");
+//                            }
+//
+//
+//                            ByteArrayOutputStream baos=new ByteArrayOutputStream();
+//                            compressedImageFile.compress(Bitmap.CompressFormat.JPEG,100,baos);
+//                            byte[] thumbData=baos.toByteArray();
+//
+//                            UploadTask uploadTask=storageReference.child("clubEventImages").child(random+".thumbjpg").putBytes(thumbData);
+//
+//                            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                                @Override
+//                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//
+//                                }
+//                            }).addOnFailureListener(new OnFailureListener() {
+//                                @Override
+//                                public void onFailure(@NonNull  Exception e) {
+//
+//                                }
+//                            });
+
                              filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                  @Override
                                  public void onSuccess(Uri uri) {
@@ -199,28 +234,62 @@ public class postEvent extends AppCompatActivity {
             }
         });
 
-    }
+        postImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("File Open","FileOpener is started");
+                CropImage.activity()
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .setAspectRatio(2,1)
+                        .start(postEvent.this);
+            }
+        });
 
-    private void openFileChooser() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null) {
-            mImageUri = data.getData();
-            Picasso.with(this).load(mImageUri).into(postImage);
-        } else if (requestCode == PICK_IMAGE_REQUEST && data == null) {
-            finish();
+        Log.e("Result","On Activity Result is called");
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                mImageUri = result.getUri();
+                postImage.setImageURI(mImageUri);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Log.e("Result","Error has occured in result");
+            }
         }
+        Log.e("Result","On Activity Result is completed");
 
     }
+
+    //    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        Log.e("Result","On Activity Result is called");
+//        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+//            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+//            if (resultCode == RESULT_OK) {
+//                mImageUri = result.getUri();
+//                postImage.setImageURI(mImageUri);
+//            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+//                Log.e("Result","Error has occured in result");
+//            }
+//        }
+//        Log.e("Result","On Activity Result is completed");
+//    }
+
+
+
+//    private void openFileChooser() {
+//        Intent intent = new Intent();
+//        intent.setType("image/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+//    }
+
+
 
     private void updateLabel() {
         String myFormat = "dd/MM/yyyy"; //In which you need put here
