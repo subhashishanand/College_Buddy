@@ -116,6 +116,7 @@ public class DetailActivity extends AppCompatActivity implements AdapterView.OnI
                     Log.e("File Opener","File chooser is opened with crop activity");
                     CropImage.activity()
                             .setGuidelines(CropImageView.Guidelines.ON)
+                            .setAspectRatio(1,1)
                             .start(DetailActivity.this);
 
 
