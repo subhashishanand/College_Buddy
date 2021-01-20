@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
 import com.printhub.printhub.R;
 import com.smarteist.autoimageslider.SliderViewAdapter;
@@ -41,10 +42,15 @@ public class SliderAdapterExample extends SliderViewAdapter<SliderAdapterExample
 
     @Override
     public void onBindViewHolder(SliderAdapterVH viewHolder, final int position) {
-        Glide.with(viewHolder.itemView)
-                .load(sliderImage.get(position).toString().trim())
-                .fitCenter()
-                .into(viewHolder.imageViewBackground);
+        try {
+            Glide.with(viewHolder.itemView)
+                    .load(sliderImage.get(position).toString().trim())
+                    .fitCenter()
+                    .into(viewHolder.imageViewBackground);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
         viewHolder.textViewDescription.setText(sliderAbout.get(position).toString());
         viewHolder.textViewDescription.setTextSize(16);
         viewHolder.imageGifContainer.setVisibility(View.GONE);
