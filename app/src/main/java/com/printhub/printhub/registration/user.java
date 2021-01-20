@@ -8,6 +8,8 @@ public class user {
     private String collegeName;
     private String hostelName;
     private String cityName;
+    private String imageLink;
+
 
 
     public user() {
@@ -29,13 +31,14 @@ public class user {
         this.name = name;
     }
 
-    public user(String name, String rollNumber, String mobileNumber, String collegeName, String hostelName, String cityName) {
+    public user(String name, String rollNumber, String mobileNumber, String collegeName, String hostelName, String cityName,String imageLink) {
         this.name = name;
         this.rollNumber = rollNumber;
         this.mobileNumber = mobileNumber;
         this.collegeName = collegeName;
         this.hostelName = hostelName;
         this.cityName = cityName;
+        this.imageLink=imageLink;
     }
 
     public String getrollNumber() {
@@ -64,6 +67,14 @@ public class user {
 
     public String getHostelName() {
         return hostelName;
+    }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 
     public void setHostelName(String hostelName) {

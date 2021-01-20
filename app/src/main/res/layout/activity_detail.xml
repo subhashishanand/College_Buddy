@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
-                android:text="Print Hub registration"
+                android:text="CollegeBuddy registration"
                 android:textColor="@color/primary"
                 android:textSize="28sp" />
 
@@ -46,11 +46,21 @@
             android:layout_margin="20dp"
             android:orientation="vertical">
 
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/circularImage"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                app:civ_border_color="#8ef3f3"
+                android:src="@drawable/padrao"
+                app:civ_border_width="2dp"
+             android:layout_marginTop="10dp"/>
+
             <EditText
                 android:id="@+id/nameText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:hint="Name"
                 android:padding="10dp"
                 android:textSize="22sp" />
@@ -137,6 +147,7 @@
                 android:layout_marginTop="30dp"
                 android:backgroundTint="@color/green"
                 android:text="UPLOAD DETAIL"
+                android:layout_marginBottom="10dp"
                 android:textColor="@color/md_white_1000"
                 android:textSize="24dp"/>
 

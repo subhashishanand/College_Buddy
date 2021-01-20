@@ -14,7 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".clubEvents.postEvent"></activity>
+        <activity android:name=".collab.collabPostActivity"></activity>
+        <activity android:name=".collab.collabActivity" />
+        <activity android:name=".clubEvents.postEvent" />
         <activity android:name=".clubEvents.clubActivity" />
         <activity android:name=".image.MultipleImages" />
         <activity android:name=".image.docCategoryChooser" />
@@ -75,6 +77,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"/>
 
         <meta-data
             android:name="preloaded_fonts"
