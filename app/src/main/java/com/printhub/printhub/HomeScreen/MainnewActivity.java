@@ -92,7 +92,7 @@ public class MainnewActivity extends AppCompatActivity {
 
     public static String firebaseUserId=null,cityName= null, collegeName= null;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    SharedPreferences detail = null;
+    SharedPreferences detail = null,cityNameSharedPref,collegeNameSharedPref,userIdSharedPref;
     DatabaseReference mref;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -109,23 +109,17 @@ public class MainnewActivity extends AppCompatActivity {
         firebaseUserId=user.getUid();
         mref= FirebaseDatabase.getInstance().getReference();
         detail = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
+        userIdSharedPref = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
+        collegeNameSharedPref = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
+        cityNameSharedPref = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
+        collegeName=collegeNameSharedPref.getString("collegeName","");
+        cityName = cityNameSharedPref.getString("cityName", "");
+        sliderView = findViewById(R.id.slider);
 
         Typeface typeface = ResourcesCompat.getFont(this, R.font.blacklist);
         TextView appname = findViewById(R.id.appname);
         appname.setTypeface(typeface);
-
-        db.collection("users").document(firebaseUserId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()){
-                    cityName = documentSnapshot.getString("cityName");
-                    collegeName = documentSnapshot.getString("collegeName");
-                    Log.e("rahul",cityName+" "+collegeName);
-                    setSlider();
-
-                }
-            }
-        });
+        setSlider();
 
         //Push notification customer type subscription
         FirebaseMessaging.getInstance().subscribeToTopic("hamirpur")
@@ -139,8 +133,6 @@ public class MainnewActivity extends AppCompatActivity {
                         Log.d("notification subscription", msg);
                     }
                 });
-
-        sliderView = findViewById(R.id.slider);
 
         prefs = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
 
@@ -465,9 +457,6 @@ public class MainnewActivity extends AppCompatActivity {
                     final SliderAdapterExample adapter = new SliderAdapterExample(MainnewActivity.this,sliderAbout,sliderImage);
                     adapter.setCount(sliderAbout.size());
                     sliderView.setSliderAdapter(adapter);
-
-
-
                 }
             }
         });

@@ -104,6 +104,8 @@ dependencies {
         transitive = true;
     }
 
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
     //algolia dependency
     implementation 'com.algolia:algoliasearch-android:3.+'
 

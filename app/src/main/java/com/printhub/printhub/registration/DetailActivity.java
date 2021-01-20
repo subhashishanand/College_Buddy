@@ -53,7 +53,7 @@ public class DetailActivity extends AppCompatActivity implements AdapterView.OnI
     Spinner citySpinner,collegeSpinner;
     String cityName=null,collegeName=null,userId;
     Button uploadButton;
-    SharedPreferences detail = null;
+    SharedPreferences detail = null,cityNameSharedPref,collegeNameSharedPref,userIdSharedPref;
     CircleImageView circularImage;
     private static  int GALLERY_REQUEST = 1;
     Uri imageUri = null;
@@ -102,6 +102,9 @@ public class DetailActivity extends AppCompatActivity implements AdapterView.OnI
         gettingCityNames();
 
         detail = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
+        collegeNameSharedPref = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
+        cityNameSharedPref = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
+        userIdSharedPref = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
 
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -265,7 +268,10 @@ public class DetailActivity extends AppCompatActivity implements AdapterView.OnI
                     public void onSuccess(Void aVoid) {
                         progressDialog.dismiss();
                         Toasty.success(getApplicationContext(), "Successfully registered!!").show();
-                        detail.edit().putBoolean("fillDetails", true).commit();
+                        detail.edit().putBoolean("fillDetails", true).apply();
+                        collegeNameSharedPref.edit().putString("collegeName",collegeName).apply();
+                        cityNameSharedPref.edit().putString("cityName", cityName).apply();
+                        userIdSharedPref.edit().putString("userId",userId).apply();
                         startActivity(new Intent(getApplicationContext(), MainnewActivity.class));
                         finish();
                     }

@@ -93,9 +93,9 @@ public class clubActivity extends AppCompatActivity {
 
     private void loadData(){
         if (lastDocumentSnapshot == null) {
-            query = firebaseFirestore.collection(cityName).document(collegeName).collection("clubActivity").orderBy("timestamp", Query.Direction.DESCENDING).limit(10);
+            query = firebaseFirestore.collection(cityName).document(collegeName).collection("clubActivity").orderBy("timestamp", Query.Direction.DESCENDING).limit(5);
         } else {
-            query = firebaseFirestore.collection(cityName).document(collegeName).collection("clubActivity").orderBy("timestamp", Query.Direction.DESCENDING).startAfter(lastDocumentSnapshot).limit(10);
+            query = firebaseFirestore.collection(cityName).document(collegeName).collection("clubActivity").orderBy("timestamp", Query.Direction.DESCENDING).startAfter(lastDocumentSnapshot).limit(5);
         }
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
