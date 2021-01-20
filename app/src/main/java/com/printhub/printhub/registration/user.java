@@ -8,6 +8,7 @@ public class user {
     private String collegeName;
     private String hostelName;
     private String cityName;
+    private String token;
     private String imageLink;
 
 
@@ -31,7 +32,7 @@ public class user {
         this.name = name;
     }
 
-    public user(String name, String rollNumber, String mobileNumber, String collegeName, String hostelName, String cityName,String imageLink) {
+    public user(String name, String rollNumber, String mobileNumber, String collegeName, String hostelName, String cityName, String token,String imageLink) {
         this.name = name;
         this.rollNumber = rollNumber;
         this.mobileNumber = mobileNumber;
@@ -39,6 +40,7 @@ public class user {
         this.hostelName = hostelName;
         this.cityName = cityName;
         this.imageLink=imageLink;
+        this.token = token;
     }
 
     public String getrollNumber() {
@@ -79,5 +81,13 @@ public class user {
 
     public void setHostelName(String hostelName) {
         this.hostelName = hostelName;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

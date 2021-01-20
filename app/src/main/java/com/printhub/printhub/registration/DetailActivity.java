@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -58,6 +59,7 @@ public class DetailActivity extends AppCompatActivity implements AdapterView.OnI
     Uri imageUri = null;
     ProgressDialog progressDialog;
     private StorageReference mstorageref;
+    String token;
 
 
     ArrayList cityArray = new ArrayList<String>();
@@ -114,7 +116,8 @@ public class DetailActivity extends AppCompatActivity implements AdapterView.OnI
             public void onClick(View v) {
                 if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
                     Log.e("File Opener","File chooser is opened with crop activity");
-                    CropImage.activity()
+
+                   CropImage.activity()
                             .setGuidelines(CropImageView.Guidelines.ON)
                             .setAspectRatio(1,1)
                             .start(DetailActivity.this);
@@ -164,7 +167,7 @@ public class DetailActivity extends AppCompatActivity implements AdapterView.OnI
                             filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                   adddata(uri.toString(),rollNumber,mobileNumber,hostelName,name);
+                                    adddata(uri.toString(),rollNumber,mobileNumber,hostelName,name);
 
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
@@ -247,10 +250,16 @@ public class DetailActivity extends AppCompatActivity implements AdapterView.OnI
         Map<String, Object> collegeInfo = new HashMap<>();
         collegeInfo.put("cityName", cityName);
         collegeInfo.put("collegeName", collegeName);
-        db.collection("users").document(userId).set(collegeInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+        FirebaseAuth.getInstance().getAccessToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+            @Override
+            public void onSuccess(GetTokenResult getTokenResult) {
+                token =getTokenResult.getToken();
+            }
+        });
+                db.collection("users").document(userId).set(collegeInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                user user1=new user(name ,rollNumber,mobileNumber,collegeName,hostelName,cityName,url);
+                user user1=new user(name ,rollNumber,mobileNumber,collegeName,hostelName,cityName,token,url);
                 db.collection(cityName).document(collegeName).collection("users").document(userId).set(user1).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

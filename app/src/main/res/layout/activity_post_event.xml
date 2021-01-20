@@ -43,6 +43,59 @@
         app:layout_constraintTop_toBottomOf="@+id/newPostImage"
         tools:layout_editor_absoluteX="154dp" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="40dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24dp"
+            android:text="Choose date"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:id="@+id/choose_date"
+            android:hint="DD/MM/YYYY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:clickable="true"
+            android:focusable="false"
+            android:editable="true"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24dp"
+            android:text="Choose time"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:id="@+id/choose_time"
+            android:hint="HH:mm AM"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:clickable="true"
+            android:focusable="false"
+            android:editable="true"/>
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/postEvent"
         android:layout_width="wrap_content"
@@ -58,11 +111,4 @@
         android:text="Post"
         app:layout_constraintTop_toBottomOf="@+id/newPostDes" />
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="99dp"
-        android:visibility="invisible" />
 </LinearLayout>

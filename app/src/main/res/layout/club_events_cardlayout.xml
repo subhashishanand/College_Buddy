@@ -1,18 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="8dp">
+    android:paddingBottom="10dp">
     <LinearLayout android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:weightSum="3">
+        android:weightSum="3"
+        android:paddingBottom="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
         <TextView
             android:id="@+id/authorName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ClubName"
-            android:textSize="20sp"/>
+            android:layout_margin="10dp"
+            android:textSize="24sp"
+            android:textColor="#8EF3F3"
+            android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/blogdate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="posted at:"
+                android:layout_margin="10dp"
+                android:textSize="10sp"
+                android:gravity="right|center_vertical"/>
+        </LinearLayout>
         <ImageView
             android:layout_marginLeft="5dp"
             android:id="@+id/clubEventPost"
@@ -27,18 +45,67 @@
             android:id="@+id/blog_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:text="Description"
+            android:textColor="@color/black"
             android:textSize="20sp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
             <TextView
-                android:id="@+id/blogdate"
+                android:id="@+id/clubEventDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Date and Time"
-                android:textSize="20sp"/>
+                android:text="date"
+                android:layout_margin="10dp"
+                android:textStyle="bold"
+                android:textColor="@color/md_blue_A700"/>
+            <TextView
+                android:id="@+id/clubEventTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="time"
+                android:textStyle="bold"
+                android:layout_margin="10dp"
+                android:textColor="@color/md_blue_A700"/>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:orientation="horizontal">
 
+                <Button
+                    android:id="@+id/saveClubEvent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round_button"
+                    android:layout_marginRight="10dp"
+                    android:text="Save"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:padding="10dp"/>
+
+                <Button
+                    android:id="@+id/reminderButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round_button"
+                    android:layout_marginRight="10dp"
+                    android:text="Set Reminder"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:padding="10dp"/>
+
+            </LinearLayout>
 
         </LinearLayout>
+
+
     </LinearLayout>
+    </androidx.cardview.widget.CardView>
 

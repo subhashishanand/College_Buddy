@@ -2,6 +2,7 @@ package com.printhub.printhub.clubEvents;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -54,29 +55,21 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull  ViewHolder holder, int position) {
-        String desc_data=blog_list.get(position).getDescription();
-        holder.setDescText(desc_data);
-        Picasso.with(context).load(blog_list.get(position).getImageUrl()).into(holder.clubEventPost);
-
-        String user_id=blog_list.get(position).getUser_id();
-        db.collection(cityName).document(collegeName).collection("users").document(user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    String userName=task.getResult().getString("name");
-                    holder.setName(userName);
-                }
-            }
-        });
+        EventsClass eventsClass=blog_list.get(position);
+        holder.setDescText(eventsClass.getDescription());
+        holder.setName(eventsClass.clubName);
+        holder.setTime(eventsClass.getActivityTime());
+        holder.setDate(eventsClass.getActivityDate());
+        Picasso.with(context).load(eventsClass.getImageUrl()).into(holder.clubEventPost);
+        holder.setName(eventsClass.getClubName());
 
 
 
         long milliseconds=blog_list.get(position).getTimestamp().getTime();
-        String dateString= DateFormat.format("MM/dd/yyyy",new Date(milliseconds)).toString();
-        holder.setTime(dateString);
+        String dateString= DateFormat.format("dd/MM/yyyy",new Date(milliseconds)).toString();
+        holder.setPostingTime(dateString);
 
     }
-
     @Override
     public int getItemCount() {
         return blog_list.size();
@@ -86,6 +79,7 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
 
         private View mView;
         private MultiAutoCompleteTextView descView;
+        private TextView timeTextView, dateTextView;
         ImageView clubEventPost;
         private TextView blogDate,authorName;
         public ViewHolder(@NonNull  View itemView) {
@@ -96,13 +90,23 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
             //descView=mView.findViewById(R.id.blog_desc);
         }
 
+        public void setDate(String date){
+            dateTextView=mView.findViewById(R.id.clubEventDate);
+            dateTextView.setText(date);
+        }
+
+        public void setTime(String time){
+            timeTextView=mView.findViewById(R.id.clubEventTime);
+            timeTextView.setText(time);
+        }
+
         public void setDescText(String descText){
             descView=mView.findViewById(R.id.blog_desc);
             descView.setText(descText);
         }
-        public void setTime(String date){
+        public void setPostingTime(String date){
             blogDate=mView.findViewById(R.id.blogdate);
-            blogDate.setText(date);
+            blogDate.setText("posted date:"+date);
         }
 
         public void setName(String name){

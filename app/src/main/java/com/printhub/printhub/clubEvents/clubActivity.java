@@ -1,5 +1,6 @@
 package com.printhub.printhub.clubEvents;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -8,15 +9,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.Button;
 
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -31,10 +36,15 @@ import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
 public class clubActivity extends AppCompatActivity {
     private FloatingActionButton button;
     private RecyclerView mEvents;
-    private List<EventsClass> blogList;
+    private List<EventsClass> blogList=new ArrayList<>();
     private StorageReference storageReference;
+    private LinearLayoutManager manager;
+    Boolean isScrolling = false;
+    int totalItems, scrolledOutItems;
     private FirebaseFirestore firebaseFirestore;
     private mEventsAdapter blogRecyclerAdapter;
+    private DocumentSnapshot lastDocumentSnapshot=null;
+    Query query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +56,8 @@ public class clubActivity extends AppCompatActivity {
 
         button=findViewById(R.id.fab);
         mEvents=findViewById(R.id.mEvents);
-        blogList=new ArrayList<>();
-        mEvents.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        manager=new LinearLayoutManager(getApplicationContext());
+        mEvents.setLayoutManager(manager);
 
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -57,24 +67,48 @@ public class clubActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        Query firstQuery=firebaseFirestore.collection(cityName).document(collegeName).collection("collab").orderBy("timestamp", Query.Direction.DESCENDING);
-        firstQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        loadData();
+        mEvents.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onEvent( QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
-
-                for(DocumentChange doc:queryDocumentSnapshots.getDocumentChanges()){
-                    if(doc.getType()==DocumentChange.Type.ADDED){
-                        EventsClass blogPost=doc.getDocument().toObject(EventsClass.class);
-                        blogList.add(blogPost);
-
-                        blogRecyclerAdapter.notifyDataSetChanged();
-                    }
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isScrolling = true;
                 }
+            }
 
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                totalItems = manager.getItemCount();
+                scrolledOutItems = manager.findLastVisibleItemPosition();
+                if (isScrolling && scrolledOutItems + 1 >= totalItems) {
+                    isScrolling = false;
+                    loadData();
+                }
+            }
+        });
+
+    }
+
+    private void loadData(){
+        if (lastDocumentSnapshot == null) {
+            query = firebaseFirestore.collection(cityName).document(collegeName).collection("clubActivity").orderBy("timestamp", Query.Direction.DESCENDING).limit(10);
+        } else {
+            query = firebaseFirestore.collection(cityName).document(collegeName).collection("clubActivity").orderBy("timestamp", Query.Direction.DESCENDING).startAfter(lastDocumentSnapshot).limit(10);
+        }
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    lastDocumentSnapshot = documentSnapshot;
+                    EventsClass blogPost=documentSnapshot.toObject(EventsClass.class);
+                    blogList.add(blogPost);
+                    blogRecyclerAdapter.notifyDataSetChanged();
+                }
             }
         });
         blogRecyclerAdapter=new mEventsAdapter(blogList,this);
         mEvents.setAdapter(blogRecyclerAdapter);
-
     }
 }

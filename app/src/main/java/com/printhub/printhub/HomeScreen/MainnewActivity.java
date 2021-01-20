@@ -128,7 +128,7 @@ public class MainnewActivity extends AppCompatActivity {
         });
 
         //Push notification customer type subscription
-        FirebaseMessaging.getInstance().subscribeToTopic("general")
+        FirebaseMessaging.getInstance().subscribeToTopic("hamirpur")
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -434,7 +434,7 @@ public class MainnewActivity extends AppCompatActivity {
 
     public void bagsActivity(View view) {
 
-        startActivity(new Intent(MainnewActivity.this, Bags.class));
+        startActivity(new Intent(MainnewActivity.this, clubActivity.class));
     }
 
     public void stationaryAcitivity(View view) {
