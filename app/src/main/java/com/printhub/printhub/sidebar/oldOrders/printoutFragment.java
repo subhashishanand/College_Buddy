@@ -55,13 +55,14 @@ public class printoutFragment extends Fragment {
         noData =  v.findViewById(R.id.no_data);
         //check Internet Connection
         new CheckInternetConnection(getContext()).checkConnection();
+        manager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(manager);
 
         if (mRecyclerView != null) {
             //to enable optimization of recyclerview
             mRecyclerView.setHasFixedSize(true);
         }
 
-        LoadData();
 
         db.collection(cityName).document(collegeName).collection("printOrders").whereEqualTo("userId",firebaseUserId).get().addOnSuccessListener(getActivity(), new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -91,7 +92,6 @@ public class printoutFragment extends Fragment {
             }
         });
 
-        mRecyclerView.setLayoutManager(manager);
         PrintAdapter myAdapter = new PrintAdapter(mRecyclerView, getContext(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
         mRecyclerView.setAdapter(myAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -207,7 +207,7 @@ public class printoutFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull PrintAdapter.ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             holder.fileName.setText(fileNames.get(position));
             holder.quantity.setText("Copy: " + quantities.get(position));
             holder.status.setText("Status: "+ statuses.get(position));

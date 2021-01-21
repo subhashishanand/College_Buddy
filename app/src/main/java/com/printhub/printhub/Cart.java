@@ -43,7 +43,7 @@ public class Cart extends AppCompatActivity {
 
 
     private LottieAnimationView tv_no_item;
-   // private LinearLayout activitycartlist;
+    // private LinearLayout activitycartlist;
 
     private float totalcost=0;
 
@@ -71,10 +71,10 @@ public class Cart extends AppCompatActivity {
         new CheckInternetConnection(this).checkConnection();
 
         //retrieve session values and display on listviews
-       // getValues();
+        // getValues();
 
         //SharedPreference for Cart Value
-       // session = new UserSession(getApplicationContext());
+        // session = new UserSession(getApplicationContext());
 
         //validating session
         //session.isLoggedIn();
@@ -82,7 +82,7 @@ public class Cart extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recyclerview);
         tv_no_item = findViewById(R.id.tv_no_cards);
         //activitycartlist = findViewById(R.id.activity_cart_list);
-        //emptytext = findViewById(R.id.emptyBox);
+        emptytext = findViewById(R.id.emptyBox);
         //cartcollect = new ArrayList<>();
 
         if (mRecyclerView != null) {
@@ -95,7 +95,7 @@ public class Cart extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId)
-        .collection("productCart").get().addOnSuccessListener(this, new OnSuccessListener<QuerySnapshot>() {
+                .collection("productCart").get().addOnSuccessListener(this, new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if(queryDocumentSnapshots.isEmpty()){
@@ -132,7 +132,7 @@ public class Cart extends AppCompatActivity {
 //
 
         db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId)
-        .collection("printCart").get().addOnSuccessListener(this, new OnSuccessListener<QuerySnapshot>() {
+                .collection("printCart").get().addOnSuccessListener(this, new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if(queryDocumentSnapshots.isEmpty()){

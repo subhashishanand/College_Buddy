@@ -79,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:background="@color/colorPrimary"
+                android:background="@color/endBlue"
                 android:text="CHECKOUT"
                 android:elevation="40dp"
                 android:textSize="14dp"
@@ -100,16 +100,18 @@
         android:layout_marginRight="5dp"
         app:lottie_autoPlay="true"/>
 
+
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/empty_cart"
+        android:id="@+id/emptyBox"
         android:layout_width="match_parent"
-        app:lottie_fileName="empty_list.json"
         android:layout_height="match_parent"
-        android:foregroundGravity="center"
-        android:src="@drawable/cartempty"
         android:visibility="gone"
         app:lottie_loop="true"
-        app:lottie_autoPlay="true"/>
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="empty_list.json"
+        android:foregroundGravity="center">
+
+    </com.airbnb.lottie.LottieAnimationView>
 
 
 </RelativeLayout>

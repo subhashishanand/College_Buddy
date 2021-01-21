@@ -17,19 +17,37 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".eventActivity"
-            android:label="@string/title_activity_event"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".image.docCategoryChooser" />
-        <activity android:name=".WebServices.MainActivityWeb"></activity>
-        <activity android:name=".WebServices.WebViewActivity" />
-        <activity android:name=".collab.collabPostActivity" />
-        <activity android:name=".collab.collabActivity" />
-        <activity android:name=".clubEvents.postEvent" />
-        <activity android:name=".clubEvents.clubActivity" />
-        <activity android:name=".image.MultipleImages" />
-        <activity android:name=".image.docCategoryChooser" />
-        <activity android:name=".sidebar.oldOrders.OrdersActivity" />
-        <activity android:name=".openingaActivity.SplashActivity">
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".image.docCategoryChooser"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".WebServices.MainActivityWeb"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".WebServices.WebViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".collab.collabPostActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".collab.collabActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".clubEvents.postEvent"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".clubEvents.clubActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".image.MultipleImages"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".sidebar.oldOrders.OrdersActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".openingaActivity.SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,29 +58,64 @@
         <!-- android:theme="@style/WhiteTheme" /> -->
         <activity
             android:name=".prodcutscategory.Bags"
+            android:screenOrientation="portrait"
             android:theme="@style/WhiteTheme" />
         <activity
             android:name=".prodcutscategory.Keychains"
+            android:screenOrientation="portrait"
             android:theme="@style/WhiteTheme" />
         <activity
             android:name=".prodcutscategory.Stationary"
+            android:screenOrientation="portrait"
             android:theme="@style/WhiteTheme" />
-        <activity android:name=".HomeScreen.MainnewActivity" />
-        <activity android:name=".sidebar.Profile" />
-        <activity android:name=".sidebar.Wishlist" />
-        <activity android:name=".Cart" />
-        <activity android:name=".sidebar.HelpCenter" />
-        <activity android:name=".OrderDetails" />
-        <activity android:name=".OrderPlaced" />
-        <activity android:name=".IndividualProduct" />
-        <activity android:name=".NotificationActivity" />
-        <activity android:name=".WelcomeActivity" />
-        <activity android:name=".sidebar.aboutus.AboutusActivity" />
-        <activity android:name=".bunkManager.BunkActivity" />
-        <activity android:name=".registration.DetailActivity" />
-        <activity android:name=".image.ImageActivity" />
-        <activity android:name=".pdf.pdfActivity" />
-        <activity android:name=".bunkManager.EditSub">
+        <activity
+            android:name=".HomeScreen.MainnewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".sidebar.Profile"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".sidebar.Wishlist"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Cart"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".sidebar.HelpCenter"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OrderDetails"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OrderPlaced"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".IndividualProduct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NotificationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".WelcomeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".sidebar.aboutus.AboutusActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".bunkManager.BunkActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".registration.DetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".image.ImageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".pdf.pdfActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".bunkManager.EditSub"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT" />
 

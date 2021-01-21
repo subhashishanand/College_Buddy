@@ -47,6 +47,7 @@ import com.printhub.printhub.WebServices.MainActivityWeb;
 import com.printhub.printhub.clubEvents.clubActivity;
 import com.printhub.printhub.clubEvents.postEvent;
 import com.printhub.printhub.collab.collabActivity;
+import com.printhub.printhub.eventActivity;
 import com.printhub.printhub.image.MultipleImages;
 import com.printhub.printhub.image.docCategoryChooser;
 import com.printhub.printhub.sidebar.aboutus.AboutusActivity;
@@ -404,7 +405,7 @@ public class MainnewActivity extends AppCompatActivity {
 
     }
     public void eventActivity(View view) {
-        Intent intent= new Intent(MainnewActivity.this , docCategoryChooser.class);
+        Intent intent= new Intent(MainnewActivity.this , eventActivity.class);
         startActivity(intent);
     }
 
