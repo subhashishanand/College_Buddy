@@ -88,9 +88,9 @@ public class collabActivity extends AppCompatActivity {
 
     private void loadData(){
         if (lastDocumentSnapshot == null) {
-            query = firebaseFirestore.collection(cityName).document(collegeName).collection("collab").orderBy("timestamp", Query.Direction.DESCENDING).limit(5);
+            query = firebaseFirestore.collection(cityName).document(collegeName).collection("collab").orderBy("timestamp", Query.Direction.DESCENDING).limit(10);
         } else {
-            query = firebaseFirestore.collection(cityName).document(collegeName).collection("collab").orderBy("timestamp", Query.Direction.DESCENDING).startAfter(lastDocumentSnapshot).limit(5);
+            query = firebaseFirestore.collection(cityName).document(collegeName).collection("collab").orderBy("timestamp", Query.Direction.DESCENDING).startAfter(lastDocumentSnapshot).limit(10);
         }
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override

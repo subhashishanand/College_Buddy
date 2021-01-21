@@ -79,7 +79,9 @@ public class collabPostActivity extends AppCompatActivity {
                         postMap.put("whatsApp",whatsAppno);
                     }
                     if(!githubId.isEmpty()){
-                        postMap.put("githubId",githubId);
+                        if(githubId.contains("github.com/")){
+                            postMap.put("githubId",githubId);
+                        }
                     }
                     if(!linkedinId.isEmpty()){
                         postMap.put("linkedinId",linkedinId);

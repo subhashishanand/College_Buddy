@@ -1,7 +1,11 @@
 package com.printhub.printhub.collab;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -13,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -31,6 +37,7 @@ import com.printhub.printhub.IndividualProduct;
 import com.printhub.printhub.R;
 import com.printhub.printhub.WebServices.WebViewActivity;
 import com.printhub.printhub.clubEvents.EventsClass;
+import com.printhub.printhub.pdf.pdfActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.Date;
@@ -66,7 +73,6 @@ public class collabAdapter extends RecyclerView.Adapter<collabAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
        // String desc_data=blog_list.get(position).getDescription();
        // holder.setDescText(desc_data);
-        holder.setIsRecyclable(false);
         String postkey =  collab_list.get(position).getPostkey();
         holder.description.setText(collab_list.get(position).getDescription());
         holder.domain.setText("Domain:"+" "+collab_list.get(position).getDomain());
@@ -111,12 +117,11 @@ public class collabAdapter extends RecyclerView.Adapter<collabAdapter.ViewHolder
         });
 
         String gitlink=collab_list.get(position).getGithubId();
-        if(!TextUtils.isEmpty(gitlink) && gitlink!=null){
+        if( null!=gitlink && !TextUtils.isEmpty(gitlink)){
             holder.github.setVisibility(View.VISIBLE);
             holder.github.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     String link=collab_list.get(position).getGithubId();
                     Intent intent = new Intent(context, WebViewActivity.class);
                     intent.putExtra("Link", link);
@@ -124,20 +129,44 @@ public class collabAdapter extends RecyclerView.Adapter<collabAdapter.ViewHolder
 
                 }
             });
-        }else{
+        }
+        String whatsappno=collab_list.get(position).getWhatsApp();
+        if(null!=whatsappno && !TextUtils.isEmpty(whatsappno)) {
+            String whatsapplink = "https://wa.me/+91" + whatsappno;
+            holder.whatsapp.setVisibility(View.VISIBLE);
+            holder.whatsapp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, WebViewActivity.class);
+                    intent.putExtra("Link", whatsapplink);
+                    context.startActivity(intent);
+
+                }
+            });
 
         }
+            String number= collab_list.get(position).getMobileNo();
+            if(null!=number && !TextUtils.isEmpty(number)){
+                holder.call.setVisibility(View.VISIBLE);
+                holder.call.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
+                            ActivityCompat.requestPermissions((Activity) context,new String[]{Manifest.permission.CALL_PHONE},9);
+                        }else{
+                            String s= "tel:"+number;
+                            Intent intent= new Intent(Intent.ACTION_CALL);
+                            intent.setData(Uri.parse(s));
+                            context.startActivity(intent);
+                        }
 
-
-
-
-
-        holder.interest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+                    }
+                });
             }
-        });
+
+
+
+
         holder.interest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

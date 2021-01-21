@@ -6,12 +6,17 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.paytm.pgsdk.PaytmOrder;
 import com.paytm.pgsdk.PaytmPGService;
 import com.paytm.pgsdk.PaytmPaymentTransactionCallback;
@@ -32,6 +37,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 
 import static com.printhub.printhub.Cart.myAdapter;
 import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
@@ -53,6 +59,10 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
     String custid="", orderId="", mid="",amount;
     String status = "";
     Random random = new Random();
+    Button submit;
+    EditText couponText;
+    String discountprice;
+    TextView payable_amount,discount_amount;
 
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -66,11 +76,19 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
 
         noOfItems.setText(myAdapter.productNames.size()+"");
         amount = getIntent().getStringExtra("totalPrice");
+        discountprice = getIntent().getStringExtra("totalPrice");
         totalAmount.setText(amount);
+        payable_amount = findViewById(R.id.payable_amount);
+        discount_amount = findViewById(R.id.discount_amount);
+        discount_amount.setText("0.00");
+        payable_amount.setText(discountprice);
+        deliveryDate.setText("Within 24 hr");
 
         mid = "bzwPmq36716808918329"; /// your marchant id
         orderId = String.format("%04d", random.nextInt(10000));
         custid = firebaseUserId;
+        submit= findViewById(R.id.submit);
+        couponText= findViewById(R.id.couponText);
 
         //check Internet Connection
         new CheckInternetConnection(this).checkConnection();
@@ -80,6 +98,12 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
         progressDialog.setTitle("Payment processing...");
         progressDialog.setProgress(0);
         progressDialog.setCancelable(false);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                couponVerify();
+            }
+        });
 
 
 
@@ -88,6 +112,53 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+    }
+
+    private void couponVerify(){
+        String couponCode = couponText.getText().toString();
+        if(null!=couponCode && !couponCode.isEmpty()){
+            //couponText.setEnabled(false);
+            db.collection(cityName).document(collegeName).collection("coupon").document(couponCode).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if(documentSnapshot.exists()){
+
+                       submit.setText("Applied");
+                      int discountper= Integer.parseInt(documentSnapshot.getString("discount"));
+                        Log.e("coupon",discountprice);
+                       Double actualamt= Double.parseDouble(amount);
+                       int discountamt=  (int)((actualamt*discountper)/100);
+                       if(discountamt>Integer.parseInt(documentSnapshot.getString("maxDiscount"))){
+                           discountamt=Integer.parseInt(documentSnapshot.getString("maxDiscount"));
+                       }
+                       discountprice=actualamt-(double)discountamt+"";
+                       discount_amount.setText(discountamt+"");
+                       payable_amount.setText(discountprice);
+
+                         Toasty.success(OrderDetails.this, "Your Discount Coupon is applied").show();
+
+                    }else{
+                        couponText.setText("");
+                        couponText.setEnabled(true);
+                        submit.setText("Apply");
+                        discountprice = amount;
+                        discount_amount.setText("0.00");
+                        payable_amount.setText(discountprice);
+                        Toasty.error(OrderDetails.this, "Enter Valid Coupon Code").show();
+                    }
+
+                }
+            });
+
+
+
+        }else{
+            discountprice = amount;
+            submit.setText("Apply");
+            discount_amount.setText("0.00");
+            payable_amount.setText(discountprice);
+            Toasty.error(OrderDetails.this, "Enter Coupon Code").show();
+        }
     }
 
 
@@ -193,7 +264,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
                     "MID="+mid+
                             "&ORDER_ID=" + orderId+
                             "&CUST_ID="+custid+
-                            "&CHANNEL_ID=WAP&TXN_AMOUNT="+amount+"&WEBSITE=DEFAULT"+
+                            "&CHANNEL_ID=WAP&TXN_AMOUNT="+discountprice+"&WEBSITE=DEFAULT"+
                             "&CALLBACK_URL="+ varifyurl+"&INDUSTRY_TYPE_ID=Retail";
 
             JSONObject jsonObject = jsonParser.makeHttpRequest(url,"POST",param);
@@ -232,7 +303,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
             paramMap.put("ORDER_ID", orderId);
             paramMap.put("CUST_ID", custid);
             paramMap.put("CHANNEL_ID", "WAP");
-            paramMap.put("TXN_AMOUNT", amount);
+            paramMap.put("TXN_AMOUNT", discountprice);
             paramMap.put("WEBSITE", "DEFAULT");
             paramMap.put("CALLBACK_URL" ,varifyurl);
             //paramMap.put( "EMAIL" , "abc@gmail.com");   // no need

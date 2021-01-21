@@ -26,14 +26,14 @@
     <ScrollView
         android:layout_below="@id/toolbarwrap"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:scrollbars="vertical">
 
         <LinearLayout
             android:padding="10dp"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
                 <LinearLayout
                     android:background="@drawable/borderfile"
@@ -103,6 +103,51 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="Discount : "
+                            style="@style/fonts"
+                            android:textColor="#424242"/>
+
+                        <TextView
+                            android:id="@+id/discount_amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/headingfonts"
+                            android:textColor="@color/colorPrimaryDark" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_margin="5dp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Payable Amount : "
+                            style="@style/fonts"
+                            android:textColor="#424242"/>
+
+                        <TextView
+                            android:id="@+id/payable_amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/headingfonts"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:text="15000"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_margin="5dp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:text="Estimated Delivery Date : "
                             style="@style/fonts"
                             android:textColor="#424242"/>
@@ -117,6 +162,40 @@
 
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="4">
+
+                        <EditText
+                            android:id="@+id/couponText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Enter Discount Coupon:"
+                            style="@style/fonts"
+                            android:textColor="#424242"
+                            android:layout_weight="3"
+                            android:maxLines="1"
+                            android:textSize="20sp" />
+
+                        <Button
+                            android:id="@+id/submit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_gravity="end"
+                            android:text="Apply"
+                            android:padding="5dp"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:background="@color/endBlue"
+                            android:textColor="@color/white"/>
+
+                    </LinearLayout>
+
+
+
                 </LinearLayout>
 
             <View
@@ -127,22 +206,23 @@
                 android:layout_marginBottom="5dp"/>
 
 
-            <ImageView
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                style="@style/AppTheme.RoundedCornerMaterialButton"
-                android:layout_gravity="bottom|right"
-                android:src="@drawable/ordernow"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
-                android:elevation="40dp"
-                android:background="@color/colorPrimary"
-                android:padding="17dp"
-                android:onClick="PlaceOrder"/>
 
         </LinearLayout>
 
     </ScrollView>
+
+    <TextView android:id="@+id/text_action_bottom2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/endBlue"
+        android:text="Proceed to Payment"
+        android:elevation="40dp"
+        android:textSize="14dp"
+        android:padding="10dp"
+        android:textColor="@color/gen_white"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:onClick="PlaceOrder"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

@@ -125,7 +125,9 @@ public class Cart extends AppCompatActivity {
                             }
                         });
                     }
+                    emptytext.setVisibility(View.GONE);
                 }
+
 
             }
         });
@@ -145,7 +147,7 @@ public class Cart extends AppCompatActivity {
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
-                    emptytext.setVisibility(View.VISIBLE);
+                    emptytext.setVisibility(View.GONE);
                     String fileName = documentSnapshot.getString("fileName");
                     String key = documentSnapshot.getId();
                     String color = documentSnapshot.getString("color");

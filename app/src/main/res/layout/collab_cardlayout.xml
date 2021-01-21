@@ -4,17 +4,16 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_margin="10dp">
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="4dp"
-        app:cardCornerRadius="5dp">
+    android:background="@drawable/collab_back"
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="2dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -33,7 +32,6 @@
                     android:id="@+id/username"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Rahul Raj"
                     android:gravity="fill"
                     android:textSize="16sp"
                     android:layout_weight="3"
@@ -46,7 +44,7 @@
                     android:text="12/04/2000"
                     android:layout_weight="1"
                     android:layout_marginTop="2dp"
-                    android:layout_marginRight="2dp"
+                    android:layout_marginRight="4dp"
                     android:gravity="right"/>
             </LinearLayout>
 
@@ -105,7 +103,7 @@
                     android:layout_height="28dp"
                     android:layout_marginRight="18dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/github"/>
+                    android:src="@drawable/whatsapp"/>
                 <ImageView
                     android:id="@+id/call"
                     android:layout_width="28dp"
@@ -113,7 +111,7 @@
                     android:layout_marginRight="18dp"
                     android:visibility="gone"
                     android:layout_gravity="center"
-                    android:src="@drawable/github"/>
+                    android:src="@drawable/ic_baseline_call_24"/>
 
 
                 <LinearLayout
@@ -155,6 +153,5 @@
 
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
 
 </LinearLayout>
