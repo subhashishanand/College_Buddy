@@ -20,7 +20,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import com.printhub.printhub.CheckInternetConnection;
 import com.printhub.printhub.IndividualProduct;
-import com.printhub.printhub.NotificationActivity;
 import com.printhub.printhub.OrderDetails;
 import com.printhub.printhub.R;
 import com.printhub.printhub.prodcutscategory.Stationary;
@@ -148,11 +147,7 @@ public class Wishlist extends AppCompatActivity {
         startActivity(new Intent(Wishlist.this, Profile.class));
         finish();
     }
-    public void Notifications(View view) {
 
-        startActivity(new Intent(Wishlist.this, NotificationActivity.class));
-        finish();
-    }
 
     @Override
     protected void onResume() {

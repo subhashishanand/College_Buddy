@@ -50,9 +50,9 @@ public class OrdersActivity extends AppCompatActivity {
 //                case R.id.navigation_cabs:
 //                    selectedFragment = new cabsFragment();
 //                    break;
-                case R.id.navigation_old_books:
-                    selectedFragment = new oldBooksFragment();
-                    break;
+//                case R.id.navigation_old_books:
+//                    selectedFragment = new oldBooksFragment();
+//                    break;
             }
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,selectedFragment).commit();
             return true;

@@ -288,11 +288,6 @@ public class Cart extends AppCompatActivity {
         startActivity(new Intent(Cart.this, Profile.class));
         finish();
     }
-    public void Notifications(View view) {
-
-        startActivity(new Intent(Cart.this, NotificationActivity.class));
-        finish();
-    }
 
     @Override
     protected void onResume() {

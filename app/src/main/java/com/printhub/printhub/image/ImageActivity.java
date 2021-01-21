@@ -40,7 +40,6 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.printhub.printhub.Cart;
 import com.printhub.printhub.HomeScreen.MainnewActivity;
-import com.printhub.printhub.NotificationActivity;
 import com.printhub.printhub.R;
 import com.squareup.picasso.Picasso;
 
@@ -372,10 +371,6 @@ public class ImageActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
 
-    public void Notifications(View view) {
-        startActivity(new Intent(ImageActivity.this, NotificationActivity.class));
-        finish();
-    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

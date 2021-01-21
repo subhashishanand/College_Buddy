@@ -11,9 +11,5 @@
         android:icon="@drawable/book"
         android:title="Stationary" />
 
-    <item
-        android:id="@+id/navigation_old_books"
-        android:icon="@drawable/old"
-        android:title="Old Books" />
 
 </menu>

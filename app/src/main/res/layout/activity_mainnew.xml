@@ -38,16 +38,6 @@
                 android:gravity="right"
                 android:orientation="horizontal">
 
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/notifintro"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="10dp"
-                    android:onClick="Notifications"
-                    app:lottie_autoPlay="true"
-                    app:lottie_fileName="ripple.json"
-                    app:lottie_loop="true" />
 
                 <ImageView
                     android:id="@+id/view_profile"
@@ -233,6 +223,34 @@
                                 android:text="Purchase Stationary" />
 
                         </RelativeLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+
+
+
+                    <RelativeLayout
+                        style="@style/homegridcard"
+                        android:onClick="QuickAcessAcitivity"
+                        android:background="@drawable/button_back"
+                        >
+
+                        <ImageView
+                            android:id="@+id/quickacess"
+                            style="@style/homegridimage"
+                            android:src="@drawable/pens" />
+
+                        <TextView
+                            style="@style/homegridtext"
+                            android:layout_below="@id/quickacess"
+                            android:text="Quick Acess" />
+
+                    </RelativeLayout>
 
                 </LinearLayout>
 

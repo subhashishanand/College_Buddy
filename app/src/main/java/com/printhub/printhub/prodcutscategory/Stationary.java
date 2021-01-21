@@ -26,7 +26,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.printhub.printhub.Cart;
 import com.printhub.printhub.CheckInternetConnection;
 import com.printhub.printhub.IndividualProduct;
-import com.printhub.printhub.NotificationActivity;
 import com.printhub.printhub.R;
 import com.squareup.picasso.Picasso;
 
@@ -219,10 +218,6 @@ public class Stationary extends AppCompatActivity {
 //        }
 //    }
 
-    public void Notifications(View view) {
-        startActivity(new Intent(Stationary.this, NotificationActivity.class));
-        finish();
-    }
 
     @Override
     public boolean onSupportNavigateUp() {

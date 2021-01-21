@@ -33,13 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/notification"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="15dp"
-                    android:onClick="Notifications"/>
+
 
 
                 <ImageView

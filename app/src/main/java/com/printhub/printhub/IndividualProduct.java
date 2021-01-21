@@ -119,10 +119,7 @@ public class IndividualProduct extends AppCompatActivity {
     }
 
 
-    public void Notifications(View view) {
-        startActivity(new Intent(IndividualProduct.this, NotificationActivity.class));
-        finish();
-    }
+
 //
     @Override
     public boolean onSupportNavigateUp() {

@@ -47,7 +47,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.itextpdf.text.pdf.PdfReader;
 import com.printhub.printhub.Cart;
-import com.printhub.printhub.NotificationActivity;
 import com.printhub.printhub.R;
 import com.shockwave.pdfium.PdfDocument;
 
@@ -90,7 +89,6 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
     TextView chooseAnotherFile;
     TextView add_to_cart;
     ImageView buyNow;
-    ImageView notifica;
 
     PDFView pdfView;
     Integer pageNumber = 0;
@@ -112,7 +110,6 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        notifica= findViewById(R.id.notific);
         buyNow = findViewById(R.id.buy_now);
         notification = findViewById(R.id.notification);
         noOfPages=findViewById(R.id.noOfPages);
@@ -164,13 +161,6 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
             }
         });
 
-        notifica.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(pdfActivity.this, NotificationActivity.class));
-                finish();
-            }
-        });
 
         chooseAnotherFile.setOnClickListener(new View.OnClickListener() {
             @Override

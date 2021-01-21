@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.printhub.printhub.Cart;
 import com.printhub.printhub.CheckInternetConnection;
-import com.printhub.printhub.NotificationActivity;
+
 import com.printhub.printhub.R;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -62,10 +62,6 @@ public class Keychains extends AppCompatActivity {
         }
     }
 
-    public void Notifications(View view) {
-        startActivity(new Intent(Keychains.this, NotificationActivity.class));
-        finish();
-    }
 
     @Override
     public boolean onSupportNavigateUp() {

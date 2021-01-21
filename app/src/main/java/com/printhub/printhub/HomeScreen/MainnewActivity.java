@@ -43,6 +43,7 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.util.DrawerUIUtils;
 import com.mikepenz.materialize.util.UIUtils;
+import com.printhub.printhub.WebServices.MainActivityWeb;
 import com.printhub.printhub.clubEvents.clubActivity;
 import com.printhub.printhub.clubEvents.postEvent;
 import com.printhub.printhub.collab.collabActivity;
@@ -54,7 +55,6 @@ import com.printhub.printhub.Cart;
 import com.printhub.printhub.CheckInternetConnection;
 import com.printhub.printhub.sidebar.HelpCenter;
 import com.printhub.printhub.image.ImageActivity;
-import com.printhub.printhub.NotificationActivity;
 import com.printhub.printhub.sidebar.oldOrders.OrdersActivity;
 import com.printhub.printhub.sidebar.Profile;
 import com.printhub.printhub.R;
@@ -163,17 +163,6 @@ public class MainnewActivity extends AppCompatActivity {
 
             new TapTargetSequence(this)
                     .targets(
-                            TapTarget.forView(findViewById(R.id.notifintro), "Notifications", "Latest offers will be available here !")
-                                    .targetCircleColor(R.color.colorAccent)
-                                    .titleTextColor(R.color.colorAccent)
-                                    .titleTextSize(25)
-                                    .descriptionTextSize(15)
-                                    .descriptionTextColor(R.color.colorAccent2)
-                                    .drawShadow(true)                   // Whether to draw a drop shadow or not
-                                    .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
-                                    .tintTarget(true)
-                                    .transparentTarget(true)
-                                    .outerCircleColor(R.color.first),
                             TapTarget.forView(findViewById(R.id.view_profile), "Profile", "You can view and edit your profile here !")
                                     .targetCircleColor(R.color.colorAccent)
                                     .titleTextColor(R.color.colorAccent)
@@ -251,13 +240,12 @@ public class MainnewActivity extends AppCompatActivity {
         PrimaryDrawerItem item5 = new PrimaryDrawerItem().withIdentifier(5).withName(R.string.cart).withIcon(R.drawable.cart);
         PrimaryDrawerItem item6 = new PrimaryDrawerItem().withIdentifier(6).withName(R.string.logout).withIcon(R.drawable.logout);
 
-        SecondaryDrawerItem item7 = new SecondaryDrawerItem().withIdentifier(8).withName("Offers").withIcon(R.drawable.tag);
-        SecondaryDrawerItem item8 = new SecondaryDrawerItem().withIdentifier(9).withName(R.string.aboutus).withIcon(R.drawable.credits);
-        SecondaryDrawerItem item9 = new SecondaryDrawerItem().withIdentifier(10).withName(R.string.feedback).withIcon(R.drawable.feedback);
-        SecondaryDrawerItem item10 = new SecondaryDrawerItem().withIdentifier(11).withName(R.string.helpcentre).withIcon(R.drawable.helpccenter);
+        SecondaryDrawerItem item7 = new SecondaryDrawerItem().withIdentifier(9).withName(R.string.aboutus).withIcon(R.drawable.credits);
+        SecondaryDrawerItem item8 = new SecondaryDrawerItem().withIdentifier(10).withName(R.string.feedback).withIcon(R.drawable.feedback);
+        SecondaryDrawerItem item9 = new SecondaryDrawerItem().withIdentifier(11).withName(R.string.helpcentre).withIcon(R.drawable.helpccenter);
 
-        SecondaryDrawerItem item12 = new SecondaryDrawerItem().withIdentifier(13).withName("App Tour").withIcon(R.drawable.tour);
-        SecondaryDrawerItem item13 = new SecondaryDrawerItem().withIdentifier(14).withName("Explore").withIcon(R.drawable.explore);
+        SecondaryDrawerItem item10 = new SecondaryDrawerItem().withIdentifier(13).withName("App Tour").withIcon(R.drawable.tour);
+        SecondaryDrawerItem item11 = new SecondaryDrawerItem().withIdentifier(14).withName("Explore").withIcon(R.drawable.explore);
 
 
         //creating navbar and adding to the toolbar ------------------------------------------------
@@ -272,7 +260,7 @@ public class MainnewActivity extends AppCompatActivity {
                 .withTranslucentStatusBar(true)
                 .withActionBarDrawerToggleAnimated(true)
                 .addDrawerItems(
-                        item1, item2, item3, item4, item5, item6, new DividerDrawerItem(), item7, item8, item9, item10,new DividerDrawerItem(),item12,item13
+                        item1, item2, item3, item4, item5, item6, new DividerDrawerItem(), item7, item8, item9,new DividerDrawerItem(),item10,item11
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -318,29 +306,25 @@ public class MainnewActivity extends AppCompatActivity {
                                 break;
 
                             case 8:
-                                startActivity(new Intent(MainnewActivity.this, NotificationActivity.class));
-                                break;
-
-                            case 9:
                                 startActivity(new Intent(MainnewActivity.this, AboutusActivity.class));
                                 break;
-                            case 10:
+                            case 9:
                                 new EasyFeedback.Builder(MainnewActivity.this)
                                         .withEmail("printhub.connect@gmail.com")
                                         .withSystemInfo()
                                         .build()
                                         .start();
                                 break;
-                            case 11:
+                            case 10:
                                 startActivity(new Intent(MainnewActivity.this, HelpCenter.class));
                                 break;
-                            case 13:
+                            case 11:
                                 prefs.edit().putBoolean("firstrun", true).commit();
                                 //session.setFirstTimeLaunch(true);
                                 startActivity(new Intent(MainnewActivity.this, WelcomeActivity.class));
                                 finish();
                                 break;
-                            case 14:
+                            case 12:
                                 if (result != null && result.isDrawerOpen()) {
                                     result.closeDrawer();
                                 }
@@ -413,9 +397,6 @@ public class MainnewActivity extends AppCompatActivity {
         startActivity(new Intent(MainnewActivity.this, Cart.class));
     }
 
-    public void Notifications(View view) {
-        startActivity(new Intent(MainnewActivity.this, NotificationActivity.class));
-    }
 
 
     public void tshirtActivity(View view) {
@@ -437,6 +418,10 @@ public class MainnewActivity extends AppCompatActivity {
     public void calendarsActivity(View view) {
 
         startActivity(new Intent(MainnewActivity.this, BunkActivity.class));
+    }
+    public void QuickAcessAcitivity(View view) {
+
+        startActivity(new Intent(MainnewActivity.this, MainActivityWeb.class));
     }
 
     public void keychainsActivity(View view) {

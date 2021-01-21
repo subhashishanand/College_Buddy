@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -144,6 +145,8 @@ public class printoutFragment extends Fragment {
                     String end = documentSnapshot.getString("endPageNo");
                     String orderId = documentSnapshot.getString("orderId");
                     String quantity = documentSnapshot.getString("copy");
+                    Log.e("alisha",fileName+" "+ quantity);
+
                     ((PrintAdapter)mRecyclerView.getAdapter()).update(fileName,custom,status,color,doubleSide,start,end, orderId, quantity);
                     //quantity-copies,
                 }
@@ -174,6 +177,7 @@ public class printoutFragment extends Fragment {
             ends.add(end);
             orderIds.add(orderId);
             quantities.add(quantity);
+            Log.e("alisha2",fileName+" "+ quantity);
             notifyDataSetChanged();  //refershes the recyler view automatically...
         }
 
@@ -189,6 +193,7 @@ public class printoutFragment extends Fragment {
             this.ends = ends;
             this.orderIds =  orderIds;
             this.quantities = quantities;
+
         }
 
 

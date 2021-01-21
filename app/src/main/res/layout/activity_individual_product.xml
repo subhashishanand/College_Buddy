@@ -35,13 +35,6 @@
                 android:gravity="right"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="15dp"
-                    android:onClick="Notifications"
-                    android:src="@drawable/notification" />
 
 
             </LinearLayout>

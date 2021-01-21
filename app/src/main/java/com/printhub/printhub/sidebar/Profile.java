@@ -12,7 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.printhub.printhub.Cart;
 import com.printhub.printhub.CheckInternetConnection;
 import com.printhub.printhub.registration.DetailActivity;
-import com.printhub.printhub.NotificationActivity;
+
 import com.printhub.printhub.R;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -103,8 +103,4 @@ public class Profile extends AppCompatActivity {
 
     }
 
-    public void Notifications(View view) {
-        startActivity(new Intent(Profile.this, NotificationActivity.class));
-        finish();
-    }
 }

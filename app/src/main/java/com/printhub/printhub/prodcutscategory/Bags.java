@@ -10,7 +10,6 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.printhub.printhub.Cart;
-import com.printhub.printhub.NotificationActivity;
 import com.printhub.printhub.R;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -116,10 +115,7 @@ public class Bags extends AppCompatActivity {
         }
     }
 
-    public void Notifications(View view) {
-        startActivity(new Intent(Bags.this, NotificationActivity.class));
-        finish();
-    }
+
 
     @Override
     public boolean onSupportNavigateUp() {
