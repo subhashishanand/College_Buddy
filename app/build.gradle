@@ -44,9 +44,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:17.1.2'
     implementation 'com.google.firebase:firebase-messaging:21.0.0'
     implementation 'com.google.firebase:firebase-analytics:18.0.0'
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.android.material:material:1.1.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.itextpdf:itextg:5.5.10'
@@ -103,8 +103,6 @@ dependencies {
     implementation('com.paytm:pgplussdk:1.4.4') {
         transitive = true;
     }
-
-    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     //algolia dependency
     implementation 'com.algolia:algoliasearch-android:3.+'

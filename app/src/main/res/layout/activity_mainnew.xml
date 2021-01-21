@@ -8,10 +8,12 @@
     android:background="@color/colorAccent2"
     tools:context=".HomeScreen.MainnewActivity">
 
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/toolbarwrap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -73,6 +75,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
 
             <com.smarteist.autoimageslider.SliderView
@@ -86,7 +91,11 @@
                 app:sliderIndicatorUnselectedColor="#FFF"
                 android:layout_margin="10dp"
                 app:sliderScrollTimeInSec="1"
-                app:sliderStartAutoCycle="true" />
+                app:sliderStartAutoCycle="true" >
+            </com.smarteist.autoimageslider.SliderView>
+
+
+                            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -35,6 +35,7 @@ public class SplashActivity extends AppCompatActivity {
 
         detail = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
 
+
         Typeface typeface = ResourcesCompat.getFont(this, R.font.blacklist);
 
         TextView appname= findViewById(R.id.appname);

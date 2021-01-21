@@ -52,7 +52,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
     String First;
 
-    SharedPreferences detail = null;
+    SharedPreferences detail = null,cityNameSharedPref,collegeNameSharedPref,userIdSharedPref;
 
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private String firebaseUserId;
@@ -65,8 +65,9 @@ public class WelcomeActivity extends AppCompatActivity {
 
         new CheckInternetConnection(this).checkConnection();
         detail = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
-
-
+        collegeNameSharedPref = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
+        cityNameSharedPref = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
+        userIdSharedPref = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
 
         // Making notification bar transparent
         if (Build.VERSION.SDK_INT >= 21) {
@@ -204,17 +205,20 @@ public class WelcomeActivity extends AppCompatActivity {
                     progressDialog.show();
 
                     firebaseUserId= user.getUid();
+                    userIdSharedPref.edit().putString("userId",firebaseUserId).apply();
                     db.collection("users").document(firebaseUserId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if(documentSnapshot.exists()){
+                                collegeNameSharedPref.edit().putString("collegeName",documentSnapshot.getString("collegeName")).apply();
+                                cityNameSharedPref.edit().putString("cityName", documentSnapshot.getString("cityName")).apply();
                                 db.collection(documentSnapshot.getString("cityName")).document(documentSnapshot.getString("collegeName"))
                                         .collection("users").document(firebaseUserId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                                         if(documentSnapshot.exists()){
                                             progressDialog.dismiss();
-                                            detail.edit().putBoolean("fillDetails", true).commit();
+                                            detail.edit().putBoolean("fillDetails", true).apply();
                                             Intent mainIntent = new Intent(WelcomeActivity.this, MainnewActivity.class);
                                             startActivity(mainIntent);
                                             finish();
