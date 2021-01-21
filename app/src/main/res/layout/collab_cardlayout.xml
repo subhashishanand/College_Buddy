@@ -85,6 +85,7 @@
                     android:id="@+id/github"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
+                    android:visibility="gone"
                     android:layout_marginRight="18dp"
                     android:layout_gravity="center"
                     android:src="@drawable/github"/>
@@ -92,6 +93,7 @@
                     android:id="@+id/linkedin"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
+                    android:visibility="gone"
                     android:layout_marginRight="18dp"
                     android:layout_gravity="center"
 
@@ -99,6 +101,7 @@
                 <ImageView
                     android:id="@+id/whatsapp"
                     android:layout_width="28dp"
+                    android:visibility="gone"
                     android:layout_height="28dp"
                     android:layout_marginRight="18dp"
                     android:layout_gravity="center"
@@ -108,6 +111,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:layout_marginRight="18dp"
+                    android:visibility="gone"
                     android:layout_gravity="center"
                     android:src="@drawable/github"/>
 
@@ -126,7 +130,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
                         android:layout_weight="1"
-                        android:gravity="left"
+                        android:layout_marginRight="10dp"
+                        android:gravity="right"
                         android:text="Interested"
                         android:layout_gravity="center_vertical|right"
                         android:textColor="@color/gen_black"

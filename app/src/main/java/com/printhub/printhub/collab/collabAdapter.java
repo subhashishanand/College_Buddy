@@ -1,6 +1,8 @@
 package com.printhub.printhub.collab;
 
 import android.content.Context;
+import android.content.Intent;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,6 +29,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.printhub.printhub.IndividualProduct;
 import com.printhub.printhub.R;
+import com.printhub.printhub.WebServices.WebViewActivity;
 import com.printhub.printhub.clubEvents.EventsClass;
 import com.squareup.picasso.Picasso;
 
@@ -37,6 +41,7 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
 
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
 import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
 
@@ -104,6 +109,26 @@ public class collabAdapter extends RecyclerView.Adapter<collabAdapter.ViewHolder
 
             }
         });
+
+        String gitlink=collab_list.get(position).getGithubId();
+        if(!TextUtils.isEmpty(gitlink) && gitlink!=null){
+            holder.github.setVisibility(View.VISIBLE);
+            holder.github.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    String link=collab_list.get(position).getGithubId();
+                    Intent intent = new Intent(context, WebViewActivity.class);
+                    intent.putExtra("Link", link);
+                    context.startActivity(intent);
+
+                }
+            });
+        }else{
+
+        }
+
+
 
 
 
