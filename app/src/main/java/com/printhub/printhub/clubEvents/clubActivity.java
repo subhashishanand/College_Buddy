@@ -58,6 +58,10 @@ public class clubActivity extends AppCompatActivity {
         mEvents=findViewById(R.id.mEvents);
         manager=new LinearLayoutManager(getApplicationContext());
         mEvents.setLayoutManager(manager);
+        if (mEvents != null) {
+            //to enable optimization of recyclerview
+            mEvents.setHasFixedSize(true);
+        }
 
 
         button.setOnClickListener(new View.OnClickListener() {

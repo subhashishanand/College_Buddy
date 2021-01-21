@@ -23,20 +23,24 @@
                 android:orientation="horizontal"
                 android:weightSum="5">
                 <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/userimage"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:src="@drawable/avtarimage"
                     android:layout_weight="1"/>
 
                 <TextView
+                    android:id="@+id/username"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="Rahul Raj"
                     android:gravity="fill"
                     android:textSize="16sp"
                     android:layout_weight="3"
+                    android:textStyle="bold"
                     android:textColor="@color/black"/>
                 <TextView
+                    android:id="@+id/postdate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="12/04/2000"
@@ -47,6 +51,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/domain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
@@ -57,6 +62,7 @@
                 android:text="Domain: Android Developer"/>
 
             <TextView
+                android:id="@+id/description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
@@ -66,53 +72,81 @@
                 android:layout_marginRight="5dp"
                 android:text="good project cmerom good mind"/>
 
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="2dp"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
-                android:background="@color/black"
-                android:layout_marginTop="10dp"/>
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginLeft="20dp"
-                android:gravity="right"
-                android:layout_marginEnd="4dp"
-                android:layout_marginBottom="5dp"
-                android:orientation="horizontal">
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="5dp">
+                <ImageView
+                    android:id="@+id/github"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginRight="18dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/github"/>
+                <ImageView
+                    android:id="@+id/linkedin"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginRight="18dp"
+                    android:layout_gravity="center"
 
+                    android:src="@drawable/github"/>
                 <ImageView
+                    android:id="@+id/whatsapp"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:layout_marginRight="18dp"
                     android:layout_gravity="center"
                     android:src="@drawable/github"/>
                 <ImageView
+                    android:id="@+id/call"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:layout_marginRight="18dp"
                     android:layout_gravity="center"
+                    android:src="@drawable/github"/>
 
-                    android:src="@drawable/github"/>
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_marginRight="18dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/github"/>
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_marginRight="18dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/github"/>
+
+                <LinearLayout
+                    android:id="@+id/layout_action3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+                    <TextView
+                        android:id="@+id/text_action"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="Interested"
+                        android:layout_gravity="center_vertical|right"
+                        android:textColor="@color/gen_black"
+                        android:textSize="12dp" />
+
+                    <ImageView
+                        android:id="@+id/interest"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:foregroundGravity="center"
+                        android:visibility="visible"
+                        android:src="@drawable/like_grey"/>
+
+
+                </LinearLayout>
 
 
             </LinearLayout>
+
+
 
         </LinearLayout>
 

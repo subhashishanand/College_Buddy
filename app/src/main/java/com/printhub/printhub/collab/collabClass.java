@@ -3,13 +3,13 @@ package com.printhub.printhub.collab;
 import java.util.Date;
 
 public class collabClass {
-    public String domain,description,mobileNo,whatsApp,githubId,linkedinId,status,userid;
+    public String domain,description,mobileNo,whatsApp,githubId,linkedinId,status,userid,postkey;
     public Date timestamp;
     public collabClass(){
 
     }
 
-    public collabClass(String domain, String description, String mobileNo, String whatsApp, String githubId, String linkedinId, String status, String userid, Date timestamp) {
+    public collabClass(String domain, String description, String mobileNo, String whatsApp, String githubId, String linkedinId, String status, String userid, Date timestamp,String postkey) {
         this.domain = domain;
         this.description = description;
         this.mobileNo = mobileNo;
@@ -19,6 +19,7 @@ public class collabClass {
         this.status = status;
         this.userid = userid;
         this.timestamp = timestamp;
+        this.postkey= postkey;
     }
 
     public String getDomain() {
@@ -91,5 +92,13 @@ public class collabClass {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getPostkey() {
+        return postkey;
+    }
+
+    public void setPostkey(String postkey) {
+        this.postkey = postkey;
     }
 }

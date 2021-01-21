@@ -74,5 +74,7 @@
 
     <color name="colorAccent2">#FFFFFF</color>
     <color name="darkWhite">#cfd8dc</color>
+    <color name="likebtngrey">#747474</color>
+    <color name="likebtnAccent">#F44334</color>
 
 </resources>
