@@ -4,13 +4,18 @@ package com.printhub.printhub.image;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import es.dmoral.toasty.Toasty;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -37,6 +42,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.printhub.printhub.R;
+import com.printhub.printhub.pdf.pdfActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -99,6 +105,12 @@ public class MultipleImages extends AppCompatActivity {
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
+        if(ContextCompat.checkSelfPermission(MultipleImages.this, Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED) {
+            pickImagesIntent();
+        }else{
+            ActivityCompat.requestPermissions(MultipleImages.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},9);
+        }
+
         // Setup image Switcher
         imageIs.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
@@ -119,14 +131,18 @@ public class MultipleImages extends AppCompatActivity {
         color.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (colorPrintEnabled.equals("No")) {
-                    colorPrintEnabled = "Yes";
-                    colorPrint.set(position,true);
-                    //sumTotal(noOfCopies,colorPrint,posterPrint,totalCost);
-                } else {
-                    colorPrintEnabled = "No";
-                    colorPrint.set(position,false);
-                    //sumTotal(noOfCopies,colorPrint,posterPrint,totalCost);
+                if(imageUris.size()==0){
+                    Toast.makeText(MultipleImages.this, "No file selected", Toast.LENGTH_SHORT).show();
+                }else {
+                    if (colorPrintEnabled.equals("No")) {
+                        colorPrintEnabled = "Yes";
+                        colorPrint.set(position, true);
+                        //sumTotal(noOfCopies,colorPrint,posterPrint,totalCost);
+                    } else {
+                        colorPrintEnabled = "No";
+                        colorPrint.set(position, false);
+                        //sumTotal(noOfCopies,colorPrint,posterPrint,totalCost);
+                    }
                 }
 
             }
@@ -135,12 +151,16 @@ public class MultipleImages extends AppCompatActivity {
         poster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (posterEnabled.equals("No")) {
-                    posterEnabled = "Yes";
-                    posterPrint.set(position,true);
-                } else {
-                    posterEnabled = "No";
-                    posterPrint.set(position,false);
+                if(imageUris.size()==0){
+                    Toast.makeText(MultipleImages.this, "No file selected", Toast.LENGTH_SHORT).show();
+                }else {
+                    if (posterEnabled.equals("No")) {
+                        posterEnabled = "Yes";
+                        posterPrint.set(position, true);
+                    } else {
+                        posterEnabled = "No";
+                        posterPrint.set(position, false);
+                    }
                 }
 
             }
@@ -224,18 +244,29 @@ public class MultipleImages extends AppCompatActivity {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 9 && grantResults[0]== PackageManager.PERMISSION_GRANTED){
+            pickImagesIntent();
+        }else{
+            Toast.makeText(MultipleImages.this,"Please provide permission",Toast.LENGTH_SHORT).show();
+            finish();
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode==PICK_IMAGES_CODE){
-            if(resultCode== Activity.RESULT_OK){
-
-                if(data.getClipData()!=null){
+        if(requestCode==PICK_IMAGES_CODE && resultCode ==RESULT_OK){
+            if(data!=null) {
+                Toasty.success(this, "image loaded").show();
+                if (data.getClipData() != null) {
                     // Picked Multiple Images
-                    int cout=data.getClipData().getItemCount(); // no of images picked;
-                    for(int i=0;i<cout;i++){
+                    int cout = data.getClipData().getItemCount(); // no of images picked;
+                    for (int i = 0; i < cout; i++) {
                         //Get Image Uri at every Position
-                        Uri imageUri=data.getClipData().getItemAt(i).getUri();
+                        Uri imageUri = data.getClipData().getItemAt(i).getUri();
 
                         //Populating Arrays
                         imageUris.add(imageUri);// Added to array
@@ -257,13 +288,11 @@ public class MultipleImages extends AppCompatActivity {
                     poster.setChecked(posterPrint.get(0));
 
                     //Setting Position
-                    position=0;
+                    position = 0;
 
-                }
-                else{
+                } else {
                     //picked single image
-                    Uri imageUri=data.getData();
-
+                    Uri imageUri = data.getData();
                     //Populating Arrays
                     imageUris.add(imageUri);
                     noOfCopies.add(1);
@@ -275,10 +304,22 @@ public class MultipleImages extends AppCompatActivity {
                     editCopies.setText(noOfCopies.get(0).toString());
                     color.setChecked(colorPrint.get(0));
                     poster.setChecked(posterPrint.get(0));
-                    position=0;
+                    position = 0;
                 }
+            }else{
+                Toasty.error(this, "no image selected").show();
             }
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
 
@@ -372,8 +413,7 @@ public class MultipleImages extends AppCompatActivity {
                                         progressDialog.setProgress(0);
                                     }
                                 }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
+                            }).addOnFailureListener(new OnFailureListener() {                                @Override
                                 public void onFailure(@NonNull Exception e) {
                                     if(finalJ==(imageUris.size()-1)){
                                         progressDialog.dismiss();
