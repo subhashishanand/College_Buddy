@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_marginTop="150dp"/>
+        android:layout_marginTop="160dp"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -24,7 +24,7 @@
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/ic_add_black_24dp"
-        app:backgroundTint="@color/fui_bgEmail"
+        app:backgroundTint="#8EF3F3"
         app:fabSize="normal"
         android:layout_gravity="bottom|right|end"/>
 

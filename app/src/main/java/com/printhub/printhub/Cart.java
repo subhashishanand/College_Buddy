@@ -44,13 +44,13 @@ public class Cart extends AppCompatActivity {
 
     private LottieAnimationView tv_no_item;
    // private LinearLayout activitycartlist;
-    private LottieAnimationView emptycart;
 
     private float totalcost=0;
 
     public static MyAdapter myAdapter;
 
     boolean stock = true;
+    private LottieAnimationView emptytext;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -82,7 +82,7 @@ public class Cart extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recyclerview);
         tv_no_item = findViewById(R.id.tv_no_cards);
         //activitycartlist = findViewById(R.id.activity_cart_list);
-        emptycart = findViewById(R.id.empty_cart);
+        emptytext = findViewById(R.id.emptyBox);
         //cartcollect = new ArrayList<>();
 
         if (mRecyclerView != null) {
@@ -102,29 +102,31 @@ public class Cart extends AppCompatActivity {
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
-                    emptycart.setVisibility(View.VISIBLE);
-                }
-                for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
-                    if (tv_no_item.getVisibility() == View.VISIBLE) {
-                        tv_no_item.setVisibility(View.GONE);
-                    }
-                    emptycart.setVisibility(View.GONE);
-                    String cartKey =documentSnapshot.getId();
-                    String quantity =documentSnapshot.getString("quantity");
-                    String cost =documentSnapshot.getString("cost");
-                    totalcost = totalcost + Float.parseFloat(cost);
-                    db.collection(cityName).document(collegeName).collection("products").document(cartKey).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            String productName = documentSnapshot.getString("productName");
-                            String price = documentSnapshot.getString("price");
-                            String mrp = documentSnapshot.getString("mrp");
-                            String discount = documentSnapshot.getString("discount");
-                            String productImage = documentSnapshot.getString("productImage");
-                      ((MyAdapter) mRecyclerView.getAdapter()).update(productName, cartKey, price, mrp, discount, productImage, quantity,cost,"notUse");
+                    emptytext.setVisibility(View.VISIBLE);
+                }else{
+                    for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
+                        if (tv_no_item.getVisibility() == View.VISIBLE) {
+                            tv_no_item.setVisibility(View.GONE);
                         }
-                    });
+                        emptytext.setVisibility(View.GONE);
+                        String cartKey =documentSnapshot.getId();
+                        String quantity =documentSnapshot.getString("quantity");
+                        String cost =documentSnapshot.getString("cost");
+                        totalcost = totalcost + Float.parseFloat(cost);
+                        db.collection(cityName).document(collegeName).collection("products").document(cartKey).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                String productName = documentSnapshot.getString("productName");
+                                String price = documentSnapshot.getString("price");
+                                String mrp = documentSnapshot.getString("mrp");
+                                String discount = documentSnapshot.getString("discount");
+                                String productImage = documentSnapshot.getString("productImage");
+                                ((MyAdapter) mRecyclerView.getAdapter()).update(productName, cartKey, price, mrp, discount, productImage, quantity,cost,"notUse");
+                            }
+                        });
+                    }
                 }
+
             }
         });
 //
@@ -137,13 +139,13 @@ public class Cart extends AppCompatActivity {
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
-                    emptycart.setVisibility(View.VISIBLE);
+                    emptytext.setVisibility(View.VISIBLE);
                 }
                 for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
-                    emptycart.setVisibility(View.GONE);
+                    emptytext.setVisibility(View.VISIBLE);
                     String fileName = documentSnapshot.getString("fileName");
                     String key = documentSnapshot.getId();
                     String color = documentSnapshot.getString("color");

@@ -403,6 +403,10 @@ public class MainnewActivity extends AppCompatActivity {
         startActivity(new Intent(MainnewActivity.this, docCategoryChooser.class));
 
     }
+    public void eventActivity(View view) {
+        Intent intent= new Intent(MainnewActivity.this , docCategoryChooser.class);
+        startActivity(intent);
+    }
 
 
     public void bagsActivity(View view) {

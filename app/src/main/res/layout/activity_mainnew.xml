@@ -182,25 +182,21 @@
 
                         </RelativeLayout>
 
-
-
-
-
                         <RelativeLayout
                             style="@style/homegridcard"
-                            android:onClick="tshirtActivity"
+                            android:onClick="eventActivity"
                             android:background="@drawable/button_back"
                             >
 
                             <ImageView
-                                android:id="@+id/tshirts"
+                                android:id="@+id/events"
                                 style="@style/homegridimage"
-                                android:src="@drawable/pdf" />
+                                android:src="@drawable/promo" />
 
                             <TextView
                                 style="@style/homegridtext"
-                                android:layout_below="@id/tshirts"
-                                android:text="Printout" />
+                                android:layout_below="@id/events"
+                                android:text="Events" />
 
                         </RelativeLayout>
 
@@ -211,6 +207,25 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:weightSum="10">
+
+
+                    <RelativeLayout
+                        style="@style/homegridcard"
+                        android:onClick="tshirtActivity"
+                        android:background="@drawable/button_back"
+                        >
+
+                        <ImageView
+                            android:id="@+id/tshirts"
+                            style="@style/homegridimage"
+                            android:src="@drawable/pdf" />
+
+                        <TextView
+                            style="@style/homegridtext"
+                            android:layout_below="@id/tshirts"
+                            android:text="Printout" />
+
+                    </RelativeLayout>
 
 
 
