@@ -82,7 +82,7 @@ public class Cart extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recyclerview);
         tv_no_item = findViewById(R.id.tv_no_cards);
         //activitycartlist = findViewById(R.id.activity_cart_list);
-        emptytext = findViewById(R.id.emptyBox);
+        //emptytext = findViewById(R.id.emptyBox);
         //cartcollect = new ArrayList<>();
 
         if (mRecyclerView != null) {

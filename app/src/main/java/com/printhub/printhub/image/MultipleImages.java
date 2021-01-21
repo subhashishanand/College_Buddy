@@ -72,6 +72,7 @@ public class MultipleImages extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     String customString="1 in 1 page";
     private StorageTask mUploadTask;
+    private double costValue=2;
 
 
     private static final int PICK_IMAGES_CODE=0;
@@ -85,7 +86,6 @@ public class MultipleImages extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiple_images);
-
         imageIs=findViewById(R.id.imageIs);
         previousBtn=findViewById(R.id.previousBtn);
         nextBtn=findViewById(R.id.nextBtn);
@@ -123,7 +123,6 @@ public class MultipleImages extends AppCompatActivity {
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sumTotal(noOfCopies,colorPrint,posterPrint,totalCost);
                 uploadImages();
             }
         });
@@ -137,11 +136,11 @@ public class MultipleImages extends AppCompatActivity {
                     if (colorPrintEnabled.equals("No")) {
                         colorPrintEnabled = "Yes";
                         colorPrint.set(position, true);
-                        //sumTotal(noOfCopies,colorPrint,posterPrint,totalCost);
+                        sumTotal(noOfCopies,colorPrint,posterPrint,totalCost);
                     } else {
                         colorPrintEnabled = "No";
                         colorPrint.set(position, false);
-                        //sumTotal(noOfCopies,colorPrint,posterPrint,totalCost);
+                        sumTotal(noOfCopies,colorPrint,posterPrint,totalCost);
                     }
                 }
 
@@ -157,9 +156,11 @@ public class MultipleImages extends AppCompatActivity {
                     if (posterEnabled.equals("No")) {
                         posterEnabled = "Yes";
                         posterPrint.set(position, true);
+                        sumTotal(noOfCopies,colorPrint,posterPrint,totalCost);
                     } else {
                         posterEnabled = "No";
                         posterPrint.set(position, false);
+                        sumTotal(noOfCopies,colorPrint,posterPrint,totalCost);
                     }
                 }
 
@@ -192,6 +193,7 @@ public class MultipleImages extends AppCompatActivity {
                     copies = 1;
                     Toast.makeText(MultipleImages.this, "default Copies is 1", Toast.LENGTH_SHORT).show();
                 }
+                sumTotal(noOfCopies,colorPrint,posterPrint,totalCost);
             }
         });
 
@@ -286,6 +288,7 @@ public class MultipleImages extends AppCompatActivity {
                     //Setting Switches
                     color.setChecked(colorPrint.get(0));
                     poster.setChecked(posterPrint.get(0));
+                    sumTotal(noOfCopies,colorPrint,posterPrint,totalCost);
 
                     //Setting Position
                     position = 0;
@@ -305,6 +308,7 @@ public class MultipleImages extends AppCompatActivity {
                     color.setChecked(colorPrint.get(0));
                     poster.setChecked(posterPrint.get(0));
                     position = 0;
+                    sumTotal(noOfCopies,colorPrint,posterPrint,totalCost);
                 }
             }else{
                 Toasty.error(this, "no image selected").show();
@@ -325,7 +329,7 @@ public class MultipleImages extends AppCompatActivity {
 
     //Total Cost Calculation
     public static void sumTotal(List<Integer> copies,List<Boolean> color,List<Boolean> poster,TextView tv) {
-        int sum = 0;
+        double sum=0;
         for (int i = 0; i < copies.size(); i++) {
             if(color.get(i) && poster.get(i)){
                 sum+=copies.get(i)*20;
@@ -337,9 +341,7 @@ public class MultipleImages extends AppCompatActivity {
                 sum+=copies.get(i)*2;
             }
         }
-
-        Integer temp=new Integer(sum);
-        tv.setText(temp.toString());
+        tv.setText(sum+"");
     }
     public static boolean isConnectionAvailable(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
