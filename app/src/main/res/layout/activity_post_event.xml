@@ -7,117 +7,163 @@
     android:orientation="vertical"
     tools:context=".clubEvents.postEvent">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Club Name"
-            android:textSize="20sp"
-            android:layout_marginRight="10dp"/>
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="50dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/borderfile"
+                android:layout_marginRight="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Club Name:"
+                    android:textSize="20sp"
+                    android:layout_marginRight="10dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"/>
 
-        <EditText
-            android:id="@+id/clubName"
-            android:layout_width="200dp"
-            android:layout_height="35sp"
-            android:backgroundTint="#EA0505" />
-    </LinearLayout>
-    <ImageView
-        android:id="@+id/newPostImage"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="30dp"
-        android:background="#FDFDFD"
-        android:src="@drawable/agenda"
-        app:srcCompat="@drawable/icon" />
+                <EditText
+                    android:id="@+id/clubName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textColorHint="@color/dark4"
+                    android:backgroundTint="#EA0505" />
+            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:text="Upload Poster:"
+                android:textStyle="bold"
+                android:padding="15dp"/>
+            <ImageView
+                android:id="@+id/newPostImage"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="#FDFDFD"
+                android:padding="5dp"
+                android:src="@drawable/padrao" />
 
-    <MultiAutoCompleteTextView
-        android:id="@+id/newPostDes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/newPostImage"
-        android:layout_marginTop="62dp"
-        android:backgroundTint="#F80808"
-        app:layout_constraintTop_toBottomOf="@+id/newPostImage"
-        tools:layout_editor_absoluteX="154dp"
-        android:hint="Description"/>
+            <MultiAutoCompleteTextView
+                android:id="@+id/newPostDes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColorHint="@color/dark4"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                tools:layout_editor_absoluteX="154dp"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:padding="10dp"
+                android:background="@drawable/borderfile"
+                android:hint="Description"/>
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="20dp"
-        android:hint="If any link"
-        android:id="@+id/linkTextView" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Registration Link"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/black"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:id="@+id/linkTextView"
+                android:textColorHint="@color/dark4"
+                android:background="@drawable/borderfile"/>
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="40dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="24dp"
-            android:text="Choose date"
-            android:textStyle="bold"
-            android:textColor="@color/black"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/borderfile">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:text="Choose date:"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"/>
 
-        <EditText
-            android:id="@+id/choose_date"
-            android:hint="DD/MM/YYYY"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:clickable="true"
-            android:focusable="false"
-            android:editable="true"/>
-    </LinearLayout>
+                <EditText
+                    android:id="@+id/choose_date"
+                    android:hint="DD/MM/YYYY"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:clickable="true"
+                    android:textColorHint="@color/dark4"
+                    android:backgroundTint="@color/md_orange_800"
+                    android:focusable="false"
+                    android:editable="true"/>
+            </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="20dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="24dp"
-            android:text="Choose time"
-            android:textStyle="bold"
-            android:textColor="@color/black"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/borderfile">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:text="Choose time:"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"/>
 
-        <EditText
-            android:id="@+id/choose_time"
-            android:hint="HH:mm AM"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:clickable="true"
-            android:focusable="false"
-            android:editable="true"/>
+                <EditText
+                    android:id="@+id/choose_time"
+                    android:hint="HH:mm AM"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:clickable="true"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textColorHint="@color/dark4"
+                    android:focusable="false"
+                    android:editable="true"/>
 
-    </LinearLayout>
+            </LinearLayout>
 
-    <Button
-        android:id="@+id/postEvent"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_below="@+id/newPostDes"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="168dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginEnd="168dp"
-        android:layout_marginBottom="304dp"
-        android:background="#FF1717"
-        android:text="Post"
-        app:layout_constraintTop_toBottomOf="@+id/newPostDes" />
+            <Button
+                android:id="@+id/postEvent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:textSize="20sp"
+                android:padding="10dp"
+                android:textColor="@color/white"
+                android:background="@drawable/rounded_button"
+                android:text="Submit" />
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
 
 </LinearLayout>

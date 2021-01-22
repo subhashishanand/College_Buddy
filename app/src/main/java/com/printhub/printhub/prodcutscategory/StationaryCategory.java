@@ -6,12 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.printhub.printhub.R;
 import com.printhub.printhub.WebServices.WebViewActivity;
 
 public class StationaryCategory extends AppCompatActivity {
-    private Button notebook,pen,misc,sheets,stationary;
+    private ImageView notebook,pen,misc,sheets,stationary;
     private String link;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

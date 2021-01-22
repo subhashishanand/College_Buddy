@@ -14,6 +14,7 @@
             android:id="@+id/iv_auto_image_slider"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:src="@drawable/collegebuddy"
             android:scaleType="fitXY" />
 
 
@@ -27,7 +28,6 @@
 
         <FrameLayout
             android:id="@+id/fl_shadow_container"
-            android:background="@drawable/bg_overlay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom">

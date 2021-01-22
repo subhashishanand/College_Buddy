@@ -7,33 +7,62 @@
     android:orientation="vertical"
     tools:context=".prodcutscategory.StationaryCategory">
 
-    <Button
-        android:id="@+id/notebook"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="Notebooks"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp">
+            <ImageView
+                android:id="@+id/notebook"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/notebook"/>
 
-    <Button
-        android:id="@+id/pen"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="Pens"/>
 
-    <Button
-        android:id="@+id/stationary"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="Stationary"/>
+            <ImageView
+                android:id="@+id/sheets"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/sheetsandcharts"/>
 
-    <Button
-        android:id="@+id/sheets"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="Sheets and chartpapers"/>
-    <Button
-        android:id="@+id/misc"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="Misc"/>
+            <ImageView
+                android:id="@+id/pen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/penandpencil"/>
+
+            <ImageView
+                android:id="@+id/stationary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/stationary"/>
+
+            <ImageView
+                android:id="@+id/misc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/misc"/>
+
+        </LinearLayout>
+
+
+
+
+    </ScrollView>
+
 
 </LinearLayout>

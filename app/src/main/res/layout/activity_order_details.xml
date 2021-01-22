@@ -177,6 +177,8 @@
                             android:textColor="#424242"
                             android:layout_weight="3"
                             android:maxLines="1"
+                            android:textColorHint="@color/dark4"
+                            android:background="@drawable/borderfile"
                             android:textSize="20sp" />
 
                         <Button

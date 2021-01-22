@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:padding="5dp"
+                android:padding="1dp"
                 android:text="@string/app_name"
                 android:textColor="@color/primary"
                 android:textSize="28sp" />
@@ -91,6 +91,7 @@
                 app:sliderIndicatorUnselectedColor="#FFF"
                 android:layout_margin="10dp"
                 app:sliderScrollTimeInSec="1"
+                android:background="@drawable/collegebuddy"
                 app:sliderStartAutoCycle="true" >
             </com.smarteist.autoimageslider.SliderView>
 
@@ -187,7 +188,6 @@
                             android:onClick="eventActivity"
                             android:background="@drawable/button_back"
                             >
-
                             <ImageView
                                 android:id="@+id/events"
                                 style="@style/homegridimage"

@@ -48,7 +48,6 @@ public class Cart extends AppCompatActivity {
     private float totalcost=0;
 
     public static MyAdapter myAdapter;
-
     boolean stock = true;
     private LottieAnimationView emptytext;
 

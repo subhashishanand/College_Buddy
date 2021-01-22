@@ -3,6 +3,8 @@ package com.printhub.printhub.sidebar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,9 +16,13 @@ import com.printhub.printhub.CheckInternetConnection;
 import com.printhub.printhub.registration.DetailActivity;
 
 import com.printhub.printhub.R;
+import com.printhub.printhub.registration.interestActivity;
+import com.squareup.picasso.Picasso;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
 import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
@@ -24,24 +30,19 @@ import static com.printhub.printhub.HomeScreen.MainnewActivity.firebaseUserId;
 
 public class Profile extends AppCompatActivity {
 
-    private TextView name, mobileNo, detail;
-    private TextView updateDetails;
+    private TextView name, mobileNo, detail,rollnumber;
+    private ImageView updateDetails;
     private LinearLayout addressview;
+    CircleImageView userImage;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.profile_activity);
 
         new CheckInternetConnection(this).checkConnection();
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         initialize();
 
@@ -51,9 +52,11 @@ public class Profile extends AppCompatActivity {
         db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId).get().addOnSuccessListener(this,new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                name.setText(documentSnapshot.getString("name")+"\n"+documentSnapshot.getString("rollNumber"));
+                name.setText(documentSnapshot.getString("name"));
+                rollnumber.setText(documentSnapshot.getString("rollNumber"));
                 mobileNo.setText(documentSnapshot.getString("mobileNumber"));
                 detail.setText(documentSnapshot.getString("hostelName")+"\n"+collegeName+", "+cityName);
+                Picasso.with(getApplicationContext()).load(documentSnapshot.getString("imageLink")).placeholder(R.drawable.avtarimage).into(userImage);
             }
         });
 
@@ -66,6 +69,9 @@ public class Profile extends AppCompatActivity {
         mobileNo=findViewById(R.id.mobileview);
         name =findViewById(R.id.nameText);
         updateDetails=findViewById(R.id.updatedetails);
+        userImage = findViewById(R.id.userPic);
+        rollnumber = findViewById(R.id.rollNumberTextview);
+
 
         updateDetails.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +84,8 @@ public class Profile extends AppCompatActivity {
         addressview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                startActivity(new Intent(Profile.this,Wishlist.class));
+
+               startActivity(new Intent(Profile.this, interestActivity.class));
             }
         });
     }
@@ -91,10 +98,7 @@ public class Profile extends AppCompatActivity {
         return true;
     }
 
-    public void viewCart(View view) {
-        startActivity(new Intent(Profile.this, Cart.class));
-        finish();
-    }
+
 
     @Override
     protected void onResume() {

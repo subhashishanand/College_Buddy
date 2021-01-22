@@ -4,37 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
+    android:background="@drawable/registration"
     tools:context=".registration.DetailActivity"
     android:orientation="vertical">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/toolbarwrap"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            style="@style/CustomTheme"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorAccent2"
-            android:gravity="left"
-            app:titleTextColor="@color/colorAccent2">
-
-            <TextView
-                android:id="@+id/appname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:padding="5dp"
-                android:text="CollegeBuddy registration"
-                android:textColor="@color/primary"
-                android:textSize="28sp" />
-
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
+   <ImageView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:src="@drawable/registration_word"
+       android:layout_marginTop="20dp"
+       android:layout_marginLeft="30dp"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -48,13 +27,13 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/circularImage"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_gravity="center"
                 app:civ_border_color="#8ef3f3"
                 android:src="@drawable/padrao"
                 app:civ_border_width="2dp"
-             android:layout_marginTop="10dp"/>
+             android:layout_marginTop="50dp"/>
 
             <EditText
                 android:id="@+id/nameText"
@@ -63,41 +42,51 @@
                 android:layout_marginTop="20dp"
                 android:hint="Name"
                 android:padding="10dp"
+                android:backgroundTint="@color/md_orange_800"
+                android:textColor="@color/black"
                 android:textSize="22sp" />
 
             <EditText
                 android:id="@+id/rollNumberText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:hint="Roll Number"
                 android:padding="10dp"
+                android:backgroundTint="@color/md_orange_800"
+                android:textColor="@color/black"
                 android:textSize="22sp" />
 
             <EditText
                 android:id="@+id/mobileNumberText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:padding="10dp"
                 android:inputType="phone"
                 android:hint="Mobile Number"
+
+                android:digits="1234567890"
+                android:backgroundTint="@color/md_orange_800"
+                android:textColor="@color/black"
                 android:textSize="22sp"/>
 
             <EditText
                 android:id="@+id/hostelNameText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:padding="10dp"
                 android:hint="Hostel Name"
+                android:backgroundTint="@color/md_orange_800"
+                android:textColor="@color/black"
                 android:textSize="22sp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="30dp">
+                android:layout_marginTop="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -120,7 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="30dp">
+            android:layout_marginTop="10dp">
 
             <TextView
                 android:layout_width="wrap_content"

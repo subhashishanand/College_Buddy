@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".image.docCategoryChooser"
-    android:background="@drawable/choos_file_back">
+    android:background="@drawable/choos_file_category">
 
 
 
@@ -21,7 +21,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="330dp"
         android:textColor="#ffffff"
-        android:background="@drawable/round_button"/>
+        android:background="@drawable/rounded_button"/>
 
 
     <Button
@@ -36,5 +36,5 @@
         android:textStyle="bold"
         android:layout_marginBottom="50dp"
         android:textColor="#ffffff"
-        android:background="@drawable/round_button"/>
+        android:background="@drawable/rounded_button"/>
 </LinearLayout>
