@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +62,7 @@ public class MultipleImages extends AppCompatActivity {
     private EditText editCopies;
     private TextView totalCost;
     private Switch color,poster;
+    private Spinner custom;
 
     private ArrayList<Uri> imageUris;
     private ArrayList<Integer> noOfCopies;
@@ -95,6 +97,7 @@ public class MultipleImages extends AppCompatActivity {
         poster=findViewById(R.id.poster);
         totalCost=findViewById(R.id.totalCost);
         checkout=findViewById(R.id.checkout);
+        custom=findViewById(R.id.custom);
 
         //init list
         imageUris=new ArrayList<>();
@@ -102,6 +105,8 @@ public class MultipleImages extends AppCompatActivity {
         colorPrint=new ArrayList<>();
         posterPrint=new ArrayList<>();
         eachCost=new ArrayList<>();
+
+
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
 

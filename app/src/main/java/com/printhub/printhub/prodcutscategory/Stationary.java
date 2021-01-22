@@ -64,6 +64,7 @@ public class Stationary extends AppCompatActivity {
 
     Client client;
     Index index;
+    private  String category;
 
     private MyAdapter myAdapter;
 
@@ -82,6 +83,10 @@ public class Stationary extends AppCompatActivity {
 
         //check Internet Connection
         new CheckInternetConnection(this).checkConnection();
+
+        //Loading Category
+        Intent intent = getIntent();
+        category= intent.getExtras().getString("Link");
 
         //Initializing our Recyclerview
         mRecyclerView = findViewById(R.id.my_recycler_view);
@@ -170,9 +175,9 @@ public class Stationary extends AppCompatActivity {
     private void LoadData() {
         algoliaResult = false;
         if (lastDocumentSnapshot == null) {
-            query = db.collection(cityName).document(collegeName).collection("products").limit(10);
+            query = db.collection(cityName).document(collegeName).collection("products").whereEqualTo("type",category).limit(10);
         } else {
-            query = db.collection(cityName).document(collegeName).collection("products").startAfter(lastDocumentSnapshot).limit(10);
+            query = db.collection(cityName).document(collegeName).collection("products").whereEqualTo("type",category).startAfter(lastDocumentSnapshot).limit(10);
         }
         query.get().addOnSuccessListener(this, new OnSuccessListener<QuerySnapshot>() {
             @Override

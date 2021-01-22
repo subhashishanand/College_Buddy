@@ -2,12 +2,14 @@ package com.printhub.printhub.clubEvents;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.allyants.notifyme.NotifyMe;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -26,6 +29,9 @@ import com.printhub.printhub.bunkManager.Subjectlist;
 import com.printhub.printhub.prodcutscategory.Stationary;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -63,7 +69,32 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
         Picasso.with(context).load(eventsClass.getImageUrl()).into(holder.clubEventPost);
         holder.setName(eventsClass.getClubName());
 
-
+        holder.reminderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calendar=Calendar.getInstance();
+                SimpleDateFormat simpleDateFormat= new SimpleDateFormat("dd/MM/yyyy hh:mm aa");
+                try {
+                    calendar.setTime(simpleDateFormat.parse(eventsClass.getActivityDate()+" "+eventsClass.getActivityTime()));
+                    Log.e("Time",calendar.getTime().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                NotifyMe notifyMe = new NotifyMe.Builder(context)
+                        .title("Hey")
+                        .content("Lets go")
+                        .color(255,0,0,255)
+                        .led_color(255,255,255,255)
+                        .time(calendar)
+                  //      .addAction(intent,"Snooze",false)
+                        .key("test")
+                    //    .addAction(new Intent(),"Dismiss",true,false)
+                      //  .addAction(intent,"Done")
+                        .large_icon(R.mipmap.ic_launcher_round)
+                        .rrule("FREQ=MINUTELY;INTERVAL=5;COUNT=2")
+                        .build();
+            }
+        });
 
         long milliseconds=blog_list.get(position).getTimestamp().getTime();
         String dateString= DateFormat.format("dd/MM/yyyy",new Date(milliseconds)).toString();
@@ -81,11 +112,13 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
         private MultiAutoCompleteTextView descView;
         private TextView timeTextView, dateTextView;
         ImageView clubEventPost;
+        private Button reminderButton;
         private TextView blogDate,authorName;
         public ViewHolder(@NonNull  View itemView) {
 
             super(itemView);
             mView=itemView;
+            reminderButton=mView.findViewById(R.id.reminderButton);
             clubEventPost= mView.findViewById(R.id.clubEventPost);
             //descView=mView.findViewById(R.id.blog_desc);
         }

@@ -115,6 +115,11 @@
         </LinearLayout>
 
     </LinearLayout>
+    <Spinner
+        android:id="@+id/custom"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:autofillHints="Print" />
     <Button
         android:id="@+id/pickImagesBtn"
         android:text="Pick Images"

@@ -107,5 +107,7 @@ dependencies {
     //algolia dependency
     implementation 'com.algolia:algoliasearch-android:3.+'
 
+    //Notify Me
+    implementation 'com.github.jakebonk:NotifyMe:1.0.1'
 }
 apply plugin: 'com.google.gms.google-services'

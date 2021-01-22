@@ -50,6 +50,7 @@ import com.printhub.printhub.collab.collabActivity;
 import com.printhub.printhub.eventActivity;
 import com.printhub.printhub.image.MultipleImages;
 import com.printhub.printhub.image.docCategoryChooser;
+import com.printhub.printhub.prodcutscategory.StationaryCategory;
 import com.printhub.printhub.sidebar.aboutus.AboutusActivity;
 import com.printhub.printhub.bunkManager.BunkActivity;
 import com.printhub.printhub.Cart;
@@ -417,7 +418,7 @@ public class MainnewActivity extends AppCompatActivity {
 
     public void stationaryAcitivity(View view) {
 
-        startActivity(new Intent(MainnewActivity.this, Stationary.class));
+        startActivity(new Intent(MainnewActivity.this, StationaryCategory.class));
     }
 
     public void calendarsActivity(View view) {
