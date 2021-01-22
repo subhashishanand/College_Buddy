@@ -271,8 +271,9 @@
 
                         <TextView
                             style="@style/homegridtext"
+                            android:id="@+id/text"
                             android:layout_below="@id/quickacess"
-                            android:text="Quick Acess" />
+                            android:text="Web Services(Beta)" />
 
                     </RelativeLayout>
 

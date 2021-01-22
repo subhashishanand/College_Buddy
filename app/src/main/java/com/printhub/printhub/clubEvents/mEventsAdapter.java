@@ -24,8 +24,12 @@ import com.allyants.notifyme.NotifyMe;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.printhub.printhub.R;
 import com.printhub.printhub.bunkManager.Subjectlist;
 import com.printhub.printhub.prodcutscategory.Stationary;
@@ -51,6 +55,8 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
     List<EventsClass> blog_list;
     Context context;
     RecyclerView recyclerView;
+    private FirebaseFirestore db;
+
 
     public void update(EventsClass eventsClass){
         blog_list.add(eventsClass);
@@ -65,19 +71,53 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(@NonNull  ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.club_events_cardlayout,parent,false);
+        db= FirebaseFirestore.getInstance();
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull  ViewHolder holder, int position) {
         EventsClass eventsClass=blog_list.get(position);
+        String postkey =  eventsClass.getEventid();
+        String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         holder.setDescText(eventsClass.getDescription());
         holder.setName(eventsClass.clubName);
         holder.setTime(eventsClass.getActivityTime());
         holder.setDate(eventsClass.getActivityDate());
         Picasso.with(context).load(blog_list.get(position).getImageUrl()).into(holder.clubEventPost);
         holder.setName(eventsClass.getClubName());
-        holder.setLink(eventsClass.getLink());
+        if(null!=eventsClass.getLink() &&!eventsClass.getLink().isEmpty()){
+            holder.linkTextView.setVisibility(View.VISIBLE);
+            holder.setLink(eventsClass.getLink());
+        }
+
+        //countlike
+        db.collection(cityName).document(collegeName).collection("clubActivity").document(postkey).collection("Likes").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
+                if(!queryDocumentSnapshots.isEmpty()){
+                    int count = queryDocumentSnapshots.size();
+                    holder.text_action.setText(count+" Interested");
+                }else{
+                    holder.text_action.setText(0 +" Interested");
+                }
+
+            }
+        });
+        //getlike
+        db.collection(cityName).document(collegeName).collection("clubActivity").document(postkey).collection("Likes").document(userid).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(DocumentSnapshot documentSnapshot,FirebaseFirestoreException e) {
+                if(documentSnapshot.exists()){
+                    holder.interest.setImageDrawable(context.getDrawable(R.drawable.like_red));
+                }else{
+                    holder.interest.setImageDrawable(context.getDrawable(R.drawable.like_grey));
+
+                }
+
+            }
+        });
+
 
 
         holder.reminderButton.setOnClickListener(new View.OnClickListener() {
@@ -124,8 +164,8 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
 
         private View mView;
         private MultiAutoCompleteTextView descView;
-        private TextView timeTextView, dateTextView,linkTextView;
-        ImageView clubEventPost;
+        private TextView timeTextView, dateTextView,linkTextView,text_action;
+        ImageView clubEventPost,interest;
         private Button reminderButton;
         private TextView blogDate,authorName;
         public ViewHolder(@NonNull  View itemView) {
@@ -134,6 +174,8 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
             mView=itemView;
             reminderButton=mView.findViewById(R.id.reminderButton);
             clubEventPost= mView.findViewById(R.id.clubEventPost);
+            interest= mView.findViewById(R.id.saveClubEvent);
+            text_action= mView.findViewById(R.id.text_action);
             //descView=mView.findViewById(R.id.blog_desc);
         }
 

@@ -40,6 +40,20 @@
                     android:textColorHint="@color/dark4"
                     android:backgroundTint="#EA0505" />
             </LinearLayout>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Event Title"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/black"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:id="@+id/eventTitle"
+                android:textColorHint="@color/dark4"
+                android:background="@drawable/borderfile"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -55,6 +69,8 @@
                 android:background="#FDFDFD"
                 android:padding="5dp"
                 android:src="@drawable/padrao" />
+
+
 
             <MultiAutoCompleteTextView
                 android:id="@+id/newPostDes"

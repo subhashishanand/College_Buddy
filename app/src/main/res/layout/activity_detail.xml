@@ -65,8 +65,8 @@
                 android:padding="10dp"
                 android:inputType="phone"
                 android:hint="Mobile Number"
-
                 android:digits="1234567890"
+                android:maxLength="10"
                 android:backgroundTint="@color/md_orange_800"
                 android:textColor="@color/black"
                 android:textSize="22sp"/>

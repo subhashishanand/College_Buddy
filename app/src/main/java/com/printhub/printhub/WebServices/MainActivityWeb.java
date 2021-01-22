@@ -1,27 +1,38 @@
 package com.printhub.printhub.WebServices;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
+import com.printhub.printhub.CheckInternetConnection;
 import com.printhub.printhub.R;
 
 public class MainActivityWeb extends AppCompatActivity {
-    private Button zomato,dominos,ola,redbus,udemy,twitter;
+    private ImageView zomato,dominos,ola,redbus,udemy,twitter;
     private String link;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_web2);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         zomato=findViewById(R.id.zomato);
         dominos=findViewById(R.id.dominos);
         ola=findViewById(R.id.ola);
         redbus=findViewById(R.id.redbus);
         udemy=findViewById(R.id.udemy);
         twitter=findViewById(R.id.twitter);
+
+
 
         zomato.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,7 +60,7 @@ public class MainActivityWeb extends AppCompatActivity {
         ola.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                link = "https://www.olacabs.com/";
+                link = "https://www.uber.com/in/en/";
                 Intent i = new Intent(getApplicationContext(), WebViewActivity.class);
                 i.putExtra("Link", link);
                 startActivity(i);
@@ -90,5 +101,21 @@ public class MainActivityWeb extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

@@ -113,6 +113,9 @@ public class clubActivity extends AppCompatActivity {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    if(!documentSnapshot.exists()){
+
+                    }
                     if(documentSnapshot!=null) {
                         lastDocumentSnapshot = documentSnapshot;
                         EventsClass blogPost = documentSnapshot.toObject(EventsClass.class);

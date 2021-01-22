@@ -1,6 +1,7 @@
 package com.printhub.printhub.prodcutscategory;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,8 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.printhub.printhub.CheckInternetConnection;
 import com.printhub.printhub.R;
 import com.printhub.printhub.WebServices.WebViewActivity;
+import com.printhub.printhub.sidebar.Profile;
+import com.printhub.printhub.sidebar.Wishlist;
 
 public class StationaryCategory extends AppCompatActivity {
     private ImageView notebook,pen,misc,sheets,stationary;
@@ -18,6 +22,13 @@ public class StationaryCategory extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stationary_category);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Stationary Category");
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         misc=findViewById(R.id.misc);
         notebook=findViewById(R.id.notebook);
         pen=findViewById(R.id.pen);
@@ -77,5 +88,26 @@ public class StationaryCategory extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //check Internet Connection
+        new CheckInternetConnection(this).checkConnection();
     }
 }

@@ -16,6 +16,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.printhub.printhub.R;
+import com.printhub.printhub.collab.collabActivity;
 import com.printhub.printhub.collab.collabAdapter;
 import com.printhub.printhub.collab.collabClass;
 
@@ -27,13 +28,12 @@ import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
 
 public class interestActivity extends AppCompatActivity {
     RecyclerView recyclerView;
-    private List<collabClass> collabList=new ArrayList<>();
     Boolean isScrolling = false;
     int totalItems, scrolledOutItems;
     private LinearLayoutManager manager;
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private DocumentSnapshot lastDocumentSnapshot=null;
-    private com.printhub.printhub.collab.collabAdapter collabAdapter;
+    private collabAdapter collabAdapter;
     Query query;
 
     @Override
@@ -43,6 +43,8 @@ public class interestActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.collabview);
         manager=new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(manager);
+        collabAdapter= new collabAdapter(new ArrayList<>(), interestActivity.this, recyclerView);
+        recyclerView.setAdapter(collabAdapter);
         if (recyclerView != null) {
             //to enable optimization of recyclerview
             recyclerView.setHasFixedSize(true);
@@ -90,14 +92,11 @@ public class interestActivity extends AppCompatActivity {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                     lastDocumentSnapshot = documentSnapshot;
-                    collabClass collabPost=documentSnapshot.toObject(collabClass.class);
-                    collabList.add(collabPost);
-                    collabAdapter.notifyDataSetChanged();
+                    collabClass cc=documentSnapshot.toObject(collabClass.class);
+                    ((collabAdapter)recyclerView.getAdapter()).update(cc);
                 }
             }
         });
-        collabAdapter=new collabAdapter(collabList,this);
-        recyclerView.setAdapter(collabAdapter);
 
     }
 }

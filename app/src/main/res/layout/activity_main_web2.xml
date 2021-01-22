@@ -7,37 +7,135 @@
     android:orientation="vertical"
     tools:context=".WebServices.MainActivityWeb">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:id="@+id/zomato"
-        android:text="Zomato"/>
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbarwrap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/dominos"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="Dominos"/>
-    <Button
-        android:id="@+id/ola"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="OLA"/>
-    <Button
-        android:id="@+id/redbus"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="REDBUS"/>
-    <Button
-        android:id="@+id/udemy"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="UDEMY"/>
-    <Button
-        android:id="@+id/twitter"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="TWITTER"/>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:titleTextColor="#000"
+            style="@style/CustomTheme"
+            android:background="@color/colorAccent">
+
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/zomato"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/zomato"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/black"
+                android:layout_marginLeft="100dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="100dp"/>
+
+            <ImageView
+                android:id="@+id/dominos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/dominos"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/black"
+                android:layout_marginLeft="100dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="100dp"/>
+            <ImageView
+                android:id="@+id/twitter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/twitter"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/black"
+                android:layout_marginLeft="100dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="100dp"/>
+            <ImageView
+                android:id="@+id/udemy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/udemy"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/black"
+                android:layout_marginLeft="100dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="100dp"/>
+            <ImageView
+                android:id="@+id/redbus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/redbus"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/black"
+                android:layout_marginLeft="100dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="100dp"/>
+            <ImageView
+                android:id="@+id/ola"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/uber"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="10dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/black"
+                android:layout_marginLeft="100dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="100dp"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/tinder"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="10dp"/>
+
+
+
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
 
 
 </LinearLayout>
