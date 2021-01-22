@@ -212,7 +212,7 @@ public class postEvent extends AppCompatActivity {
                                      postMap.put("activityTime", chooseTimeTextView.getText().toString());
                                      postMap.put("link",tempLink);
                                      postMap.put("eventid",eventId);
-                                     postMap.put("eventTitle",eventTitle);
+                                     postMap.put("eventTitle",eventhead);
 
                                      firebaseFirestore.collection(cityName).document(collegeName).collection("clubActivity").document(eventId).set(postMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                          @Override
@@ -221,6 +221,7 @@ public class postEvent extends AppCompatActivity {
                                              Intent intent=new Intent(getApplicationContext(),clubActivity.class);
                                              startActivity(intent);
                                              finish();
+                                             Toast.makeText(postEvent.this, "Post is Uploaded Succesfully", Toast.LENGTH_LONG).show();
                                          }
                                      });
                                  }

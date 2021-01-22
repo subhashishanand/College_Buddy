@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.AbsListView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -35,12 +37,15 @@ public class interestActivity extends AppCompatActivity {
     private DocumentSnapshot lastDocumentSnapshot=null;
     private collabAdapter collabAdapter;
     Query query;
+    private LottieAnimationView tv_no_item;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interest);
         recyclerView = findViewById(R.id.collabview);
+        tv_no_item = findViewById(R.id.tv_no_cards);
         manager=new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(manager);
         collabAdapter= new collabAdapter(new ArrayList<>(), interestActivity.this, recyclerView);
@@ -90,7 +95,15 @@ public class interestActivity extends AppCompatActivity {
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(queryDocumentSnapshots.isEmpty()){
+                    if (tv_no_item.getVisibility() == View.VISIBLE) {
+                        tv_no_item.setVisibility(View.GONE);
+                    }
+                }
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    if (tv_no_item.getVisibility() == View.VISIBLE) {
+                        tv_no_item.setVisibility(View.GONE);
+                    }
                     lastDocumentSnapshot = documentSnapshot;
                     collabClass cc=documentSnapshot.toObject(collabClass.class);
                     ((collabAdapter)recyclerView.getAdapter()).update(cc);

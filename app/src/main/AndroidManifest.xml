@@ -16,6 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".registration.eventInterestActivity"
+            android:screenOrientation="portrait"></activity>
+
         <receiver android:name="com.allyants.notifyme.NotificationPublisher" />
         <receiver android:name="com.allyants.notifyme.BootNotifyMe">
             <intent-filter>
@@ -24,8 +27,10 @@
                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>
-        <activity android:name=".registration.interestActivity"
-            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".registration.interestActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".eventActivity"
             android:screenOrientation="portrait" />

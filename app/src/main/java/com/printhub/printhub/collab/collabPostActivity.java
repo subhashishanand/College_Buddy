@@ -47,6 +47,7 @@ public class collabPostActivity extends AppCompatActivity {
         postButton = findViewById(R.id.postButton);
         firebaseFirestore=FirebaseFirestore.getInstance();
         progressDialog= new ProgressDialog(this);
+        progressDialog.setMessage("Uploading Post");
         progressDialog.setCancelable(false);
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override

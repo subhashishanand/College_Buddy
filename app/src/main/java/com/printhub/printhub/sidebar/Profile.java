@@ -16,6 +16,7 @@ import com.printhub.printhub.CheckInternetConnection;
 import com.printhub.printhub.registration.DetailActivity;
 
 import com.printhub.printhub.R;
+import com.printhub.printhub.registration.eventInterestActivity;
 import com.printhub.printhub.registration.interestActivity;
 import com.squareup.picasso.Picasso;
 
@@ -32,7 +33,7 @@ public class Profile extends AppCompatActivity {
 
     private TextView name, mobileNo, detail,rollnumber;
     private ImageView updateDetails;
-    private LinearLayout addressview;
+    private LinearLayout addressview,eventInterest;
     CircleImageView userImage;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -71,13 +72,21 @@ public class Profile extends AppCompatActivity {
         updateDetails=findViewById(R.id.updatedetails);
         userImage = findViewById(R.id.userPic);
         rollnumber = findViewById(R.id.rollNumberTextview);
+        eventInterest = findViewById(R.id.eventInterest);
+
+        eventInterest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Profile.this, eventInterestActivity.class));
+            }
+        });
 
 
         updateDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(Profile.this, DetailActivity.class));
-                finish();
+                //finish();
             }
         });
 

@@ -22,16 +22,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.allyants.notifyme.NotifyMe;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.printhub.printhub.R;
 import com.printhub.printhub.bunkManager.Subjectlist;
+import com.printhub.printhub.collab.collabClass;
 import com.printhub.printhub.prodcutscategory.Stationary;
 import com.squareup.picasso.Picasso;
 
@@ -39,7 +42,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.security.auth.login.LoginException;
 
@@ -120,6 +125,44 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
 
 
 
+        holder.interest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //holder.interest.playAnimation();
+                EventsClass eventsClass1 = new EventsClass(eventsClass.getClubName(),eventsClass.getDescription(),eventsClass.getImageUrl(),eventsClass.getTimestamp(), eventsClass.getActivityDate(),eventsClass.getActivityTime(),eventsClass.getLink(),eventsClass.getEventid(),eventsClass.getEventTitle());
+
+                db.collection(cityName).document(collegeName).collection("clubActivity").document(postkey).collection("Likes").document(userid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(!task.getResult().exists()){
+                            db.collection(cityName).document(collegeName).collection("users").document(userid).collection("eventinterest").document(postkey).set(eventsClass1).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Toasty.success(context, "Added to Interest").show();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toasty.success(context, "Failed Try Again").show();
+                                }
+                            });
+                            Map<String,Object> likemap = new HashMap<>();
+                            likemap.put("timestamp", FieldValue.serverTimestamp());
+                            db.collection(cityName).document(collegeName).collection("clubActivity").document(postkey).collection("Likes").document(userid).set(likemap);
+                        }else{
+                            db.collection(cityName).document(collegeName).collection("users").document(userid).collection("eventinterest").document(postkey).delete();
+                            db.collection(cityName).document(collegeName).collection("clubActivity").document(postkey).collection("Likes").document(userid).delete();
+                        }
+
+                    }
+                });
+
+
+            }
+        });
+
+
+
         holder.reminderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -176,6 +219,7 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
             clubEventPost= mView.findViewById(R.id.clubEventPost);
             interest= mView.findViewById(R.id.saveClubEvent);
             text_action= mView.findViewById(R.id.text_action);
+            linkTextView= mView.findViewById(R.id.linkTextView);
             //descView=mView.findViewById(R.id.blog_desc);
         }
 

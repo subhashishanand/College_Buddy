@@ -1,76 +1,67 @@
-package com.printhub.printhub.collab;
+package com.printhub.printhub.registration;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AbsListView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.printhub.printhub.CheckInternetConnection;
 import com.printhub.printhub.R;
 import com.printhub.printhub.clubEvents.EventsClass;
-import com.printhub.printhub.clubEvents.clubActivity;
 import com.printhub.printhub.clubEvents.mEventsAdapter;
+import com.printhub.printhub.collab.collabAdapter;
+import com.printhub.printhub.collab.collabClass;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
 import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
 
+public class eventInterestActivity extends AppCompatActivity {
 
-public class collabActivity extends AppCompatActivity {
-    FloatingActionButton fab;
     RecyclerView recyclerView;
     Boolean isScrolling = false;
     int totalItems, scrolledOutItems;
     private LinearLayoutManager manager;
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private DocumentSnapshot lastDocumentSnapshot=null;
-    private collabAdapter collabAdapter;
+    private mEventsAdapter mEventsAdapter;
     Query query;
     private LottieAnimationView tv_no_item;
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_collab);
-        fab = findViewById(R.id.fab);
-        tv_no_item = findViewById(R.id.tv_no_cards);
-
-
-        new CheckInternetConnection(this).checkConnection();
+        setContentView(R.layout.activity_event_interest);
         recyclerView = findViewById(R.id.collabview);
+        tv_no_item = findViewById(R.id.tv_no_cards);
         manager=new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(manager);
-        collabAdapter= new collabAdapter(new ArrayList<>(), collabActivity.this, recyclerView);
-        recyclerView.setAdapter(collabAdapter);
+        mEventsAdapter= new mEventsAdapter(new ArrayList<>(), eventInterestActivity.this, recyclerView);
+        recyclerView.setAdapter(mEventsAdapter);
+        if (recyclerView != null) {
+            //to enable optimization of recyclerview
+            recyclerView.setHasFixedSize(true);
+        } recyclerView = findViewById(R.id.collabview);
+        manager=new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(manager);
         if (recyclerView != null) {
             //to enable optimization of recyclerview
             recyclerView.setHasFixedSize(true);
         }
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(getApplicationContext(), collabPostActivity.class);
-                startActivity(intent);
-            }
-        });
         loadData();
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -93,15 +84,14 @@ public class collabActivity extends AppCompatActivity {
                 }
             }
         });
-
-
     }
+
 
     private void loadData(){
         if (lastDocumentSnapshot == null) {
-            query = firebaseFirestore.collection(cityName).document(collegeName).collection("collab").orderBy("timestamp", Query.Direction.DESCENDING).limit(10);
+            query = firebaseFirestore.collection(cityName).document(collegeName).collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("eventinterest").orderBy("timestamp", Query.Direction.DESCENDING).limit(10);
         } else {
-            query = firebaseFirestore.collection(cityName).document(collegeName).collection("collab").orderBy("timestamp", Query.Direction.DESCENDING).startAfter(lastDocumentSnapshot).limit(10);
+            query = firebaseFirestore.collection(cityName).document(collegeName).collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("eventinterest").orderBy("timestamp", Query.Direction.DESCENDING).startAfter(lastDocumentSnapshot).limit(10);
         }
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -116,8 +106,8 @@ public class collabActivity extends AppCompatActivity {
                         tv_no_item.setVisibility(View.GONE);
                     }
                     lastDocumentSnapshot = documentSnapshot;
-                    collabClass cc=documentSnapshot.toObject(collabClass.class);
-                    ((collabAdapter)recyclerView.getAdapter()).update(cc);
+                    EventsClass cc=documentSnapshot.toObject(EventsClass.class);
+                    ((mEventsAdapter)recyclerView.getAdapter()).update(cc);
                 }
             }
         });
