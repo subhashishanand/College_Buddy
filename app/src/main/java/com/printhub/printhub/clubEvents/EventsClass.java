@@ -8,18 +8,19 @@ import java.util.Date;
 
 public class EventsClass {
 
-    public String clubName,description,imageUrl,activityDate,activityTime;
+    public String clubName,description,imageUrl,activityDate,activityTime,link;
     public Date timestamp;
 
     public EventsClass(){}
 
-    public EventsClass(String clubName, String description, String imageUrl, Date timestamp,String activityDate, String activityTime) {
+    public EventsClass(String clubName, String description, String imageUrl, Date timestamp,String activityDate, String activityTime, String link) {
         this.clubName= clubName;
         this.description = description;
         this.imageUrl = imageUrl;
         this.timestamp = timestamp;
         this.activityDate=activityDate;
         this.activityTime=activityTime;
+        this.link=link;
     }
 
     public String getClubName() {
@@ -68,5 +69,13 @@ public class EventsClass {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }

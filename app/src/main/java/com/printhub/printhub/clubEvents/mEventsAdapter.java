@@ -3,8 +3,10 @@ package com.printhub.printhub.clubEvents;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +39,7 @@ import java.util.List;
 
 import javax.security.auth.login.LoginException;
 
+import es.dmoral.toasty.Toasty;
 import io.grpc.internal.LogExceptionRunnable;
 
 import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
@@ -68,6 +71,8 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
         holder.setDate(eventsClass.getActivityDate());
         Picasso.with(context).load(eventsClass.getImageUrl()).into(holder.clubEventPost);
         holder.setName(eventsClass.getClubName());
+        holder.setLink(eventsClass.getLink());
+
 
         holder.reminderButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,23 +81,26 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
                 SimpleDateFormat simpleDateFormat= new SimpleDateFormat("dd/MM/yyyy hh:mm aa");
                 try {
                     calendar.setTime(simpleDateFormat.parse(eventsClass.getActivityDate()+" "+eventsClass.getActivityTime()));
+                    calendar.add(Calendar.MINUTE,-30);
                     Log.e("Time",calendar.getTime().toString());
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                NotifyMe notifyMe = new NotifyMe.Builder(context)
-                        .title("Hey")
-                        .content("Lets go")
-                        .color(255,0,0,255)
-                        .led_color(255,255,255,255)
-                        .time(calendar)
-                  //      .addAction(intent,"Snooze",false)
-                        .key("test")
-                    //    .addAction(new Intent(),"Dismiss",true,false)
-                      //  .addAction(intent,"Done")
-                        .large_icon(R.mipmap.ic_launcher_round)
-                        .rrule("FREQ=MINUTELY;INTERVAL=5;COUNT=2")
-                        .build();
+                Intent intent = new Intent(context,clubActivity.class);
+                intent.putExtra("test","I am a String");
+                    NotifyMe notifyMe = new NotifyMe.Builder(context)
+                            .title(eventsClass.clubName)
+                            .content("Lets get going")
+                            .color(255, 0, 0, 255)
+                            .led_color(255, 255, 255, 255)
+                            .time(calendar)
+                            .addAction(intent, "Snooze", false)
+                            .key("test")
+                            .addAction(new Intent(), "Dismiss", true, false)
+                            .large_icon(R.mipmap.ic_launcher_round)
+                            .rrule("FREQ=MINUTELY;INTERVAL=10;COUNT=2")
+                            .build();
+                    Toasty.success(context,"We will remind you", Toasty.LENGTH_SHORT).show();
             }
         });
 
@@ -110,7 +118,7 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
 
         private View mView;
         private MultiAutoCompleteTextView descView;
-        private TextView timeTextView, dateTextView;
+        private TextView timeTextView, dateTextView,linkTextView;
         ImageView clubEventPost;
         private Button reminderButton;
         private TextView blogDate,authorName;
@@ -121,6 +129,11 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
             reminderButton=mView.findViewById(R.id.reminderButton);
             clubEventPost= mView.findViewById(R.id.clubEventPost);
             //descView=mView.findViewById(R.id.blog_desc);
+        }
+
+        public void setLink(String link){
+            linkTextView=mView.findViewById(R.id.linkTextView);
+            linkTextView.setText(link);
         }
 
         public void setDate(String date){

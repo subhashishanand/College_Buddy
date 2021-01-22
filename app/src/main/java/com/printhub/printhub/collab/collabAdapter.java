@@ -54,7 +54,7 @@ import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
 
 
 public class collabAdapter extends RecyclerView.Adapter<collabAdapter.ViewHolder> {
-
+//
     List<collabClass> collab_list;
     Context context;
     private FirebaseFirestore db;

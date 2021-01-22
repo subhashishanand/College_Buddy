@@ -95,8 +95,8 @@ dependencies {
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
     implementation 'com.google.firebase:firebase-messaging'
 
-    //Compressor and Crop Image
-    implementation 'id.zelory:compressor:2.1.0'
+//Compressor and Crop Image
+    implementation 'id.zelory:compressor:3.0.0'
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
 
     // paytm dependency

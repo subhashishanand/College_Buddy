@@ -63,14 +63,13 @@ import static com.printhub.printhub.HomeScreen.MainnewActivity.firebaseUserId;
 
 public class postEvent extends AppCompatActivity {
     private ImageView postImage;
-    private EditText postDes,clubName, chooseDateTextView, chooseTimeTextView;
+    private EditText postDes,clubName, chooseDateTextView, chooseTimeTextView, linkTextView;
     private Button postButton;
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri mImageUri=null;
     private Bitmap compressedImageFile;
     private ProgressDialog progressDialog;
     Calendar myCalendar = Calendar.getInstance();
-
     private FirebaseAuth firebaseAuth;
     private StorageReference storageReference;
     private String currUserId;
@@ -91,6 +90,7 @@ public class postEvent extends AppCompatActivity {
         postButton=findViewById(R.id.postEvent);
         chooseDateTextView=findViewById(R.id.choose_date);
         chooseTimeTextView=findViewById(R.id.choose_time);
+        linkTextView=findViewById(R.id.linkTextView);
 
         progressDialog=new ProgressDialog(this);
         progressDialog.setMessage("Uploading Event...");
@@ -157,7 +157,8 @@ public class postEvent extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String desc=postDes.getText().toString();
-                if(null!=mImageUri && !TextUtils.isEmpty(desc) && !TextUtils.isEmpty(clubName.getText()) && !TextUtils.isEmpty(chooseDateTextView.getText()) && !TextUtils.isEmpty(chooseTimeTextView.getText())){
+                String tempLink= linkTextView.getText().toString();
+                if(!TextUtils.isEmpty(tempLink) && null!=mImageUri && !TextUtils.isEmpty(desc) && !TextUtils.isEmpty(clubName.getText()) && !TextUtils.isEmpty(chooseDateTextView.getText()) && !TextUtils.isEmpty(chooseTimeTextView.getText())){
                     progressDialog.show();
                     String random= new RandomString(10, ThreadLocalRandom.current()).nextString();;
                     StorageReference filepath= storageReference.child("clubEventImages").child(random+".jpg");
@@ -205,6 +206,7 @@ public class postEvent extends AppCompatActivity {
                                      postMap.put("clubName",clubName.getText().toString());
                                      postMap.put("activityDate",chooseDateTextView.getText().toString());
                                      postMap.put("activityTime", chooseTimeTextView.getText().toString());
+                                     postMap.put("link",tempLink);
 
                                      firebaseFirestore.collection(cityName).document(collegeName).collection("clubActivity").add(postMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                          @Override
