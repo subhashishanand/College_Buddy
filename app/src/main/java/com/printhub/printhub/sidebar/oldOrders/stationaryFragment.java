@@ -2,6 +2,7 @@ package com.printhub.printhub.sidebar.oldOrders;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -68,7 +70,7 @@ public class stationaryFragment extends Fragment {
         LoadData();
         manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
-        OrderAdapter myAdapter= new OrderAdapter(mRecyclerView, getContext(),new ArrayList<String>(),new ArrayList<String>() , new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(),new ArrayList<String>(), new ArrayList<String>());
+        OrderAdapter myAdapter= new OrderAdapter(mRecyclerView, getContext(),new ArrayList<String>(),new ArrayList<String>() , new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(),new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
         mRecyclerView.setAdapter(myAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -121,7 +123,8 @@ public class stationaryFragment extends Fragment {
                     String discount = documentSnapshot.getString("discount");
                     String productImage = documentSnapshot.getString("productImage");
                     String orderId = documentSnapshot.getString("orderId");
-                    ((OrderAdapter)mRecyclerView.getAdapter()).update(productName,quantity,status,price,mrp,discount,productImage, orderId);
+                    String key=documentSnapshot.getId();
+                    ((OrderAdapter)mRecyclerView.getAdapter()).update(productName,quantity,status,price,mrp,discount,productImage, orderId, key);
                     //quantity-copies,
                 }
             }
@@ -139,8 +142,9 @@ public class stationaryFragment extends Fragment {
         ArrayList<String> discounts= new ArrayList<>();
         ArrayList<String> productImages= new ArrayList<>();
         ArrayList<String> orderIds= new ArrayList<>();
+        ArrayList<String> keys= new ArrayList<>();
 
-        public void update(String productName, String quantity, String status, String price, String mrp, String discount, String productImage, String orderId){
+        public void update(String productName, String quantity, String status, String price, String mrp, String discount, String productImage, String orderId, String key){
             productNames.add(productName);
             quantities.add(quantity);
             statuses.add(status);
@@ -149,11 +153,12 @@ public class stationaryFragment extends Fragment {
             discounts.add(discount);
             productImages.add(productImage);
             orderIds.add(orderId);
+            keys.add(key);
             notifyDataSetChanged();  //refershes the recyler view automatically...
 
         }
 
-        public OrderAdapter(RecyclerView recyclerView, Context context, ArrayList<String> productNames, ArrayList<String> quantities, ArrayList<String> statuses, ArrayList<String> prices, ArrayList<String> mrps, ArrayList<String> discounts,ArrayList<String> productImages, ArrayList<String> orderIds) {
+        public OrderAdapter(RecyclerView recyclerView, Context context, ArrayList<String> productNames, ArrayList<String> quantities, ArrayList<String> statuses, ArrayList<String> prices, ArrayList<String> mrps, ArrayList<String> discounts,ArrayList<String> productImages, ArrayList<String> orderIds, ArrayList<String> keys) {
             this.recyclerView = recyclerView;
             this.context = context;
             this.productNames = productNames;
@@ -164,6 +169,7 @@ public class stationaryFragment extends Fragment {
             this.discounts = discounts;
             this.productImages = productImages;
             this.orderIds =  orderIds;
+            this.keys=keys;
         }
 
         @NonNull
@@ -183,6 +189,12 @@ public class stationaryFragment extends Fragment {
             holder.discount.setText(discounts.get(position)+"% off");
             holder.orderNo.setText(orderIds.get(position));
             Picasso.with(context).load(productImages.get(position)).into(holder.productImage);
+            holder.productImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    callReturn(keys.get(position));
+                }
+            });
         }
 
         @Override
@@ -206,6 +218,16 @@ public class stationaryFragment extends Fragment {
                 productImage = itemView.findViewById(R.id.productimage);
                 orderNo = itemView.findViewById(R.id.orderid);
             }
+        }
+        private void callReplace(String uid){
+            Intent intent=new Intent(getContext(), ReplacementActivity.class);
+            intent.putExtra("uid",uid);
+            startActivity(intent);
+        }
+        private void callReturn(String uid){
+            Intent intent =new Intent(getContext(), ReturnActivity.class);
+            intent.putExtra("uid",uid);
+            startActivity(intent);
         }
     }
 }

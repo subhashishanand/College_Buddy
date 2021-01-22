@@ -16,6 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".sidebar.oldOrders.ReplacementActivity"></activity>
+        <activity android:name=".sidebar.oldOrders.ReturnActivity" />
+
         <activity android:name=".registration.eventInterestActivity"
             android:screenOrientation="portrait"></activity>
 

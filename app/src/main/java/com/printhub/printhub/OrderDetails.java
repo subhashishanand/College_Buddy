@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -25,6 +27,7 @@ import com.printhub.printhub.payment.JSONParser;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -174,9 +177,6 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
 
 
     private void parentShifting() {
-        Date currentTime = Calendar.getInstance().getTime();
-        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-        long time = Long.parseLong(timeFormat.format(currentTime));
         for (int i = 0; i < myAdapter.colors.size(); i++) {
             int finalI = i;
             if (myAdapter.colors.get(i).equals("notUse")) {
@@ -185,7 +185,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         Map<String, Object> map = documentSnapshot.getData();
-                        map.put("orderedTime", time);
+                        map.put("orderedTime", FieldValue.serverTimestamp());
                         map.put("orderId", orderId);
                         map.put("status", status);
                         db.collection(cityName).document(collegeName).collection("productOrders").document().set(map);
@@ -209,7 +209,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         Map<String, Object> map = documentSnapshot.getData();
-                        map.put("orderedTime", time);
+                        map.put("orderedTime", FieldValue.serverTimestamp());
                         map.put("orderId", orderId);
                         map.put("status", status);
                         db.collection(cityName).document(collegeName).collection("printOrders").document().set(map);
