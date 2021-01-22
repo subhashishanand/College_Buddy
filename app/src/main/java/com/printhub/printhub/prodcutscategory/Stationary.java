@@ -50,7 +50,6 @@ import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
 public class Stationary extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
-    private StaggeredGridLayoutManager mLayoutManager;
     private LottieAnimationView tv_no_item;
     Boolean isScrolling = false, algoliaResult = false;
     int totalItems, scrolledOutItems;

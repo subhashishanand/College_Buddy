@@ -50,15 +50,21 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
 
     List<EventsClass> blog_list;
     Context context;
-    private FirebaseFirestore db;
-    public mEventsAdapter( List<EventsClass> blog_list,Context context) {
+    RecyclerView recyclerView;
+
+    public void update(EventsClass eventsClass){
+        blog_list.add(eventsClass);
+        notifyDataSetChanged();
+    }
+
+    public mEventsAdapter( List<EventsClass> blog_list,Context context,RecyclerView recyclerView) {
         this.blog_list=blog_list;
         this.context= context;
+        this.recyclerView=recyclerView;
     }
     @Override
     public ViewHolder onCreateViewHolder(@NonNull  ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.club_events_cardlayout,parent,false);
-         db= FirebaseFirestore.getInstance();
         return new ViewHolder(view);
     }
 
@@ -69,7 +75,7 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
         holder.setName(eventsClass.clubName);
         holder.setTime(eventsClass.getActivityTime());
         holder.setDate(eventsClass.getActivityDate());
-        Picasso.with(context).load(eventsClass.getImageUrl()).into(holder.clubEventPost);
+        Picasso.with(context).load(blog_list.get(position).getImageUrl()).into(holder.clubEventPost);
         holder.setName(eventsClass.getClubName());
         holder.setLink(eventsClass.getLink());
 

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.AbsListView;
 import android.widget.Button;
 
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentChange;
@@ -25,6 +27,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.printhub.printhub.Cart;
+import com.printhub.printhub.CheckInternetConnection;
 import com.printhub.printhub.R;
 
 import java.util.ArrayList;
@@ -35,8 +39,6 @@ import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
 
 public class clubActivity extends AppCompatActivity {
     private FloatingActionButton button;
-    private RecyclerView mEvents;
-    private List<EventsClass> blogList=new ArrayList<>();
     private StorageReference storageReference;
     private LinearLayoutManager manager;
     Boolean isScrolling = false;
@@ -46,23 +48,34 @@ public class clubActivity extends AppCompatActivity {
     private DocumentSnapshot lastDocumentSnapshot=null;
     Query query;
 
+    private RecyclerView mRecyclerView;
+    private StaggeredGridLayoutManager mLayoutManager;
+    private LottieAnimationView tv_no_item;
+    public static Cart.MyAdapter myAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_club);
 
+        //new code
+        new CheckInternetConnection(this).checkConnection();
+        mRecyclerView = findViewById(R.id.my_recycler_view);
+        tv_no_item = findViewById(R.id.tv_no_cards);
+
+        if (mRecyclerView != null) {
+            //to enable optimization of recyclerview
+            mRecyclerView.setHasFixedSize(true);
+        }
+
         storageReference= FirebaseStorage.getInstance().getReference();
         firebaseFirestore= FirebaseFirestore.getInstance();
 
         button=findViewById(R.id.fab);
-        mEvents=findViewById(R.id.mEvents);
-        manager=new LinearLayoutManager(getApplicationContext());
-        mEvents.setLayoutManager(manager);
-        if (mEvents != null) {
-            //to enable optimization of recyclerview
-            mEvents.setHasFixedSize(true);
-        }
-
+        manager=new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(manager);
+        blogRecyclerAdapter= new mEventsAdapter(new ArrayList<>(),clubActivity.this, mRecyclerView);
+        mRecyclerView.setAdapter(blogRecyclerAdapter);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +85,7 @@ public class clubActivity extends AppCompatActivity {
             }
         });
         loadData();
-        mEvents.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -105,14 +118,13 @@ public class clubActivity extends AppCompatActivity {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                    lastDocumentSnapshot = documentSnapshot;
-                    EventsClass blogPost=documentSnapshot.toObject(EventsClass.class);
-                    blogList.add(blogPost);
-                    blogRecyclerAdapter.notifyDataSetChanged();
+                    if(documentSnapshot!=null) {
+                        lastDocumentSnapshot = documentSnapshot;
+                        EventsClass blogPost = documentSnapshot.toObject(EventsClass.class);
+                        ((mEventsAdapter)mRecyclerView.getAdapter()).update(blogPost);
+                    }
                 }
             }
         });
-        blogRecyclerAdapter=new mEventsAdapter(blogList,this);
-        mEvents.setAdapter(blogRecyclerAdapter);
     }
 }
