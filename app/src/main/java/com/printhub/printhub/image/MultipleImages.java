@@ -22,8 +22,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageSwitcher;
@@ -55,7 +58,7 @@ import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
 import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
 import static com.printhub.printhub.HomeScreen.MainnewActivity.firebaseUserId;
 
-public class MultipleImages extends AppCompatActivity {
+public class MultipleImages extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private ImageSwitcher imageIs;
     private Button previousBtn,nextBtn,selectImageBtn,checkout;
@@ -70,9 +73,14 @@ public class MultipleImages extends AppCompatActivity {
     private ArrayList<Boolean> posterPrint;
     private ArrayList<Integer> eachCost;
 
+    //To Save the config
+    private ArrayList<String> config;
+    String customString="1 in 1 page";
+    String[] perPage;
+    private ArrayList<Integer> spinnerConfig;
+
     private StorageReference mStorageRef;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    String customString="1 in 1 page";
     private StorageTask mUploadTask;
     private double costValue=2;
 
@@ -99,14 +107,21 @@ public class MultipleImages extends AppCompatActivity {
         checkout=findViewById(R.id.checkout);
         custom=findViewById(R.id.custom);
 
+
         //init list
         imageUris=new ArrayList<>();
         noOfCopies=new ArrayList<>();
         colorPrint=new ArrayList<>();
         posterPrint=new ArrayList<>();
         eachCost=new ArrayList<>();
+        config=new ArrayList<>();
+        spinnerConfig=new ArrayList<>();
 
-
+        //spinner populate
+        ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(this,R.array.Print, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        custom.setAdapter(adapter);
+        custom.setOnItemSelectedListener(MultipleImages.this);
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
@@ -128,6 +143,7 @@ public class MultipleImages extends AppCompatActivity {
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e("config",config.get(0));
                 uploadImages();
             }
         });
@@ -218,6 +234,7 @@ public class MultipleImages extends AppCompatActivity {
                     editCopies.setText(noOfCopies.get(position).toString());
                     color.setChecked(colorPrint.get(position));
                     poster.setChecked(posterPrint.get(position));
+
                 }
                 else{
                     Toast.makeText(MultipleImages.this, "No Previous Images..", Toast.LENGTH_SHORT).show();
@@ -281,6 +298,7 @@ public class MultipleImages extends AppCompatActivity {
                         colorPrint.add(false);
                         posterPrint.add(false);
                         eachCost.add(2);
+                        config.add("1");
 
                     }
 
@@ -307,6 +325,7 @@ public class MultipleImages extends AppCompatActivity {
                     colorPrint.add(false);
                     posterPrint.add(false);
                     eachCost.add(2);
+                    config.add("1");
 
                     imageIs.setImageURI(imageUris.get(0));
                     editCopies.setText(noOfCopies.get(0).toString());
@@ -459,5 +478,18 @@ public class MultipleImages extends AppCompatActivity {
                 break;
             }
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//        customString = parent.getSelectedItem().toString();
+//        perPage=customString.split(" ");
+//        config.set(position,perPage[0]);
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }

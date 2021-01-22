@@ -70,6 +70,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/WhiteTheme" />
         <activity
+            android:name=".prodcutscategory.StationaryCategory"
+            android:screenOrientation="portrait"
+            android:theme="@style/WhiteTheme" />
+        <activity
             android:name=".HomeScreen.MainnewActivity"
             android:screenOrientation="portrait" />
         <activity
