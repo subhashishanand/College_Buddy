@@ -55,12 +55,19 @@ import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
 
 public class collabAdapter extends RecyclerView.Adapter<collabAdapter.ViewHolder> {
 //
-    List<collabClass> collab_list;
-    Context context;
+    private List<collabClass> collab_list;
+    private Context context;
     private FirebaseFirestore db;
-    public collabAdapter( List<collabClass> collab_list,Context context) {
+    private RecyclerView recyclerView;
+
+    public void update(collabClass cc){
+        collab_list.add(cc);
+        notifyDataSetChanged();
+    }
+    public collabAdapter( List<collabClass> collab_list,Context context,RecyclerView recyclerView) {
         this.collab_list=collab_list;
         this.context= context;
+        this.recyclerView=recyclerView;
     }
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

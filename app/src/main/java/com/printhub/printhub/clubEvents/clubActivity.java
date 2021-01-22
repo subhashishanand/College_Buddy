@@ -39,7 +39,6 @@ import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
 
 public class clubActivity extends AppCompatActivity {
     private FloatingActionButton button;
-    private StorageReference storageReference;
     private LinearLayoutManager manager;
     Boolean isScrolling = false;
     int totalItems, scrolledOutItems;
@@ -49,11 +48,9 @@ public class clubActivity extends AppCompatActivity {
     Query query;
 
     private RecyclerView mRecyclerView;
-    private StaggeredGridLayoutManager mLayoutManager;
     private LottieAnimationView tv_no_item;
-    public static Cart.MyAdapter myAdapter;
 
-    @Override
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_club);
@@ -67,9 +64,7 @@ public class clubActivity extends AppCompatActivity {
             //to enable optimization of recyclerview
             mRecyclerView.setHasFixedSize(true);
         }
-
-        storageReference= FirebaseStorage.getInstance().getReference();
-        firebaseFirestore= FirebaseFirestore.getInstance();
+                firebaseFirestore= FirebaseFirestore.getInstance();
 
         button=findViewById(R.id.fab);
         manager=new LinearLayoutManager(this);

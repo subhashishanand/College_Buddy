@@ -17,8 +17,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.printhub.printhub.CheckInternetConnection;
 import com.printhub.printhub.R;
 import com.printhub.printhub.clubEvents.EventsClass;
+import com.printhub.printhub.clubEvents.clubActivity;
 import com.printhub.printhub.clubEvents.mEventsAdapter;
 
 import java.util.ArrayList;
@@ -31,7 +33,6 @@ import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
 public class collabActivity extends AppCompatActivity {
     FloatingActionButton fab;
     RecyclerView recyclerView;
-    private List<collabClass> collabList=new ArrayList<>();
     Boolean isScrolling = false;
     int totalItems, scrolledOutItems;
     private LinearLayoutManager manager;
@@ -46,13 +47,18 @@ public class collabActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collab);
         fab = findViewById(R.id.fab);
+
+        new CheckInternetConnection(this).checkConnection();
         recyclerView = findViewById(R.id.collabview);
         manager=new LinearLayoutManager(getApplicationContext());
-       recyclerView.setLayoutManager(manager);
+        recyclerView.setLayoutManager(manager);
+        collabAdapter= new collabAdapter(new ArrayList<>(), collabActivity.this, recyclerView);
+        recyclerView.setAdapter(collabAdapter);
         if (recyclerView != null) {
             //to enable optimization of recyclerview
             recyclerView.setHasFixedSize(true);
         }
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,14 +103,11 @@ public class collabActivity extends AppCompatActivity {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                     lastDocumentSnapshot = documentSnapshot;
-                    collabClass collabPost=documentSnapshot.toObject(collabClass.class);
-                    collabList.add(collabPost);
-                    collabAdapter.notifyDataSetChanged();
+                    collabClass cc=documentSnapshot.toObject(collabClass.class);
+                    ((collabAdapter)recyclerView.getAdapter()).update(cc);
                 }
             }
         });
-        collabAdapter=new collabAdapter(collabList,this);
-        recyclerView.setAdapter(collabAdapter);
 
     }
 }
