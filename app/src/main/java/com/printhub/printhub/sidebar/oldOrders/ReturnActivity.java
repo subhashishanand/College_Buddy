@@ -3,8 +3,10 @@ package com.printhub.printhub.sidebar.oldOrders;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
@@ -40,9 +42,11 @@ public class ReturnActivity extends AppCompatActivity {
     ImageView productImageView;
     MultiAutoCompleteTextView reasonEditText;
     Button returnButton;
-    String replaceCount="";
     RadioGroup radioGroup;
     RadioButton radioButton;
+    ProgressDialog progressDialog;
+    int radioid =-1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +59,17 @@ public class ReturnActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Submitting Return Request");
+        progressDialog.setCancelable(false);
         productName=findViewById(R.id.productName);
         productDescription=findViewById(R.id.description);
         price=findViewById(R.id.price);
         productImageView=findViewById(R.id.productImageView);
         reasonEditText=findViewById(R.id.reasonEditText);
         returnButton=findViewById(R.id.returnButton);
+        radioGroup = findViewById(R.id.radiogroup);
+
 
 
         uid=getIntent().getStringExtra("uid");
@@ -69,28 +78,56 @@ public class ReturnActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 productName.setText(documentSnapshot.getString("productName"));
                 productDescription.setText(documentSnapshot.getString("description"));
-                price.setText(documentSnapshot.getString("price"));
-                int data= (int)Integer.parseInt(documentSnapshot.getString("replaceCount"))+1;
-                replaceCount = String.valueOf(data);
+                int shownprice = Integer.parseInt(documentSnapshot.getString("price"))-Integer.parseInt(documentSnapshot.getString("couponSaving"));
+                price.setText("Refunded Amount:"+String.valueOf(shownprice)+"");
+//                int data= (int)Integer.parseInt(documentSnapshot.getString("replaceCount"))+1;
+//                replaceCount = String.valueOf(data);
                 Picasso.with(getApplicationContext()).load(documentSnapshot.getString("productImage")).placeholder(R.drawable.drawerback).into(productImageView);
                 long milliseconds=documentSnapshot.getTimestamp("orderedTime").toDate().getTime();
                 String dateString= DateFormat.format("dd/MM/yyyy",new Date(milliseconds)).toString();
-               // orderTime.setText(dateString);
+                //orderTime.setText(dateString);
             }
         });
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                db.collection(cityName).document(collegeName).collection("productOrders").document(uid).update("status","returnRequested","replaceCount",replaceCount).addOnSuccessListener(new OnSuccessListener<Void>() {
+                submit();
+
+            }
+        });
+    }
+
+    public void submit(){
+        progressDialog.show();
+        radioid = radioGroup.getCheckedRadioButtonId();
+        if(radioid!=-1){
+            radioButton=findViewById(radioid);
+            String description = reasonEditText.getText().toString().trim();
+            String reason  = radioButton.getText().toString();
+            if(!TextUtils.isEmpty(description) && null!=reason && !TextUtils.isEmpty(reason)){
+                db.collection(cityName).document(collegeName).collection("productOrders").document(uid).update("status","returnRequested","returnDescription",description,"returnReason",reason).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Toasty.success(ReturnActivity.this, "Return request submitted").show();
+                        progressDialog.dismiss();
+                        Toasty.success(ReturnActivity.this, "Return request submitted Your Amount Will be Refunded Shortly.").show();
                         Intent intent=new Intent(getApplicationContext(), OrdersActivity.class);
                         startActivity(intent);
                     }
                 });
+
+            }else{
+                Toasty.error(ReturnActivity.this, "Enter all the Fields").show();
+                progressDialog.dismiss();
+
             }
-        });
+
+        }else{
+            Toasty.error(ReturnActivity.this, "Enter all the Fields").show();
+            progressDialog.dismiss();
+
+        }
+
+
     }
 
 

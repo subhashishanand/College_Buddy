@@ -11,7 +11,6 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/toolbarwrap"
         android:layout_width="match_parent"
-        android:background="@color/fui_transparent"
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
@@ -20,7 +19,6 @@
             android:layout_height="?attr/actionBarSize"
             app:titleTextColor="#000"
             style="@style/CustomTheme"
-            android:backgroundTint="@color/fui_transparent"
             android:background="@color/colorAccent">
 
             <TextView
@@ -120,23 +118,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Wrong Item Was Sent"
-                        android:layout_margin="10dp"
-                        android:onClick="checkButton"/>
+                        android:layout_margin="10dp" />
 
                     <RadioButton
                         android:id="@+id/reason2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="The Product Was Damaged"
-                        android:layout_margin="10dp"
-                        android:onClick="checkButton"/>
+                        android:layout_margin="10dp"/>
                     <RadioButton
                         android:id="@+id/reason3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:text="Performance or Quality Not Adequate"
-                        android:onClick="checkButton"/>
+                        android:text="Performance or Quality Not Adequate" />
 
 
                 </RadioGroup>

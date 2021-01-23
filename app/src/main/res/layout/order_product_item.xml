@@ -130,7 +130,15 @@
             <!--                android:text="Qty: 1"-->
             <!--                android:textSize="@dimen/text_size_small"/>-->
 
+            <TextView
+                android:id="@+id/orderDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ordered On:"></TextView>
+
         </LinearLayout>
+
+
     </LinearLayout>
 
     <View

@@ -3,14 +3,19 @@ package com.printhub.printhub.sidebar.oldOrders;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.MultiAutoCompleteTextView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,10 +38,16 @@ public class ReplacementActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
     String uid;
-    TextView productName,productDescription,mrp,discount,price,orderId,orderTime,quantity,orderStatus;
+    TextView productName,productDescription,price;
     ImageView productImageView;
-    EditText reasonEditText;
+    MultiAutoCompleteTextView reasonEditText;
     Button replaceButton;
+    Button returnButton;
+    String replaceCount="";
+    RadioGroup radioGroup;
+    RadioButton radioButton;
+    ProgressDialog progressDialog;
+    int radioid =-1;
 
 
     @Override
@@ -50,37 +61,33 @@ public class ReplacementActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Submitting Return Request");
+        progressDialog.setCancelable(false);
         productName=findViewById(R.id.productName);
         productDescription=findViewById(R.id.description);
-        mrp=findViewById(R.id.mrp);
-        discount=findViewById(R.id.discount);
         price=findViewById(R.id.price);
-        orderId=findViewById(R.id.orderId);
-        orderTime=findViewById(R.id.orderTime);
-        quantity=findViewById(R.id.quantity);
-        orderStatus=findViewById(R.id.orderStatus);
         productImageView=findViewById(R.id.productImageView);
         reasonEditText=findViewById(R.id.reasonEditText);
         replaceButton=findViewById(R.id.replaceButton);
+        returnButton=findViewById(R.id.returnButton);
+        radioGroup = findViewById(R.id.radiogroup);
 
         uid=getIntent().getStringExtra("uid");
-        Log.e("subhu",uid);
         db=FirebaseFirestore.getInstance();
         db.collection(cityName).document(collegeName).collection("productOrders").document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 productName.setText(documentSnapshot.getString("productName"));
                 productDescription.setText(documentSnapshot.getString("description"));
-                mrp.setText(documentSnapshot.getString("mrp"));
-                discount.setText(documentSnapshot.getString("discount"));
-                price.setText(documentSnapshot.getString("price"));
-                Picasso.with(ReplacementActivity.this).load(documentSnapshot.getString("productImage"));
-                orderId.setText(documentSnapshot.getString("orderId"));
+                int shownprice = Integer.parseInt(documentSnapshot.getString("price"))-Integer.parseInt(documentSnapshot.getString("couponSaving"));
+                price.setText("Refunded Amount:"+String.valueOf(shownprice)+"");
+                int data= (int)Integer.parseInt(documentSnapshot.getString("replaceCount"))+1;
+                replaceCount = String.valueOf(data);
+                Picasso.with(ReplacementActivity.this).load(documentSnapshot.getString("productImage")).placeholder(R.drawable.drawerback).into(productImageView);
                 long milliseconds=documentSnapshot.getTimestamp("orderedTime").toDate().getTime();
                 String dateString= DateFormat.format("dd/MM/yyyy",new Date(milliseconds)).toString();
-                orderTime.setText(dateString);
-                quantity.setText(documentSnapshot.getString("quantity"));
-                orderStatus.setText(documentSnapshot.getString("status"));
+               // orderTime.setText(dateString);
             }
         });
         replaceButton.setOnClickListener(new View.OnClickListener() {
@@ -89,15 +96,47 @@ public class ReplacementActivity extends AppCompatActivity {
                 db.collection(cityName).document(collegeName).collection("productOrders").document(uid).update("status","replaceRequested").addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        orderStatus.setText("Replace requested");
-                        Toasty.success(ReplacementActivity.this, "Replace request submitted").show();
-                        Intent intent=new Intent(getApplicationContext(), OrdersActivity.class);
-                        startActivity(intent);
+                      submit();
                     }
                 });
             }
         });
     }
+
+
+    public void submit(){
+        progressDialog.show();
+        radioid = radioGroup.getCheckedRadioButtonId();
+        if(radioid!=-1){
+            radioButton=findViewById(radioid);
+            String description = reasonEditText.getText().toString().trim();
+            String reason  = radioButton.getText().toString();
+            if(!TextUtils.isEmpty(description) && null!=reason && !TextUtils.isEmpty(reason)){
+                db.collection(cityName).document(collegeName).collection("productOrders").document(uid).update("status","replaceRequested","replaceCount",replaceCount,"replaceDescription",description,"replaceReason",reason).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        progressDialog.dismiss();
+                        Toasty.success(ReplacementActivity.this, "Replace request submitted.").show();
+                        Intent intent=new Intent(getApplicationContext(), OrdersActivity.class);
+                        startActivity(intent);
+                    }
+                });
+
+            }else{
+                Toasty.error(ReplacementActivity.this, "Enter all the Fields").show();
+                progressDialog.dismiss();
+
+            }
+
+        }else{
+            Toasty.error(ReplacementActivity.this, "Enter all the Fields").show();
+            progressDialog.dismiss();
+
+        }
+
+
+    }
+
 
 
     @Override

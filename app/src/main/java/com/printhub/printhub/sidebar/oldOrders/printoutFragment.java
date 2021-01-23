@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ import com.printhub.printhub.CheckInternetConnection;
 import com.printhub.printhub.R;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
 import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
@@ -64,7 +66,7 @@ public class printoutFragment extends Fragment {
         }
 
 
-        db.collection(cityName).document(collegeName).collection("printOrders").whereEqualTo("userId",firebaseUserId).get().addOnSuccessListener(getActivity(), new OnSuccessListener<QuerySnapshot>() {
+        db.collection(cityName).document(collegeName).collection("printOrders").orderBy("orderedTime", Query.Direction.DESCENDING).get().addOnSuccessListener(getActivity(), new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if(queryDocumentSnapshots.isEmpty()){
@@ -77,22 +79,28 @@ public class printoutFragment extends Fragment {
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
-                    String fileName = documentSnapshot.getString("fileName");
-                    String custom = documentSnapshot.getString("custom") ;
-                    String status = documentSnapshot.getString("status");
-                    String color = documentSnapshot.getString("color");
-                    String doubleSide = documentSnapshot.getString("doubleSided");
-                    String start = documentSnapshot.getString("startPageNo");
-                    String end = documentSnapshot.getString("endPageNo");
-                    String orderId = documentSnapshot.getString("orderId");
-                    String quantity = documentSnapshot.getString("copy");
-                    ((PrintAdapter)mRecyclerView.getAdapter()).update(fileName,custom,status,color,doubleSide,start,end, orderId, quantity);
-                    //quantity-copies,
+                    if(documentSnapshot.getString("userId").equals(firebaseUserId)){
+                        String fileName = documentSnapshot.getString("fileName");
+                        String custom = documentSnapshot.getString("custom") ;
+                        String status = documentSnapshot.getString("status");
+                        String color = documentSnapshot.getString("color");
+                        String doubleSide = documentSnapshot.getString("doubleSided");
+                        String start = documentSnapshot.getString("startPageNo");
+                        String end = documentSnapshot.getString("endPageNo");
+                        String orderId = documentSnapshot.getString("orderId");
+                        String quantity = documentSnapshot.getString("copy");
+                        long milliseconds=documentSnapshot.getTimestamp("orderedTime").toDate().getTime();
+                        Date date= documentSnapshot.getTimestamp("orderedTime").toDate();
+                        ((PrintAdapter)mRecyclerView.getAdapter()).update(fileName,custom,status,color,doubleSide,start,end, orderId, quantity,date);
+                        //quantity-copies,
+
+                    }
+
                 }
             }
         });
 
-        PrintAdapter myAdapter = new PrintAdapter(mRecyclerView, getContext(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
+        PrintAdapter myAdapter = new PrintAdapter(mRecyclerView, getContext(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(),new ArrayList<Date>());
         mRecyclerView.setAdapter(myAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -146,9 +154,9 @@ public class printoutFragment extends Fragment {
                         String end = documentSnapshot.getString("endPageNo");
                         String orderId = documentSnapshot.getString("orderId");
                         String quantity = documentSnapshot.getString("copy");
-                        Log.e("alisha",fileName+" "+ quantity);
-
-                        ((PrintAdapter)mRecyclerView.getAdapter()).update(fileName,custom,status,color,doubleSide,start,end, orderId, quantity);
+                        long milliseconds=documentSnapshot.getTimestamp("orderedTime").toDate().getTime();
+                        Date date= documentSnapshot.getTimestamp("orderedTime").toDate();
+                        ((PrintAdapter)mRecyclerView.getAdapter()).update(fileName,custom,status,color,doubleSide,start,end, orderId, quantity,date);
 
                     }
 
@@ -170,8 +178,10 @@ public class printoutFragment extends Fragment {
         ArrayList<String> ends= new ArrayList<>();
         ArrayList<String> orderIds= new ArrayList<>();
         ArrayList<String> quantities = new ArrayList<>();
+        ArrayList<Date> returnDate= new ArrayList<>();
 
-        public void update(String fileName, String custom, String status, String color, String doubleSide, String start, String end, String orderId, String quantity){
+
+        public void update(String fileName, String custom, String status, String color, String doubleSide, String start, String end, String orderId, String quantity,Date date){
             fileNames.add(fileName);
             customs.add(custom);
             statuses.add(status);
@@ -181,11 +191,11 @@ public class printoutFragment extends Fragment {
             ends.add(end);
             orderIds.add(orderId);
             quantities.add(quantity);
-            Log.e("alisha2",fileName+" "+ quantity);
+            returnDate.add(date);
             notifyDataSetChanged();  //refershes the recyler view automatically...
         }
 
-        public PrintAdapter(RecyclerView recyclerView, Context context, ArrayList<String> fileNames, ArrayList<String> customs, ArrayList<String> statuses, ArrayList<String> colors, ArrayList<String> doubles, ArrayList<String> starts, ArrayList<String> ends, ArrayList<String> orderIds, ArrayList<String> quantities) {
+        public PrintAdapter(RecyclerView recyclerView, Context context, ArrayList<String> fileNames, ArrayList<String> customs, ArrayList<String> statuses, ArrayList<String> colors, ArrayList<String> doubles, ArrayList<String> starts, ArrayList<String> ends, ArrayList<String> orderIds, ArrayList<String> quantities,ArrayList<Date> returnDate) {
             this.recyclerView = recyclerView;
             this.context = context;
             this.fileNames = fileNames;
@@ -197,6 +207,8 @@ public class printoutFragment extends Fragment {
             this.ends = ends;
             this.orderIds =  orderIds;
             this.quantities = quantities;
+            this.returnDate=returnDate;
+
 
         }
 
@@ -217,6 +229,9 @@ public class printoutFragment extends Fragment {
             holder.status.setText("Status: "+ statuses.get(position));
             holder.orderNo.setText(orderIds.get(position));
             holder.price.setText("custom: "+customs.get(position)+"  Color: " + colors.get(position) +"\nfrom "+ starts.get(position)+" to "+ ends.get(position)+ "   Double sided: "+ doubles.get(position));
+            long milliseconds=returnDate.get(position).getTime();
+            String dateString= DateFormat.format("dd/MM/yyyy",new Date(milliseconds)).toString();
+            holder.orderedDate.setText("Ordered On: "+dateString);
         }
 
         @Override
@@ -225,7 +240,7 @@ public class printoutFragment extends Fragment {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            TextView quantity, status, fileName, price, mrp, discount, orderNo;
+            TextView quantity, status, fileName, price, mrp, discount, orderNo,orderedDate;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -237,6 +252,7 @@ public class printoutFragment extends Fragment {
                 mrp.setPaintFlags(mrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 discount= itemView.findViewById(R.id.discount);
                 orderNo = itemView.findViewById(R.id.orderid);
+                orderedDate = itemView.findViewById(R.id.orderDate);
             }
         }
     }

@@ -78,7 +78,7 @@ public class stationaryFragment extends Fragment {
         LoadData();
         manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
-        OrderAdapter myAdapter= new OrderAdapter(mRecyclerView, getContext(),new ArrayList<String>(),new ArrayList<String>() , new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(),new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(),new ArrayList<Date>());
+        OrderAdapter myAdapter= new OrderAdapter(mRecyclerView, getContext(),new ArrayList<String>(),new ArrayList<String>() , new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(),new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(),new ArrayList<Date>(),new ArrayList<String>(),new ArrayList<String>());
         mRecyclerView.setAdapter(myAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -132,11 +132,12 @@ public class stationaryFragment extends Fragment {
                         String discount = documentSnapshot.getString("discount");
                         String productImage = documentSnapshot.getString("productImage");
                         String orderId = documentSnapshot.getString("orderId");
+                        String couponSaving =  documentSnapshot.getString("couponSaving");
+                        String replaceCount = documentSnapshot.getString("replaceCount");
                         long milliseconds=documentSnapshot.getTimestamp("orderedTime").toDate().getTime();
                          Date date= documentSnapshot.getTimestamp("orderedTime").toDate();
-                         Log.e("Rohini Darling", date.toString());
                         String key=documentSnapshot.getId();
-                        ((OrderAdapter)mRecyclerView.getAdapter()).update(productName,quantity,status,price,mrp,discount,productImage, orderId, key,date);
+                        ((OrderAdapter)mRecyclerView.getAdapter()).update(productName,quantity,status,price,mrp,discount,productImage, orderId, key,date,couponSaving,replaceCount);
                     }
 
                     //quantity-copies,
@@ -158,9 +159,11 @@ public class stationaryFragment extends Fragment {
         ArrayList<String> orderIds= new ArrayList<>();
         ArrayList<String> keys= new ArrayList<>();
         ArrayList<Date> returnDate= new ArrayList<>();
+        ArrayList<String> couponSavings =new ArrayList<>();
+        ArrayList<String> replaceCounts = new ArrayList<>();
 
 
-        public void update(String productName, String quantity, String status, String price, String mrp, String discount, String productImage, String orderId, String key,Date date){
+        public void update(String productName, String quantity, String status, String price, String mrp, String discount, String productImage, String orderId, String key,Date date,String couponSaving,String replaceCount){
             productNames.add(productName);
             quantities.add(quantity);
             statuses.add(status);
@@ -171,11 +174,13 @@ public class stationaryFragment extends Fragment {
             orderIds.add(orderId);
             keys.add(key);
             returnDate.add(date);
+            couponSavings.add(couponSaving);
+            replaceCounts.add(replaceCount);
             notifyDataSetChanged();  //refershes the recyler view automatically...
 
         }
 
-        public OrderAdapter(RecyclerView recyclerView, Context context, ArrayList<String> productNames, ArrayList<String> quantities, ArrayList<String> statuses, ArrayList<String> prices, ArrayList<String> mrps, ArrayList<String> discounts,ArrayList<String> productImages, ArrayList<String> orderIds, ArrayList<String> keys,ArrayList<Date> returnDate) {
+        public OrderAdapter(RecyclerView recyclerView, Context context, ArrayList<String> productNames, ArrayList<String> quantities, ArrayList<String> statuses, ArrayList<String> prices, ArrayList<String> mrps, ArrayList<String> discounts,ArrayList<String> productImages, ArrayList<String> orderIds, ArrayList<String> keys,ArrayList<Date> returnDate,ArrayList<String> couponSavings,ArrayList<String> replaceCounts) {
             this.recyclerView = recyclerView;
             this.context = context;
             this.productNames = productNames;
@@ -188,6 +193,8 @@ public class stationaryFragment extends Fragment {
             this.orderIds =  orderIds;
             this.keys=keys;
             this.returnDate=returnDate;
+            this.couponSavings = couponSavings;
+            this.replaceCounts= replaceCounts;
         }
 
         @NonNull
@@ -202,7 +209,8 @@ public class stationaryFragment extends Fragment {
             holder.productName.setText(productNames.get(position));
             holder.quantity.setText("Quantity: " + quantities.get(position));
             holder.status.setText("Status: "+ statuses.get(position));
-            holder.price.setText("Rs. "+prices.get(position));
+            int shownprice = Integer.parseInt(prices.get(position))-Integer.parseInt(couponSavings.get(position));
+            holder.price.setText("Rs. "+shownprice+"");
             holder.mrp.setText(mrps.get(position));
             holder.discount.setText(discounts.get(position)+"% off");
             holder.orderNo.setText(orderIds.get(position));
@@ -212,6 +220,10 @@ public class stationaryFragment extends Fragment {
             cal.setTime(returnDate.get(position));
             cal.add(Calendar.DATE,3);
             Date returnLimit=cal.getTime();
+           long milliseconds=returnDate.get(position).getTime();
+            String dateString= DateFormat.format("dd/MM/yyyy",new Date(milliseconds)).toString();
+            holder.orderedDate.setText("Ordered On: "+dateString);
+            int replacecount = Integer.parseInt(replaceCounts.get(position));
             if(statuses.get(position).equals("Delivered") && (returnLimit.compareTo(today)>0)){
                 holder.returnOption.setVisibility(View.VISIBLE);
                 holder.returnOption.setOnClickListener(new View.OnClickListener() {
@@ -251,7 +263,7 @@ public class stationaryFragment extends Fragment {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            TextView quantity, status, productName, price, mrp, discount, orderNo,returnOption;
+            TextView quantity, status, productName, price, mrp, discount, orderNo,returnOption,orderedDate;
             ImageView productImage;
 
             public ViewHolder(@NonNull View itemView) {
@@ -266,6 +278,7 @@ public class stationaryFragment extends Fragment {
                 productImage = itemView.findViewById(R.id.productimage);
                 orderNo = itemView.findViewById(R.id.orderid);
                 returnOption=itemView.findViewById(R.id.returnoption);
+                orderedDate = itemView.findViewById(R.id.orderDate);
             }
         }
         private void callReplace(String uid){
