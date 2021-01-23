@@ -27,8 +27,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.mikepenz.crossfadedrawerlayout.view.CrossfadeDrawerLayout;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -45,10 +43,8 @@ import com.mikepenz.materialdrawer.util.DrawerUIUtils;
 import com.mikepenz.materialize.util.UIUtils;
 import com.printhub.printhub.WebServices.MainActivityWeb;
 import com.printhub.printhub.clubEvents.clubActivity;
-import com.printhub.printhub.clubEvents.postEvent;
 import com.printhub.printhub.collab.collabActivity;
-import com.printhub.printhub.eventActivity;
-import com.printhub.printhub.image.MultipleImages;
+import com.printhub.printhub.globalEvents.GlobalActivity;
 import com.printhub.printhub.image.docCategoryChooser;
 import com.printhub.printhub.prodcutscategory.StationaryCategory;
 import com.printhub.printhub.sidebar.aboutus.AboutusActivity;
@@ -56,17 +52,11 @@ import com.printhub.printhub.bunkManager.BunkActivity;
 import com.printhub.printhub.Cart;
 import com.printhub.printhub.CheckInternetConnection;
 import com.printhub.printhub.sidebar.HelpCenter;
-import com.printhub.printhub.image.ImageActivity;
 import com.printhub.printhub.sidebar.oldOrders.OrdersActivity;
 import com.printhub.printhub.sidebar.Profile;
 import com.printhub.printhub.R;
 import com.printhub.printhub.WelcomeActivity;
 import com.printhub.printhub.sidebar.Wishlist;
-import com.printhub.printhub.pdf
-        .pdfActivity;
-import com.printhub.printhub.prodcutscategory.Bags;
-import com.printhub.printhub.prodcutscategory.Keychains;
-import com.printhub.printhub.prodcutscategory.Stationary;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -406,7 +396,7 @@ public class MainnewActivity extends AppCompatActivity {
 
     }
     public void eventActivity(View view) {
-        Intent intent= new Intent(MainnewActivity.this , eventActivity.class);
+        Intent intent= new Intent(MainnewActivity.this , GlobalActivity.class);
         startActivity(intent);
     }
 

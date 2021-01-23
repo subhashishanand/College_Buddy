@@ -16,9 +16,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".OrderPendingActivity"></activity>
-        <activity android:name=".sidebar.oldOrders.ReplacementActivity" />
-        <activity android:name=".sidebar.oldOrders.ReturnActivity" />
+        <activity android:name=".globalEvents.GlobalActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".OrderPendingActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".sidebar.oldOrders.ReplacementActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".sidebar.oldOrders.ReturnActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".registration.eventInterestActivity"
             android:screenOrientation="portrait" />
@@ -34,9 +39,6 @@
 
         <activity
             android:name=".registration.interestActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".eventActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".image.docCategoryChooser"
