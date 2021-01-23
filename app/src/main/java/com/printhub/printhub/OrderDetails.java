@@ -35,6 +35,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -65,6 +66,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
     Button submit;
     EditText couponText;
     String discountprice;
+    int couponSaving=0;
     TextView payable_amount,discount_amount;
 
 
@@ -88,7 +90,6 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
         deliveryDate.setText("Within 24 hr");
 
         mid = "bzwPmq36716808918329"; /// your marchant id
-        orderId = String.format("%04d", random.nextInt(10000));
         custid = firebaseUserId;
         submit= findViewById(R.id.submit);
         couponText= findViewById(R.id.couponText);
@@ -137,6 +138,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
                        discountprice=actualamt-(double)discountamt+"";
                        discount_amount.setText(discountamt+"");
                        payable_amount.setText(discountprice);
+                       couponSaving=discountamt;
 
                          Toasty.success(OrderDetails.this, "Your Discount Coupon is applied").show();
 
@@ -147,6 +149,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
                         discountprice = amount;
                         discount_amount.setText("0.00");
                         payable_amount.setText(discountprice);
+                        couponSaving=0;
                         Toasty.error(OrderDetails.this, "Enter Valid Coupon Code").show();
                     }
 
@@ -160,6 +163,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
             submit.setText("Apply");
             discount_amount.setText("0.00");
             payable_amount.setText(discountprice);
+            couponSaving=0;
             Toasty.error(OrderDetails.this, "Enter Coupon Code").show();
         }
     }
@@ -172,6 +176,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
     }
 //
     public void PlaceOrder(View view) {
+        orderId = String.format("%04d", random.nextInt(10000));
             payment();
     }
 
@@ -184,11 +189,17 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
                         .document(myAdapter.keys.get(i)).get().addOnSuccessListener(this, new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        String uid= UUID.randomUUID().toString().substring(0,16);
                         Map<String, Object> map = documentSnapshot.getData();
+                        String tempPrice=documentSnapshot.getString("price");
+                        int tPrice=Integer.parseInt(tempPrice);
+                        int productSaving= (int) ((couponSaving*tPrice)/Double.parseDouble(amount));
                         map.put("orderedTime", FieldValue.serverTimestamp());
                         map.put("orderId", orderId);
                         map.put("status", status);
-                        db.collection(cityName).document(collegeName).collection("productOrders").document().set(map);
+                        map.put("uid",uid);
+                        map.put("couponSaving",productSaving+"");
+                        db.collection(cityName).document(collegeName).collection("productOrders").document(uid).set(map);
                         db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId).collection("productCart")
                                 .document(myAdapter.keys.get(finalI)).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -215,11 +226,13 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
                         .document(myAdapter.keys.get(i)).get().addOnSuccessListener(this, new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        String uid= UUID.randomUUID().toString().substring(0,16);
                         Map<String, Object> map = documentSnapshot.getData();
                         map.put("orderedTime", FieldValue.serverTimestamp());
                         map.put("orderId", orderId);
                         map.put("status", status);
-                        db.collection(cityName).document(collegeName).collection("printOrders").document().set(map);
+                        map.put("uid",uid);
+                        db.collection(cityName).document(collegeName).collection("printOrders").document(uid).set(map);
                         db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId).collection("printCart")
                                 .document(myAdapter.keys.get(finalI)).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override

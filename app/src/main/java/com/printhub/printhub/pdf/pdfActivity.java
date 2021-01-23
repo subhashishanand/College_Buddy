@@ -40,6 +40,7 @@ import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -78,6 +79,7 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
 
     Uri pdfUri;                      //uri are actually URLs that are meant for local storage
     String upiIdEt,name, note, rollNo, doubleSided="No",colorPrint="No";
+    int page;
     int noPages=0;
 
     int startPageNo;
@@ -93,6 +95,8 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
     PDFView pdfView;
     Integer pageNumber = 0;
     String pdfFileName;
+
+    double blackRate=0,colorRate=0,doubleSidedPrice=0,singleSidedPrice=0,pageLimit=0,pageLimitDiscount=0;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -494,32 +498,58 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
     }
 
     private void updateCost(){
-        int page = ((endPageNo - startPageNo + 1)* copies)/Integer.parseInt(perPage[0]);
+        page = ((endPageNo - startPageNo + 1)* copies)/Integer.parseInt(perPage[0]);
         int rem = ((endPageNo - startPageNo + 1)* copies)%Integer.parseInt(perPage[0]);
         if(rem!=0) {
             page = page+1;
         }
-        if(colorPrint.equals("Yes")){
-            costValue = page * 5.00;
-            cost.setText("Cost: " + costValue);
-        }else{
-            if(doubleSided.equals("No")) {
-                costValue = page  * 2.00;
-                cost.setText("Cost: " + costValue);
-            }else{
-                if(page>1) {
-                    if((page<=30)){
-                        costValue = page* 1.50;
-                        cost.setText("Cost: " + costValue);
-                    }else{
-                        costValue = page* 1.00;
-                        cost.setText("Cost: " + costValue);
+        if(blackRate==0 || colorRate==0 || doubleSidedPrice==0 || singleSidedPrice==0 || pageLimit==0 || pageLimitDiscount!=0){
+            db.collection(cityName).document(collegeName).collection("printingPrice").document("printPrice").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    blackRate=documentSnapshot.getDouble("black");
+                    colorRate=documentSnapshot.getDouble("color");
+                    doubleSidedPrice=documentSnapshot.getDouble("doubleSided");
+                    singleSidedPrice=documentSnapshot.getDouble("singleSided");
+                    pageLimit=documentSnapshot.getDouble("pageLimit");
+                    pageLimitDiscount=documentSnapshot.getDouble("pageLimitDiscount");
+                    if (colorPrint.equals("Yes")) {
+                        costValue = page * colorRate;
+                    } else {
+                        if (doubleSided.equals("No")) {
+                            costValue = page * singleSidedPrice;
+                        } else {
+                            if (page > 1) {
+                                costValue = page * doubleSidedPrice;
+                            } else {
+                                costValue = page * singleSidedPrice;
+                            }
+                        }
                     }
-                }else{
-                    costValue = page* 2.00;
+                    if(page>((int)pageLimit)){
+                        costValue=costValue-((costValue*pageLimitDiscount)/100);
+                    }
                     cost.setText("Cost: " + costValue);
                 }
+            });
+        }else {
+            if (colorPrint.equals("Yes")) {
+                costValue = page * colorRate;
+            } else {
+                if (doubleSided.equals("No")) {
+                    costValue = page * singleSidedPrice;
+                } else {
+                    if (page > 1) {
+                            costValue = page * doubleSidedPrice;
+                    } else {
+                        costValue = page * singleSidedPrice;
+                    }
+                }
             }
+            if(page>((int)pageLimit)){
+                costValue=costValue-((costValue*pageLimitDiscount)/100);
+            }
+            cost.setText("Cost: " + costValue);
         }
 
     }
