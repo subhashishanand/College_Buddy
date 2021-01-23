@@ -15,7 +15,8 @@
             android:layout_height="80dp"
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/drawerback"/>
+            android:scaleType="centerCrop"
+            android:src="@drawable/print"/>
 
         <LinearLayout  android:id="@+id/layout_item_desc"
             android:layout_width="0dp"
