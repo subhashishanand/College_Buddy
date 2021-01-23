@@ -35,27 +35,39 @@
 
                 <TextView
                     android:id="@+id/productname"
-                    android:layout_width="200dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:paddingTop="10dp"
                     android:text="Denim Shirt"
                     android:textSize="@dimen/text_size_xmedium"
+                    android:maxLength="15"
                     android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="fill">
+                    android:gravity="right">
 
                     <TextView
                         android:id="@+id/orderid"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
                         android:textSize="12dp"
                         android:layout_gravity="center"
+                        android:layout_marginRight="10dp"
                         android:textAlignment="center"
                         android:text="8520"/>
+
+                    <TextView
+                        android:id="@+id/returnoption"
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content"
+                        android:text="&#8942;"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
+                        android:visibility="gone"
+                        android:layout_marginRight="15dp"/>
+
                 </LinearLayout>
 
             </LinearLayout>

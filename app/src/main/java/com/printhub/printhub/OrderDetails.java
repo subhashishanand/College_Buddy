@@ -199,6 +199,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
                         map.put("status", status);
                         map.put("uid",uid);
                         map.put("couponSaving",productSaving+"");
+                        map.put("replaceCount",0+"");
                         db.collection(cityName).document(collegeName).collection("productOrders").document(uid).set(map);
                         db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId).collection("productCart")
                                 .document(myAdapter.keys.get(finalI)).delete().addOnSuccessListener(new OnSuccessListener<Void>() {

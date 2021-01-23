@@ -90,10 +90,11 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
         holder.setTime(eventsClass.getActivityTime());
         holder.setDate(eventsClass.getActivityDate());
         holder.eventName.setText(eventsClass.getEventTitle());
-        Picasso.with(context).load(blog_list.get(position).getImageUrl()).placeholder(R.drawable.sendtimer).into(holder.clubEventPost);
+        Picasso.with(context).load(blog_list.get(position).getImageUrl()).placeholder(R.drawable.collab).into(holder.clubEventPost);
         holder.setName("Club Name: "+eventsClass.getClubName());
         if(null!=eventsClass.getLink() &&!eventsClass.getLink().isEmpty()){
             holder.linkTextView.setVisibility(View.VISIBLE);
+            holder.linkView.setVisibility(View.VISIBLE);
             holder.setLink(eventsClass.getLink());
         }
 
@@ -210,7 +211,7 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
 
         private View mView;
         private TextView descView,eventName;
-        private TextView timeTextView, dateTextView,linkTextView,text_action;
+        private TextView timeTextView, dateTextView,linkTextView,text_action,linkView;
         ImageView clubEventPost,interest;
         private TextView blogDate,authorName;
         LottieAnimationView reminderButton;
@@ -224,6 +225,7 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
             interest= mView.findViewById(R.id.saveClubEvent);
             text_action= mView.findViewById(R.id.text_action);
             linkTextView= mView.findViewById(R.id.linkTextView);
+            linkView = mView.findViewById(R.id.linkview);
             //descView=mView.findViewById(R.id.blog_desc);
         }
 
@@ -234,12 +236,12 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
 
         public void setDate(String date){
             dateTextView=mView.findViewById(R.id.clubEventDate);
-            dateTextView.setText(date);
+            dateTextView.setText("Date: "+date);
         }
 
         public void setTime(String time){
             timeTextView=mView.findViewById(R.id.clubEventTime);
-            timeTextView.setText(time);
+            timeTextView.setText("Time: "+time);
         }
 
         public void setDescText(String descText){

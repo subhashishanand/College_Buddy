@@ -1,13 +1,18 @@
 package com.printhub.printhub.sidebar.oldOrders;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.MultiAutoCompleteTextView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,24 +36,28 @@ public class ReturnActivity extends AppCompatActivity {
 
     private FirebaseFirestore db=FirebaseFirestore.getInstance();
     String uid;
-    TextView productName,productDescription,mrp,discount,price,orderId,orderTime,quantity,orderStatus;
+    TextView productName,productDescription,price;
     ImageView productImageView;
-    EditText reasonEditText;
+    MultiAutoCompleteTextView reasonEditText;
     Button returnButton;
+    String replaceCount="";
+    RadioGroup radioGroup;
+    RadioButton radioButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_return);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitle("");
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         productName=findViewById(R.id.productName);
         productDescription=findViewById(R.id.description);
-        mrp=findViewById(R.id.mrp);
-        discount=findViewById(R.id.discount);
         price=findViewById(R.id.price);
-        orderId=findViewById(R.id.orderId);
-        orderTime=findViewById(R.id.orderTime);
-        quantity=findViewById(R.id.quantity);
-        orderStatus=findViewById(R.id.orderStatus);
         productImageView=findViewById(R.id.productImageView);
         reasonEditText=findViewById(R.id.reasonEditText);
         returnButton=findViewById(R.id.returnButton);
@@ -60,33 +69,34 @@ public class ReturnActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 productName.setText(documentSnapshot.getString("productName"));
                 productDescription.setText(documentSnapshot.getString("description"));
-                mrp.setText(documentSnapshot.getString("mrp"));
-                discount.setText(documentSnapshot.getString("discount"));
                 price.setText(documentSnapshot.getString("price"));
-                Picasso.with(ReturnActivity.this).load(documentSnapshot.getString("productImage"));
-                orderId.setText(documentSnapshot.getString("orderId"));
-                Timestamp timestamp=documentSnapshot.getTimestamp("orderedTime");
-                Date date =new Date();
-                date.setTime(timestamp.getNanoseconds());
-                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("hh:mm aa  dd/MM/yyyy");
-                orderTime.setText(simpleDateFormat.format(date));
-                quantity.setText(documentSnapshot.getString("quantity"));
-                orderStatus.setText(documentSnapshot.getString("status"));
+                int data= (int)Integer.parseInt(documentSnapshot.getString("replaceCount"))+1;
+                replaceCount = String.valueOf(data);
+                Picasso.with(getApplicationContext()).load(documentSnapshot.getString("productImage")).placeholder(R.drawable.drawerback).into(productImageView);
+                long milliseconds=documentSnapshot.getTimestamp("orderedTime").toDate().getTime();
+                String dateString= DateFormat.format("dd/MM/yyyy",new Date(milliseconds)).toString();
+               // orderTime.setText(dateString);
             }
         });
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                db.collection(cityName).document(collegeName).collection("productOrders").document(uid).update("status","returnRequested").addOnSuccessListener(new OnSuccessListener<Void>() {
+                db.collection(cityName).document(collegeName).collection("productOrders").document(uid).update("status","returnRequested","replaceCount",replaceCount).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        orderStatus.setText("Return requested");
                         Toasty.success(ReturnActivity.this, "Return request submitted").show();
-                        Intent intent=new Intent(getApplicationContext(), MainnewActivity.class);
+                        Intent intent=new Intent(getApplicationContext(), OrdersActivity.class);
                         startActivity(intent);
                     }
                 });
             }
         });
+    }
+
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

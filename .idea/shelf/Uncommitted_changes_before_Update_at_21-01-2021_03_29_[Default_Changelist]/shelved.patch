@@ -1,0 +1,687 @@
+Index: app/src/main/java/com/printhub/printhub/collab/collabActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.printhub.printhub.collab;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.view.View;\r\n\r\nimport com.google.android.material.floatingactionbutton.FloatingActionButton;\r\nimport com.printhub.printhub.R;\r\n\r\n\r\npublic class collabActivity extends AppCompatActivity {\r\n    FloatingActionButton fab;\r\n    RecyclerView recyclerView;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_collab);\r\n        fab = findViewById(R.id.fab);\r\n        recyclerView = findViewById(R.id.collabview);\r\n        fab.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                Intent intent=new Intent(getApplicationContext(), collabPostActivity.class);\r\n                startActivity(intent);\r\n                finish();\r\n            }\r\n        });\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/printhub/printhub/collab/collabActivity.java	(revision c535a47b7de816784ef413e348894b348a3c6203)
++++ app/src/main/java/com/printhub/printhub/collab/collabActivity.java	(date 1611179098717)
+@@ -1,19 +1,45 @@
+ package com.printhub.printhub.collab;
+ 
++import androidx.annotation.NonNull;
+ import androidx.appcompat.app.AppCompatActivity;
++import androidx.recyclerview.widget.LinearLayoutManager;
+ import androidx.recyclerview.widget.RecyclerView;
+ 
+ import android.content.Intent;
+ import android.os.Bundle;
+ import android.view.View;
++import android.widget.AbsListView;
+ 
++import com.google.android.gms.tasks.OnSuccessListener;
+ import com.google.android.material.floatingactionbutton.FloatingActionButton;
++import com.google.firebase.firestore.DocumentSnapshot;
++import com.google.firebase.firestore.FirebaseFirestore;
++import com.google.firebase.firestore.Query;
++import com.google.firebase.firestore.QueryDocumentSnapshot;
++import com.google.firebase.firestore.QuerySnapshot;
+ import com.printhub.printhub.R;
++import com.printhub.printhub.clubEvents.EventsClass;
++import com.printhub.printhub.clubEvents.mEventsAdapter;
++
++import java.util.ArrayList;
++import java.util.List;
++
++import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
++import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
+ 
+ 
+ public class collabActivity extends AppCompatActivity {
+     FloatingActionButton fab;
+     RecyclerView recyclerView;
++    private List<collabClass> collabList=new ArrayList<>();
++    Boolean isScrolling = false;
++    int totalItems, scrolledOutItems;
++    private LinearLayoutManager manager;
++    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
++    private DocumentSnapshot lastDocumentSnapshot=null;
++    private collabAdapter collabAdapter;
++    Query query;
++
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+@@ -21,13 +47,64 @@
+         setContentView(R.layout.activity_collab);
+         fab = findViewById(R.id.fab);
+         recyclerView = findViewById(R.id.collabview);
++        manager=new LinearLayoutManager(getApplicationContext());
++       recyclerView.setLayoutManager(manager);
++        if (recyclerView != null) {
++            //to enable optimization of recyclerview
++            recyclerView.setHasFixedSize(true);
++        }
+         fab.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 Intent intent=new Intent(getApplicationContext(), collabPostActivity.class);
+                 startActivity(intent);
+-                finish();
++            }
++        });
++
++        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
++            @Override
++            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
++                super.onScrollStateChanged(recyclerView, newState);
++                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
++                    isScrolling = true;
++                }
++            }
++
++            @Override
++            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
++                super.onScrolled(recyclerView, dx, dy);
++                totalItems = manager.getItemCount();
++                scrolledOutItems = manager.findLastVisibleItemPosition();
++                if (isScrolling && scrolledOutItems + 1 >= totalItems) {
++                    isScrolling = false;
++                    loadData();
++                }
+             }
+         });
++
++        loadData();
++
++    }
++
++    private void loadData(){
++        if (lastDocumentSnapshot == null) {
++            query = firebaseFirestore.collection(cityName).document(collegeName).collection("collab").orderBy("timestamp", Query.Direction.DESCENDING).limit(5);
++        } else {
++            query = firebaseFirestore.collection(cityName).document(collegeName).collection("collab").orderBy("timestamp", Query.Direction.DESCENDING).startAfter(lastDocumentSnapshot).limit(5);
++        }
++        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
++            @Override
++            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
++                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
++                    lastDocumentSnapshot = documentSnapshot;
++                    collabClass collabPost=documentSnapshot.toObject(collabClass.class);
++                    collabList.add(collabPost);
++                    collabAdapter.notifyDataSetChanged();
++                }
++            }
++        });
++        collabAdapter=new collabAdapter(collabList,this);
++        recyclerView.setAdapter(collabAdapter);
++
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/printhub/printhub/collab/collabAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.printhub.printhub.collab;\r\n\r\nimport android.content.Context;\r\nimport android.text.format.DateFormat;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.ImageView;\r\nimport android.widget.MultiAutoCompleteTextView;\r\nimport android.widget.TextView;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.firebase.firestore.DocumentSnapshot;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.printhub.printhub.R;\r\nimport com.printhub.printhub.clubEvents.EventsClass;\r\nimport com.squareup.picasso.Picasso;\r\n\r\nimport java.util.Date;\r\nimport java.util.List;\r\n\r\nimport static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;\r\nimport static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;\r\n\r\n\r\npublic class collabAdapter extends RecyclerView.Adapter<collabAdapter.ViewHolder> {\r\n\r\n    List<collabClass> collab_list;\r\n    Context context;\r\n    private FirebaseFirestore db;\r\n    public collabAdapter( List<collabClass> collab_list,Context context) {\r\n        this.collab_list=collab_list;\r\n        this.context= context;\r\n    }\r\n    @Override\r\n    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {\r\n        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.club_events_cardlayout,parent,false);\r\n        db= FirebaseFirestore.getInstance();\r\n        return new ViewHolder(view);\r\n    }\r\n\r\n    @Override\r\n    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {\r\n       // String desc_data=blog_list.get(position).getDescription();\r\n       // holder.setDescText(desc_data);\r\n\r\n        String user_id=collab_list.get(position).getUserid();\r\n        db.collection(cityName).document(collegeName).collection(\"users\").document(user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {\r\n            @Override\r\n            public void onComplete(@NonNull Task<DocumentSnapshot> task) {\r\n                if(task.isSuccessful()){\r\n                    String userName=task.getResult().getString(\"name\");\r\n                    holder.setName(userName);\r\n                }\r\n            }\r\n        });\r\n\r\n        long milliseconds=collab_list.get(position).getTimestamp().getTime();\r\n        String dateString= DateFormat.format(\"MM/dd/yyyy\",new Date(milliseconds)).toString();\r\n        holder.setTime(dateString);\r\n\r\n    }\r\n\r\n    @Override\r\n    public int getItemCount() {\r\n        return collab_list.size();\r\n    }\r\n\r\n    public class ViewHolder extends RecyclerView.ViewHolder {\r\n\r\n        private View mView;\r\n        private MultiAutoCompleteTextView descView;\r\n        ImageView clubEventPost;\r\n        private TextView blogDate,authorName;\r\n        public ViewHolder(@NonNull  View itemView) {\r\n\r\n            super(itemView);\r\n            mView=itemView;\r\n            clubEventPost= mView.findViewById(R.id.clubEventPost);\r\n            //descView=mView.findViewById(R.id.blog_desc);\r\n        }\r\n\r\n        public void setDescText(String descText){\r\n            descView=mView.findViewById(R.id.blog_desc);\r\n            descView.setText(descText);\r\n        }\r\n        public void setTime(String date){\r\n            blogDate=mView.findViewById(R.id.blogdate);\r\n            blogDate.setText(date);\r\n        }\r\n\r\n        public void setName(String name){\r\n            authorName=mView.findViewById(R.id.authorName);\r\n            authorName.setText(name);\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/printhub/printhub/collab/collabAdapter.java	(revision c535a47b7de816784ef413e348894b348a3c6203)
++++ app/src/main/java/com/printhub/printhub/collab/collabAdapter.java	(date 1611177730632)
+@@ -12,10 +12,15 @@
+ import androidx.annotation.NonNull;
+ import androidx.recyclerview.widget.RecyclerView;
+ 
++import com.airbnb.lottie.LottieAnimationView;
+ import com.google.android.gms.tasks.OnCompleteListener;
++import com.google.android.gms.tasks.OnFailureListener;
++import com.google.android.gms.tasks.OnSuccessListener;
+ import com.google.android.gms.tasks.Task;
++import com.google.firebase.auth.FirebaseAuth;
+ import com.google.firebase.firestore.DocumentSnapshot;
+ import com.google.firebase.firestore.FirebaseFirestore;
++import com.printhub.printhub.IndividualProduct;
+ import com.printhub.printhub.R;
+ import com.printhub.printhub.clubEvents.EventsClass;
+ import com.squareup.picasso.Picasso;
+@@ -23,6 +28,9 @@
+ import java.util.Date;
+ import java.util.List;
+ 
++import de.hdodenhof.circleimageview.CircleImageView;
++import es.dmoral.toasty.Toasty;
++
+ import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
+ import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
+ 
+@@ -38,7 +46,7 @@
+     }
+     @Override
+     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.club_events_cardlayout,parent,false);
++        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.collab_cardlayout,parent,false);
+         db= FirebaseFirestore.getInstance();
+         return new ViewHolder(view);
+     }
+@@ -47,6 +55,8 @@
+     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        // String desc_data=blog_list.get(position).getDescription();
+        // holder.setDescText(desc_data);
++        holder.description.setText(collab_list.get(position).getDescription());
++        holder.domain.setText("Domain:"+" "+collab_list.get(position).getDomain());
+ 
+         String user_id=collab_list.get(position).getUserid();
+         db.collection(cityName).document(collegeName).collection("users").document(user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+@@ -54,14 +64,39 @@
+             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                 if(task.isSuccessful()){
+                     String userName=task.getResult().getString("name");
+-                    holder.setName(userName);
++                    String imageurl = task.getResult().getString("imageLink").toString().trim();
++                    holder.username.setText(userName);
++                    Picasso.with(context).load(imageurl).into(holder.userimage);
+                 }
+             }
++        });
++        holder.interest.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                 holder.interest.playAnimation();
++                holder.interest.setEnabled(false);
++                collabClass collabClass = new collabClass(collab_list.get(position).getDomain(),collab_list.get(position).getDescription(),collab_list.get(position).getMobileNo(),collab_list.get(position).getWhatsApp(),collab_list.get(position).getWhatsApp(),collab_list.get(position).getLinkedinId(),collab_list.get(position).getStatus(),collab_list.get(position).getUserid(),collab_list.get(position).getTimestamp());
++                    String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
++                db.collection(cityName).document(collegeName).collection("users").document(userid).collection("interest").document().set(collabClass).addOnSuccessListener(new OnSuccessListener<Void>() {
++                    @Override
++                    public void onSuccess(Void unused) {
++                        Toasty.success(context, "Added to Interest").show();
++                    }
++                }).addOnFailureListener(new OnFailureListener() {
++                    @Override
++                    public void onFailure(@NonNull Exception e) {
++                        Toasty.success(context, "Failed Try Again").show();
++                        holder.interest.setEnabled(true);
++
++                    }
++                });
++            }
+         });
+ 
+         long milliseconds=collab_list.get(position).getTimestamp().getTime();
+-        String dateString= DateFormat.format("MM/dd/yyyy",new Date(milliseconds)).toString();
+-        holder.setTime(dateString);
++        String dateString= DateFormat.format("dd/MM/yyyy",new Date(milliseconds)).toString();
++        holder.postdate.setText(dateString);
++
+ 
+     }
+ 
+@@ -73,29 +108,33 @@
+     public class ViewHolder extends RecyclerView.ViewHolder {
+ 
+         private View mView;
+-        private MultiAutoCompleteTextView descView;
+-        ImageView clubEventPost;
+-        private TextView blogDate,authorName;
++        CircleImageView userimage;
++        ImageView github,linkedin,whatsapp,call;
++        LottieAnimationView interest;
++        private TextView username,postdate,domain,description;
+         public ViewHolder(@NonNull  View itemView) {
+ 
+             super(itemView);
+             mView=itemView;
+-            clubEventPost= mView.findViewById(R.id.clubEventPost);
++            userimage= mView.findViewById(R.id.userimage);
++            github= mView.findViewById(R.id.github);
++            linkedin= mView.findViewById(R.id.linkedin);
++            whatsapp= mView.findViewById(R.id.whatsapp);
++            call= mView.findViewById(R.id.call);
++            interest= mView.findViewById(R.id.interest);
++            username= mView.findViewById(R.id.username);
++            postdate= mView.findViewById(R.id.postdate);
++            domain= mView.findViewById(R.id.domain);
++            description= mView.findViewById(R.id.description);
++
++
+             //descView=mView.findViewById(R.id.blog_desc);
+         }
+ 
+-        public void setDescText(String descText){
+-            descView=mView.findViewById(R.id.blog_desc);
+-            descView.setText(descText);
+-        }
+-        public void setTime(String date){
+-            blogDate=mView.findViewById(R.id.blogdate);
+-            blogDate.setText(date);
+-        }
++//        public void setDescText(String descText){
++//            descView=mView.findViewById(R.id.blog_desc);
++//            descView.setText(descText);
++//        }
+ 
+-        public void setName(String name){
+-            authorName=mView.findViewById(R.id.authorName);
+-            authorName.setText(name);
+-        }
+     }
+ }
+Index: app/src/main/java/com/printhub/printhub/clubEvents/clubActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.printhub.printhub.clubEvents;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.AbsListView;\r\nimport android.widget.Button;\r\n\r\n\r\nimport com.google.android.gms.tasks.OnSuccessListener;\r\nimport com.google.android.material.floatingactionbutton.FloatingActionButton;\r\nimport com.google.firebase.firestore.DocumentChange;\r\nimport com.google.firebase.firestore.DocumentSnapshot;\r\nimport com.google.firebase.firestore.EventListener;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.google.firebase.firestore.FirebaseFirestoreException;\r\nimport com.google.firebase.firestore.Query;\r\nimport com.google.firebase.firestore.QueryDocumentSnapshot;\r\nimport com.google.firebase.firestore.QuerySnapshot;\r\nimport com.google.firebase.storage.FirebaseStorage;\r\nimport com.google.firebase.storage.StorageReference;\r\nimport com.printhub.printhub.R;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\nimport static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;\r\nimport static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;\r\n\r\npublic class clubActivity extends AppCompatActivity {\r\n    private FloatingActionButton button;\r\n    private RecyclerView mEvents;\r\n    private List<EventsClass> blogList=new ArrayList<>();\r\n    private StorageReference storageReference;\r\n    private LinearLayoutManager manager;\r\n    Boolean isScrolling = false;\r\n    int totalItems, scrolledOutItems;\r\n    private FirebaseFirestore firebaseFirestore;\r\n    private mEventsAdapter blogRecyclerAdapter;\r\n    private DocumentSnapshot lastDocumentSnapshot=null;\r\n    Query query;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_club);\r\n\r\n        storageReference= FirebaseStorage.getInstance().getReference();\r\n        firebaseFirestore= FirebaseFirestore.getInstance();\r\n\r\n        button=findViewById(R.id.fab);\r\n        mEvents=findViewById(R.id.mEvents);\r\n        manager=new LinearLayoutManager(getApplicationContext());\r\n        mEvents.setLayoutManager(manager);\r\n\r\n\r\n        button.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                Intent intent=new Intent(getApplicationContext(),postEvent.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n        loadData();\r\n        mEvents.addOnScrollListener(new RecyclerView.OnScrollListener() {\r\n            @Override\r\n            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {\r\n                super.onScrollStateChanged(recyclerView, newState);\r\n                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {\r\n                    isScrolling = true;\r\n                }\r\n            }\r\n\r\n            @Override\r\n            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {\r\n                super.onScrolled(recyclerView, dx, dy);\r\n                totalItems = manager.getItemCount();\r\n                scrolledOutItems = manager.findLastVisibleItemPosition();\r\n                if (isScrolling && scrolledOutItems + 1 >= totalItems) {\r\n                    isScrolling = false;\r\n                    loadData();\r\n                }\r\n            }\r\n        });\r\n\r\n    }\r\n\r\n    private void loadData(){\r\n        if (lastDocumentSnapshot == null) {\r\n            query = firebaseFirestore.collection(cityName).document(collegeName).collection(\"clubActivity\").orderBy(\"timestamp\", Query.Direction.DESCENDING).limit(10);\r\n        } else {\r\n            query = firebaseFirestore.collection(cityName).document(collegeName).collection(\"clubActivity\").orderBy(\"timestamp\", Query.Direction.DESCENDING).startAfter(lastDocumentSnapshot).limit(10);\r\n        }\r\n        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {\r\n            @Override\r\n            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {\r\n                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {\r\n                    lastDocumentSnapshot = documentSnapshot;\r\n                    EventsClass blogPost=documentSnapshot.toObject(EventsClass.class);\r\n                    blogList.add(blogPost);\r\n                    blogRecyclerAdapter.notifyDataSetChanged();\r\n                }\r\n            }\r\n        });\r\n        blogRecyclerAdapter=new mEventsAdapter(blogList,this);\r\n        mEvents.setAdapter(blogRecyclerAdapter);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/printhub/printhub/clubEvents/clubActivity.java	(revision c535a47b7de816784ef413e348894b348a3c6203)
++++ app/src/main/java/com/printhub/printhub/clubEvents/clubActivity.java	(date 1611169171196)
+@@ -58,6 +58,10 @@
+         mEvents=findViewById(R.id.mEvents);
+         manager=new LinearLayoutManager(getApplicationContext());
+         mEvents.setLayoutManager(manager);
++        if (mEvents != null) {
++            //to enable optimization of recyclerview
++            mEvents.setHasFixedSize(true);
++        }
+ 
+ 
+         button.setOnClickListener(new View.OnClickListener() {
+Index: gradle/wrapper/gradle-wrapper.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#Wed Nov 25 21:48:38 IST 2020\r\ndistributionBase=GRADLE_USER_HOME\r\ndistributionPath=wrapper/dists\r\nzipStoreBase=GRADLE_USER_HOME\r\nzipStorePath=wrapper/dists\r\ndistributionUrl=https\\://services.gradle.org/distributions/gradle-6.1.1-all.zip\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>windows-1252
+===================================================================
+--- gradle/wrapper/gradle-wrapper.properties	(revision c535a47b7de816784ef413e348894b348a3c6203)
++++ gradle/wrapper/gradle-wrapper.properties	(date 1611160514843)
+@@ -3,4 +3,4 @@
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-6.1.1-all.zip
++distributionUrl=https://services.gradle.org/distributions/gradle-6.8-rc-1-all.zip
+Index: app/src/main/res/layout/activity_individual_product.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:id=\"@+id/activity_item_details\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:orientation=\"vertical\"\r\n    android:weightSum=\"10\"\r\n    tools:context=\".IndividualProduct\">\r\n\r\n\r\n    <com.google.android.material.appbar.AppBarLayout\r\n        android:id=\"@+id/toolbarwrap\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\">\r\n\r\n        <androidx.appcompat.widget.Toolbar\r\n            android:id=\"@+id/toolbar\"\r\n            android:layout_width=\"fill_parent\"\r\n            android:layout_height=\"58dp\"\r\n            android:background=\"@color/colorAccent\"\r\n            android:minHeight=\"?attr/actionBarSize\">\r\n\r\n            <TextView\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Product\"\r\n                android:textSize=\"20sp\" />\r\n\r\n\r\n            <LinearLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:gravity=\"right\"\r\n                android:orientation=\"horizontal\">\r\n\r\n                <ImageView\r\n                    android:layout_width=\"20dp\"\r\n                    android:layout_height=\"20dp\"\r\n                    android:layout_marginLeft=\"5dp\"\r\n                    android:layout_marginRight=\"15dp\"\r\n                    android:onClick=\"Notifications\"\r\n                    android:src=\"@drawable/notification\" />\r\n\r\n\r\n            </LinearLayout>\r\n\r\n        </androidx.appcompat.widget.Toolbar>\r\n    </com.google.android.material.appbar.AppBarLayout>\r\n\r\n    <ScrollView\r\n        android:id=\"@+id/scrollbar\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"0dp\"\r\n        android:layout_weight=\"9.5\"\r\n        android:paddingLeft=\"@dimen/activity_horizontal_margin\"\r\n        android:paddingTop=\"@dimen/activity_vertical_margin\"\r\n        android:paddingRight=\"@dimen/activity_horizontal_margin\"\r\n        android:scrollbars=\"none\">\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:orientation=\"vertical\">\r\n\r\n            <ImageView\r\n                android:id=\"@+id/productimage\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"200dp\"\r\n                android:src=\"@drawable/drawerback\" />\r\n\r\n            <LinearLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginTop=\"@dimen/activity_vertical_margin\"\r\n                android:orientation=\"vertical\">\r\n\r\n                <TextView\r\n                    android:id=\"@+id/productname\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:text=\"Wait fetching data\"\r\n                    android:textColor=\"@color/gen_black\"\r\n                    android:textSize=\"16dp\" />\r\n\r\n                <LinearLayout\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\">\r\n\r\n                    <TextView\r\n                        android:id=\"@+id/productprice\"\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:layout_marginTop=\"8dp\"\r\n                        android:text=\"Rs. ....\"\r\n                        android:textColor=\"#4CAF50\"\r\n                        android:textSize=\"20dp\" />\r\n\r\n                    <TextView\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:layout_marginTop=\"8dp\"\r\n                        android:paddingLeft=\"30dp\"\r\n                        android:text=\"MRP: \"\r\n                        android:textColor=\"@color/gen_black\"\r\n                        android:textSize=\"20dp\" />\r\n\r\n                    <TextView\r\n                        android:id=\"@+id/mrp\"\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:layout_marginTop=\"8dp\"\r\n                        android:text=\"..\"\r\n                        android:textColor=\"@color/gen_black\"\r\n                        android:textSize=\"20dp\" />\r\n\r\n                    <TextView\r\n                        android:id=\"@+id/discount\"\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:layout_marginTop=\"8dp\"\r\n                        android:paddingLeft=\"10dp\"\r\n                        android:text=\"..% off\"\r\n                        android:textColor=\"@color/pink\"\r\n                        android:textSize=\"20dp\" />\r\n                </LinearLayout>\r\n\r\n                <LinearLayout\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:orientation=\"horizontal\">\r\n\r\n                    <TextView\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:layout_marginTop=\"4dp\"\r\n                        android:text=\"FREE Delivery\"\r\n                        android:textSize=\"12dp\" />\r\n\r\n                    <LinearLayout\r\n                        android:layout_width=\"match_parent\"\r\n                        android:layout_height=\"match_parent\"\r\n                        android:gravity=\"right\">\r\n\r\n                        <TextView\r\n                            android:id=\"@+id/stockTextView\"\r\n                            android:layout_width=\"wrap_content\"\r\n                            android:layout_height=\"wrap_content\"\r\n                            android:textSize=\"12dp\"\r\n                            android:text=\"stock\"\r\n                            android:textColor=\"@color/md_brown_900\"\r\n                            android:paddingRight=\"20dp\"/>\r\n                    </LinearLayout>\r\n                </LinearLayout>\r\n            </LinearLayout>\r\n\r\n            <LinearLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_margin=\"16dp\"\r\n                android:orientation=\"horizontal\">\r\n\r\n                <TextView\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_marginRight=\"16dp\"\r\n                    android:text=\"Quantity: \"\r\n                    android:textColor=\"@android:color/black\"\r\n                    android:textSize=\"16sp\" />\r\n\r\n                <Button\r\n                    android:id=\"@+id/decrementQuantity\"\r\n                    android:layout_width=\"48dp\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:backgroundTint=\"#eeeeee\"\r\n                    android:onClick=\"decrement\"\r\n                    android:text=\"-\"\r\n                    android:textColor=\"@android:color/black\" />\r\n\r\n                <EditText\r\n                    android:id=\"@+id/quantityProductPage\"\r\n                    android:layout_width=\"40dp\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_marginLeft=\"8dp\"\r\n                    android:layout_marginRight=\"8dp\"\r\n                    android:gravity=\"center\"\r\n                    android:inputType=\"number\"\r\n                    android:text=\"1\"\r\n                    android:textColor=\"@android:color/black\"\r\n                    android:textSize=\"16sp\" />\r\n\r\n                <Button\r\n                    android:id=\"@+id/incrementQuantity\"\r\n                    android:layout_width=\"48dp\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:backgroundTint=\"#eeeeee\"\r\n                    android:onClick=\"increment\"\r\n                    android:text=\"+\"\r\n                    android:textColor=\"@android:color/black\" />\r\n\r\n            </LinearLayout>\r\n\r\n            <View\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"@dimen/view_width_small\"\r\n                android:layout_marginTop=\"8dp\"\r\n                android:background=\"@color/grey_light\" />\r\n\r\n            <LinearLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"30dp\"\r\n                android:layout_marginTop=\"8dp\"\r\n                android:orientation=\"horizontal\"\r\n                android:weightSum=\"3\">\r\n\r\n                <LinearLayout\r\n                    android:id=\"@+id/layout_action1\"\r\n                    android:layout_width=\"0dp\"\r\n                    android:layout_height=\"match_parent\"\r\n                    android:layout_weight=\"1\"\r\n                    android:gravity=\"center\"\r\n                    android:onClick=\"shareProduct\"\r\n                    android:orientation=\"horizontal\"\r\n                    android:weightSum=\"2\">\r\n\r\n                    <ImageView\r\n                        android:layout_width=\"30dp\"\r\n                        android:layout_height=\"30dp\"\r\n                        android:src=\"@drawable/share\" />\r\n\r\n                    <TextView\r\n                        android:id=\"@+id/text_action1\"\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:layout_marginLeft=\"8dp\"\r\n                        android:layout_weight=\"1\"\r\n                        android:gravity=\"left\"\r\n                        android:text=\"Share\"\r\n                        android:textColor=\"@color/gen_black\"\r\n                        android:textSize=\"12dp\" />\r\n                </LinearLayout>\r\n\r\n                <View\r\n                    android:layout_width=\"@dimen/view_width_small\"\r\n                    android:layout_height=\"match_parent\"\r\n                    android:background=\"@color/grey_light\" />\r\n\r\n                <LinearLayout\r\n                    android:id=\"@+id/layout_action2\"\r\n                    android:layout_width=\"0dp\"\r\n                    android:layout_height=\"match_parent\"\r\n                    android:layout_weight=\"1\"\r\n                    android:gravity=\"center\"\r\n                    android:onClick=\"similarProduct\"\r\n                    android:orientation=\"horizontal\"\r\n                    android:weightSum=\"2\">\r\n\r\n                    <ImageView\r\n                        android:layout_width=\"30dp\"\r\n                        android:layout_height=\"30dp\"\r\n                        android:src=\"@drawable/similar\" />\r\n\r\n                    <TextView\r\n                        android:id=\"@+id/text_action2\"\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:layout_marginLeft=\"8dp\"\r\n                        android:layout_weight=\"1\"\r\n                        android:gravity=\"left\"\r\n                        android:text=\"Similar\"\r\n                        android:textColor=\"@color/gen_black\"\r\n                        android:textSize=\"12dp\" />\r\n                </LinearLayout>\r\n\r\n                <View\r\n                    android:layout_width=\"@dimen/view_width_small\"\r\n                    android:layout_height=\"match_parent\"\r\n                    android:background=\"@color/grey_light\" />\r\n\r\n                <LinearLayout\r\n                    android:id=\"@+id/layout_action3\"\r\n                    android:layout_width=\"0dp\"\r\n                    android:layout_height=\"match_parent\"\r\n                    android:layout_weight=\"1\"\r\n                    android:gravity=\"center\"\r\n                    android:onClick=\"addToWishList\"\r\n                    android:orientation=\"horizontal\"\r\n                    android:weightSum=\"2\">\r\n\r\n                    <com.airbnb.lottie.LottieAnimationView\r\n                        android:id=\"@+id/add_to_wishlist\"\r\n                        android:layout_width=\"40dp\"\r\n                        android:layout_height=\"40dp\"\r\n                        android:foregroundGravity=\"center\"\r\n                        android:src=\"@drawable/cartempty\"\r\n                        android:visibility=\"visible\"\r\n                        app:lottie_fileName=\"heart.json\" />\r\n\r\n                    <TextView\r\n                        android:id=\"@+id/text_action3\"\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:layout_marginLeft=\"8dp\"\r\n                        android:layout_weight=\"1\"\r\n                        android:gravity=\"left\"\r\n                        android:text=\"Wishlist\"\r\n                        android:textColor=\"@color/gen_black\"\r\n                        android:textSize=\"12dp\" />\r\n                </LinearLayout>\r\n            </LinearLayout>\r\n\r\n            <View\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"@dimen/view_width_small\"\r\n                android:layout_marginTop=\"8dp\"\r\n                android:background=\"@color/grey_light\" />\r\n\r\n            <LinearLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginTop=\"@dimen/activity_vertical_margin\"\r\n                android:orientation=\"vertical\"\r\n                android:paddingBottom=\"@dimen/activity_vertical_margin\">\r\n\r\n                <TextView\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:text=\"Details\"\r\n                    android:textColor=\"@color/gen_black\"\r\n                    android:textSize=\"16dp\" />\r\n\r\n                <TextView\r\n                    android:id=\"@+id/productdesc\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_marginTop=\"8dp\"\r\n                    android:text=\"\\u2022 size of 178*120 200 pages\"\r\n                    android:textColor=\"@color/gen_black\"\r\n                    android:textSize=\"12dp\" />\r\n\r\n            </LinearLayout>\r\n\r\n            <View\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"@dimen/view_width_small\"\r\n                android:layout_marginTop=\"2dp\"\r\n                android:background=\"@color/grey_light\" />\r\n\r\n            <TextView\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_margin=\"10dp\"\r\n                android:text=\"Your Custom Message\"\r\n                android:textColor=\"@color/gen_black\"\r\n                android:textSize=\"16dp\" />\r\n\r\n            <View\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"@dimen/view_width_small\"\r\n                android:layout_marginTop=\"2dp\"\r\n                android:background=\"@color/grey_light\" />\r\n\r\n            <com.github.florent37.materialtextfield.MaterialTextField\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginBottom=\"30dp\"\r\n                app:mtf_image=\"@drawable/bubble\"\r\n                app:mtf_labelColor=\"#34495e\">\r\n\r\n                <EditText\r\n                    android:id=\"@+id/custommessage\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:hint=\"Content\"\r\n                    android:inputType=\"textMultiLine\"\r\n                    android:maxLines=\"10\"\r\n                    android:minLines=\"6\"\r\n                    android:scrollbars=\"vertical\"\r\n                    android:textColor=\"#424242\"\r\n                    android:textSize=\"15sp\" />\r\n\r\n            </com.github.florent37.materialtextfield.MaterialTextField>\r\n\r\n        </LinearLayout>\r\n    </ScrollView>\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_weight=\"0.5\"\r\n        android:background=\"@color/gen_black\"\r\n        android:elevation=\"30dp\"\r\n        android:orientation=\"horizontal\"\r\n        android:weightSum=\"2\">\r\n\r\n        <TextView\r\n            android:id=\"@+id/add_to_cart\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"match_parent\"\r\n            android:layout_weight=\"1\"\r\n            android:background=\"@color/gen_white\"\r\n            android:gravity=\"center\"\r\n            android:onClick=\"addToCart\"\r\n            android:text=\"ADD TO CART\"\r\n            android:textColor=\"@color/gen_black\"\r\n            android:textSize=\"14dp\"\r\n            android:textStyle=\"bold\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/buy_now\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"match_parent\"\r\n            android:layout_weight=\"1\"\r\n            android:background=\"@color/colorPrimary\"\r\n            android:gravity=\"center\"\r\n            android:onClick=\"goToCart\"\r\n            android:text=\"BUY NOW\"\r\n            android:textColor=\"@color/gen_white\"\r\n            android:textSize=\"14dp\"\r\n            android:textStyle=\"bold\" />\r\n\r\n    </LinearLayout>\r\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_individual_product.xml	(revision c535a47b7de816784ef413e348894b348a3c6203)
++++ app/src/main/res/layout/activity_individual_product.xml	(date 1611172080115)
+@@ -293,7 +293,6 @@
+                         android:layout_width="40dp"
+                         android:layout_height="40dp"
+                         android:foregroundGravity="center"
+-                        android:src="@drawable/cartempty"
+                         android:visibility="visible"
+                         app:lottie_fileName="heart.json" />
+ 
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    package=\"com.printhub.printhub\">\r\n\r\n    <uses-permission android:name=\"android:name = android.permission.INTERNET\" />\r\n    <uses-permission android:name=\"com.google.android.c2dm.permission.RECEIVE\"/>\r\n    <uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />\r\n    <uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />\r\n    <uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/AppTheme\">\r\n        <activity android:name=\".collab.collabPostActivity\"></activity>\r\n        <activity android:name=\".collab.collabActivity\" />\r\n        <activity android:name=\".clubEvents.postEvent\" />\r\n        <activity android:name=\".clubEvents.clubActivity\" />\r\n        <activity android:name=\".image.MultipleImages\" />\r\n        <activity android:name=\".image.docCategoryChooser\" />\r\n        <activity android:name=\".sidebar.oldOrders.OrdersActivity\" />\r\n        <activity android:name=\".openingaActivity.SplashActivity\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity> <!-- <activity -->\r\n        <!-- android:name=\".prodcutscategory.Cards\" -->\r\n        <!-- android:theme=\"@style/WhiteTheme\" /> -->\r\n\r\n        <activity\r\n            android:name=\".prodcutscategory.Bags\"\r\n            android:theme=\"@style/WhiteTheme\" />\r\n        <activity\r\n            android:name=\".prodcutscategory.Keychains\"\r\n            android:theme=\"@style/WhiteTheme\" />\r\n        <activity\r\n            android:name=\".prodcutscategory.Stationary\"\r\n            android:theme=\"@style/WhiteTheme\" />\r\n        <activity android:name=\".HomeScreen.MainnewActivity\" />\r\n        <activity android:name=\".sidebar.Profile\" />\r\n        <activity android:name=\".sidebar.Wishlist\" />\r\n        <activity android:name=\".Cart\" />\r\n        <activity android:name=\".sidebar.HelpCenter\" />\r\n        <activity android:name=\".OrderDetails\" />\r\n        <activity android:name=\".OrderPlaced\" />\r\n        <activity android:name=\".IndividualProduct\" />\r\n        <activity android:name=\".NotificationActivity\" />\r\n        <activity android:name=\".WelcomeActivity\" />\r\n        <activity android:name=\".sidebar.aboutus.AboutusActivity\" />\r\n        <activity android:name=\".bunkManager.BunkActivity\" />\r\n        <activity android:name=\".registration.DetailActivity\" />\r\n        <activity android:name=\".image.ImageActivity\" />\r\n        <activity android:name=\".pdf.pdfActivity\" />\r\n        <activity android:name=\".bunkManager.EditSub\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.DEFAULT\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n        <activity android:name=\"com.theartofdev.edmodo.cropper.CropImageActivity\"\r\n            android:theme=\"@style/Base.Theme.AppCompat\"/>\r\n\r\n        <meta-data\r\n            android:name=\"preloaded_fonts\"\r\n            android:resource=\"@array/preloaded_fonts\" />\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision c535a47b7de816784ef413e348894b348a3c6203)
++++ app/src/main/AndroidManifest.xml	(date 1611167314047)
+@@ -15,14 +15,22 @@
+         android:roundIcon="@mipmap/ic_launcher_round"
+         android:supportsRtl="true"
+         android:theme="@style/AppTheme">
+-        <activity android:name=".collab.collabPostActivity"></activity>
+-        <activity android:name=".collab.collabActivity" />
+-        <activity android:name=".clubEvents.postEvent" />
+-        <activity android:name=".clubEvents.clubActivity" />
+-        <activity android:name=".image.MultipleImages" />
+-        <activity android:name=".image.docCategoryChooser" />
+-        <activity android:name=".sidebar.oldOrders.OrdersActivity" />
+-        <activity android:name=".openingaActivity.SplashActivity">
++        <activity android:name=".collab.collabPostActivity"
++            android:screenOrientation="portrait"></activity>
++        <activity android:name=".collab.collabActivity"
++            android:screenOrientation="portrait"></activity>
++        <activity android:name=".clubEvents.postEvent"
++            android:screenOrientation="portrait"/>
++        <activity android:name=".clubEvents.clubActivity"
++            android:screenOrientation="portrait"/>
++        <activity android:name=".image.MultipleImages"
++            android:screenOrientation="portrait"/>
++        <activity android:name=".image.docCategoryChooser"
++            android:screenOrientation="portrait"/>
++        <activity android:name=".sidebar.oldOrders.OrdersActivity"
++            android:screenOrientation="portrait"/>
++        <activity android:name=".openingaActivity.SplashActivity"
++            android:screenOrientation="portrait">
+             <intent-filter>
+                 <action android:name="android.intent.action.MAIN" />
+ 
+@@ -34,29 +42,48 @@
+ 
+         <activity
+             android:name=".prodcutscategory.Bags"
+-            android:theme="@style/WhiteTheme" />
++            android:theme="@style/WhiteTheme"
++            android:screenOrientation="portrait"/>
+         <activity
+             android:name=".prodcutscategory.Keychains"
+-            android:theme="@style/WhiteTheme" />
++            android:theme="@style/WhiteTheme"
++            android:screenOrientation="portrait"/>
+         <activity
+             android:name=".prodcutscategory.Stationary"
+-            android:theme="@style/WhiteTheme" />
+-        <activity android:name=".HomeScreen.MainnewActivity" />
+-        <activity android:name=".sidebar.Profile" />
+-        <activity android:name=".sidebar.Wishlist" />
+-        <activity android:name=".Cart" />
+-        <activity android:name=".sidebar.HelpCenter" />
+-        <activity android:name=".OrderDetails" />
+-        <activity android:name=".OrderPlaced" />
+-        <activity android:name=".IndividualProduct" />
+-        <activity android:name=".NotificationActivity" />
+-        <activity android:name=".WelcomeActivity" />
+-        <activity android:name=".sidebar.aboutus.AboutusActivity" />
+-        <activity android:name=".bunkManager.BunkActivity" />
+-        <activity android:name=".registration.DetailActivity" />
+-        <activity android:name=".image.ImageActivity" />
+-        <activity android:name=".pdf.pdfActivity" />
+-        <activity android:name=".bunkManager.EditSub">
++            android:theme="@style/WhiteTheme"
++            android:screenOrientation="portrait"/>
++        <activity android:name=".HomeScreen.MainnewActivity"
++            android:screenOrientation="portrait"/>
++        <activity android:name=".sidebar.Profile"
++            android:screenOrientation="portrait"/>
++        <activity android:name=".sidebar.Wishlist"
++            android:screenOrientation="portrait"/>
++        <activity android:name=".Cart"
++            android:screenOrientation="portrait"/>
++        <activity android:name=".sidebar.HelpCenter"
++            android:screenOrientation="portrait"/>
++        <activity android:name=".OrderDetails"
++            android:screenOrientation="portrait"/>
++        <activity android:name=".OrderPlaced"
++            android:screenOrientation="portrait"/>
++        <activity android:name=".IndividualProduct"
++            android:screenOrientation="portrait"/>
++        <activity android:name=".NotificationActivity"
++            android:screenOrientation="portrait"/>
++        <activity android:name=".WelcomeActivity"
++            android:screenOrientation="portrait"/>
++        <activity android:name=".sidebar.aboutus.AboutusActivity"
++            android:screenOrientation="portrait"/>
++        <activity android:name=".bunkManager.BunkActivity"
++            android:screenOrientation="portrait"/>
++        <activity android:name=".registration.DetailActivity"
++            android:screenOrientation="portrait"/>
++        <activity android:name=".image.ImageActivity"
++            android:screenOrientation="portrait"/>
++        <activity android:name=".pdf.pdfActivity"
++            android:screenOrientation="portrait"/>
++        <activity android:name=".bunkManager.EditSub"
++            android:screenOrientation="portrait">
+             <intent-filter>
+                 <action android:name="android.intent.action.DEFAULT" />
+ 
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"CompilerConfiguration\">\r\n    <bytecodeTargetLevel target=\"11\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/compiler.xml	(revision c535a47b7de816784ef413e348894b348a3c6203)
++++ .idea/compiler.xml	(date 1611158603334)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="CompilerConfiguration">
+-    <bytecodeTargetLevel target="11" />
++    <bytecodeTargetLevel target="13" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_11\" default=\"false\" project-jdk-name=\"1.8\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n  <component name=\"ProjectType\">\r\n    <option name=\"id\" value=\"Android\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/misc.xml	(revision c535a47b7de816784ef413e348894b348a3c6203)
++++ .idea/misc.xml	(date 1611158603296)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_13" default="true" project-jdk-name="13" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/build/classes" />
+   </component>
+   <component name="ProjectType">
+Index: app/src/main/java/com/printhub/printhub/collab/collabPostActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.printhub.printhub.collab;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.text.TextUtils;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.Toast;\r\n\r\nimport com.google.android.gms.tasks.OnSuccessListener;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.firestore.DocumentReference;\r\nimport com.google.firebase.firestore.FieldValue;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.printhub.printhub.R;\r\nimport com.printhub.printhub.clubEvents.clubActivity;\r\nimport com.printhub.printhub.clubEvents.postEvent;\r\n\r\nimport java.util.HashMap;\r\nimport java.util.Map;\r\n\r\nimport static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;\r\nimport static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;\r\n\r\npublic class collabPostActivity extends AppCompatActivity {\r\n    EditText domainField,descField,mobileText,whatsappText,linkedinText,githubText;\r\n    Button postButton;\r\n    private FirebaseFirestore firebaseFirestore;\r\n\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_collab_post);\r\n        domainField= findViewById(R.id.domainField);\r\n        descField = findViewById(R.id.descField);\r\n        mobileText = findViewById(R.id.mobileText);\r\n        whatsappText = findViewById(R.id.whatsappText);\r\n        linkedinText = findViewById(R.id.linkedinText);\r\n        githubText =findViewById(R.id.githubText);\r\n        postButton = findViewById(R.id.postButton);\r\n        firebaseFirestore=FirebaseFirestore.getInstance();\r\n        postButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                postData();\r\n            }\r\n        });\r\n\r\n    }\r\n    public void postData(){\r\n        String domain = domainField.getText().toString();\r\n        String description = descField.getText().toString();\r\n        String mobileno = mobileText.getText().toString();\r\n\r\n        String whatsAppno= whatsappText.getText().toString();\r\n        String githubId= githubText.getText().toString();\r\n        String linkedinId=  linkedinText.getText().toString();\r\n        if(!TextUtils.isEmpty(domain) && !TextUtils.isEmpty(description)){\r\n            if(!TextUtils.isEmpty(mobileno) || !TextUtils.isEmpty(whatsAppno)){\r\n                if(mobileno.length()!=10 || whatsAppno.length()!=10){\r\n                    Toast.makeText(this, \"Please enter Correct Mobile Number\", Toast.LENGTH_SHORT).show();\r\n                }else{\r\n                    Map<String,Object> postMap=new HashMap<>();\r\n                    postMap.put(\"domain\",domainField.getText().toString());\r\n                    postMap.put(\"description\",descField.getText().toString());\r\n                    if(!mobileno.isEmpty()){\r\n                        postMap.put(\"mobileNo\",mobileno);\r\n                    }\r\n                    if(!whatsAppno.isEmpty()){\r\n                        postMap.put(\"whatsApp\",whatsAppno);\r\n                    }\r\n                    if(!githubId.isEmpty()){\r\n                        postMap.put(\"githubId\",githubId);\r\n                    }\r\n                    if(!linkedinId.isEmpty()){\r\n                        postMap.put(\"linkedinId\",linkedinId);\r\n                    }\r\n                    postMap.put(\"status\",\"unverfied\");\r\n                    postMap.put(\"timestamp\", FieldValue.serverTimestamp());\r\n                    postMap.put(\"userid\", FirebaseAuth.getInstance().getCurrentUser().getUid());\r\n                    firebaseFirestore.collection(cityName).document(collegeName).collection(\"collab\").add(postMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {\r\n                        @Override\r\n                        public void onSuccess(DocumentReference documentReference) {\r\n                            Toast.makeText(collabPostActivity.this, \"Your Post Is Activated within 12 hours\", Toast.LENGTH_LONG).show();\r\n//                        Intent intent=new Intent(getApplicationContext(), clubActivity.class);\r\n//                        startActivity(intent);\r\n                            finish();\r\n                        }\r\n                    });\r\n\r\n                }\r\n\r\n\r\n            }else{\r\n                Toast.makeText(this, \"Please enter Mobile Number or Whatsapp Number\", Toast.LENGTH_SHORT).show();\r\n            }\r\n        }else{\r\n            Toast.makeText(this, \"Please enter Doamin And Description Of Project\", Toast.LENGTH_SHORT).show();\r\n        }\r\n\r\n\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/printhub/printhub/collab/collabPostActivity.java	(revision c535a47b7de816784ef413e348894b348a3c6203)
++++ app/src/main/java/com/printhub/printhub/collab/collabPostActivity.java	(date 1611179956567)
+@@ -61,9 +61,7 @@
+         String linkedinId=  linkedinText.getText().toString();
+         if(!TextUtils.isEmpty(domain) && !TextUtils.isEmpty(description)){
+             if(!TextUtils.isEmpty(mobileno) || !TextUtils.isEmpty(whatsAppno)){
+-                if(mobileno.length()!=10 || whatsAppno.length()!=10){
+-                    Toast.makeText(this, "Please enter Correct Mobile Number", Toast.LENGTH_SHORT).show();
+-                }else{
++                if(mobileno.length()==10 || whatsAppno.length()==10){
+                     Map<String,Object> postMap=new HashMap<>();
+                     postMap.put("domain",domainField.getText().toString());
+                     postMap.put("description",descField.getText().toString());
+@@ -86,12 +84,14 @@
+                         @Override
+                         public void onSuccess(DocumentReference documentReference) {
+                             Toast.makeText(collabPostActivity.this, "Your Post Is Activated within 12 hours", Toast.LENGTH_LONG).show();
+-//                        Intent intent=new Intent(getApplicationContext(), clubActivity.class);
+-//                        startActivity(intent);
++                        Intent intent=new Intent(getApplicationContext(), clubActivity.class);
++                        startActivity(intent);
+                             finish();
+                         }
+                     });
+ 
++                }else{
++                    Toast.makeText(this, "Please enter Correct Mobile Number", Toast.LENGTH_SHORT).show();
+                 }
+ 
+ 
+Index: app/src/main/res/layout/collab_cardlayout.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"wrap_content\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    android:orientation=\"vertical\"\r\n    android:layout_margin=\"10dp\">\r\n\r\n    <androidx.cardview.widget.CardView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:elevation=\"4dp\"\r\n        app:cardCornerRadius=\"5dp\">\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:orientation=\"vertical\">\r\n\r\n            <LinearLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:orientation=\"horizontal\"\r\n                android:weightSum=\"5\">\r\n                <de.hdodenhof.circleimageview.CircleImageView\r\n                    android:layout_width=\"50dp\"\r\n                    android:layout_height=\"50dp\"\r\n                    android:src=\"@drawable/avtarimage\"\r\n                    android:layout_weight=\"1\"/>\r\n\r\n                <TextView\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"match_parent\"\r\n                    android:text=\"Rahul Raj\"\r\n                    android:gravity=\"fill\"\r\n                    android:textSize=\"16sp\"\r\n                    android:layout_weight=\"3\"\r\n                    android:textColor=\"@color/black\"/>\r\n                <TextView\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:text=\"12/04/2000\"\r\n                    android:layout_weight=\"1\"\r\n                    android:layout_marginTop=\"2dp\"\r\n                    android:layout_marginRight=\"2dp\"\r\n                    android:gravity=\"right\"/>\r\n            </LinearLayout>\r\n\r\n            <TextView\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:textColor=\"@color/black\"\r\n                android:layout_marginLeft=\"15dp\"\r\n                android:layout_marginRight=\"5dp\"\r\n                android:layout_marginTop=\"15dp\"\r\n                android:textSize=\"16sp\"\r\n                android:text=\"Domain: Android Developer\"/>\r\n\r\n            <TextView\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:textColor=\"@color/black\"\r\n                android:layout_marginTop=\"2dp\"\r\n                android:textSize=\"16sp\"\r\n                android:layout_marginLeft=\"15dp\"\r\n                android:layout_marginRight=\"5dp\"\r\n                android:text=\"good project cmerom good mind\"/>\r\n\r\n            <View\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"2dp\"\r\n                android:layout_marginLeft=\"40dp\"\r\n                android:layout_marginRight=\"40dp\"\r\n                android:background=\"@color/black\"\r\n                android:layout_marginTop=\"10dp\"/>\r\n\r\n\r\n            <LinearLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginTop=\"10dp\"\r\n                android:layout_marginLeft=\"20dp\"\r\n                android:gravity=\"right\"\r\n                android:layout_marginEnd=\"4dp\"\r\n                android:layout_marginBottom=\"5dp\"\r\n                android:orientation=\"horizontal\">\r\n\r\n                <ImageView\r\n                    android:layout_width=\"28dp\"\r\n                    android:layout_height=\"28dp\"\r\n                    android:layout_marginRight=\"18dp\"\r\n                    android:layout_gravity=\"center\"\r\n                    android:src=\"@drawable/github\"/>\r\n                <ImageView\r\n                    android:layout_width=\"28dp\"\r\n                    android:layout_height=\"28dp\"\r\n                    android:layout_marginRight=\"18dp\"\r\n                    android:layout_gravity=\"center\"\r\n\r\n                    android:src=\"@drawable/github\"/>\r\n                <ImageView\r\n                    android:layout_width=\"28dp\"\r\n                    android:layout_height=\"28dp\"\r\n                    android:layout_marginRight=\"18dp\"\r\n                    android:layout_gravity=\"center\"\r\n                    android:src=\"@drawable/github\"/>\r\n                <ImageView\r\n                    android:layout_width=\"28dp\"\r\n                    android:layout_height=\"28dp\"\r\n                    android:layout_marginRight=\"18dp\"\r\n                    android:layout_gravity=\"center\"\r\n                    android:src=\"@drawable/github\"/>\r\n\r\n\r\n            </LinearLayout>\r\n\r\n\r\n\r\n\r\n\r\n\r\n        </LinearLayout>\r\n\r\n    </androidx.cardview.widget.CardView>\r\n\r\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/collab_cardlayout.xml	(revision c535a47b7de816784ef413e348894b348a3c6203)
++++ app/src/main/res/layout/collab_cardlayout.xml	(date 1611179154372)
+@@ -23,20 +23,24 @@
+                 android:orientation="horizontal"
+                 android:weightSum="5">
+                 <de.hdodenhof.circleimageview.CircleImageView
++                    android:id="@+id/userimage"
+                     android:layout_width="50dp"
+                     android:layout_height="50dp"
+                     android:src="@drawable/avtarimage"
+                     android:layout_weight="1"/>
+ 
+                 <TextView
++                    android:id="@+id/username"
+                     android:layout_width="wrap_content"
+                     android:layout_height="match_parent"
+                     android:text="Rahul Raj"
+                     android:gravity="fill"
+                     android:textSize="16sp"
+                     android:layout_weight="3"
++                    android:textStyle="bold"
+                     android:textColor="@color/black"/>
+                 <TextView
++                    android:id="@+id/postdate"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="12/04/2000"
+@@ -47,6 +51,7 @@
+             </LinearLayout>
+ 
+             <TextView
++                android:id="@+id/domain"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:textColor="@color/black"
+@@ -57,6 +62,7 @@
+                 android:text="Domain: Android Developer"/>
+ 
+             <TextView
++                android:id="@+id/description"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:textColor="@color/black"
+@@ -66,32 +72,24 @@
+                 android:layout_marginRight="5dp"
+                 android:text="good project cmerom good mind"/>
+ 
+-            <View
+-                android:layout_width="wrap_content"
+-                android:layout_height="2dp"
+-                android:layout_marginLeft="40dp"
+-                android:layout_marginRight="40dp"
+-                android:background="@color/black"
+-                android:layout_marginTop="10dp"/>
+ 
+ 
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+-                android:layout_marginTop="10dp"
++                android:layout_marginTop="20dp"
+                 android:layout_marginLeft="20dp"
+-                android:gravity="right"
+-                android:layout_marginEnd="4dp"
+-                android:layout_marginBottom="5dp"
+-                android:orientation="horizontal">
+-
++                android:layout_marginRight="20dp"
++                android:layout_marginBottom="5dp">
+                 <ImageView
++                    android:id="@+id/github"
+                     android:layout_width="28dp"
+                     android:layout_height="28dp"
+                     android:layout_marginRight="18dp"
+                     android:layout_gravity="center"
+                     android:src="@drawable/github"/>
+                 <ImageView
++                    android:id="@+id/linkedin"
+                     android:layout_width="28dp"
+                     android:layout_height="28dp"
+                     android:layout_marginRight="18dp"
+@@ -99,12 +97,14 @@
+ 
+                     android:src="@drawable/github"/>
+                 <ImageView
++                    android:id="@+id/whatsapp"
+                     android:layout_width="28dp"
+                     android:layout_height="28dp"
+                     android:layout_marginRight="18dp"
+                     android:layout_gravity="center"
+                     android:src="@drawable/github"/>
+                 <ImageView
++                    android:id="@+id/call"
+                     android:layout_width="28dp"
+                     android:layout_height="28dp"
+                     android:layout_marginRight="18dp"
+@@ -112,6 +112,37 @@
+                     android:src="@drawable/github"/>
+ 
+ 
++                <LinearLayout
++                    android:id="@+id/layout_action3"
++                    android:layout_width="0dp"
++                    android:layout_height="match_parent"
++                    android:layout_weight="1"
++                    android:gravity="right"
++                    android:orientation="horizontal"
++                    android:weightSum="2">
++
++                    <com.airbnb.lottie.LottieAnimationView
++                        android:id="@+id/interest"
++                        android:layout_width="28dp"
++                        android:layout_height="28dp"
++                        android:foregroundGravity="center"
++                        android:visibility="visible"
++                        app:lottie_fileName="heart.json" />
++
++                    <TextView
++                        android:id="@+id/text_action3"
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:layout_marginLeft="8dp"
++                        android:layout_weight="1"
++                        android:gravity="left"
++                        android:text="Interested"
++                        android:layout_gravity="center_vertical|right"
++                        android:textColor="@color/gen_black"
++                        android:textSize="12dp" />
++                </LinearLayout>
++
++
+             </LinearLayout>
+ 
+ 
+@@ -119,6 +150,8 @@
+ 
+ 
+ 
++
++
+         </LinearLayout>
+ 
+     </androidx.cardview.widget.CardView>
+Index: build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// Top-level build file where you can add configuration options common to all sub-projects/modules.\r\n\r\nbuildscript {\r\n    repositories {\r\n        google()\r\n        jcenter()\r\n        mavenCentral()\r\n\r\n\r\n    }\r\n    dependencies {\r\n        classpath 'com.android.tools.build:gradle:4.0.0'\r\n        classpath 'com.google.gms:google-services:4.3.2'\r\n        // NOTE: Do not place your application dependencies here; they belong\r\n        // in the individual module build.gradle files\r\n    }\r\n}\r\n\r\nallprojects {\r\n    repositories {\r\n        google()\r\n        jcenter()\r\n\r\n        maven { url \"https://oss.sonatype.org/content/repositories/snapshots/\" }\r\n        maven { url \"https://jitpack.io\" }\r\n\r\n    }\r\n}\r\n\r\ntask clean(type: Delete) {\r\n    delete rootProject.buildDir\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- build.gradle	(revision c535a47b7de816784ef413e348894b348a3c6203)
++++ build.gradle	(date 1611160516019)
+@@ -9,7 +9,7 @@
+ 
+     }
+     dependencies {
+-        classpath 'com.android.tools.build:gradle:4.0.0'
++        classpath 'com.android.tools.build:gradle:7.0.0-alpha03'
+         classpath 'com.google.gms:google-services:4.3.2'
+         // NOTE: Do not place your application dependencies here; they belong
+         // in the individual module build.gradle files
+Index: app/src/main/res/layout/activity_collab.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".collab.collabActivity\"\r\n    android:fitsSystemWindows=\"true\">\r\n\r\n\r\n    <androidx.recyclerview.widget.RecyclerView\r\n        android:id=\"@+id/collabview\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        app:layout_behavior=\"@string/appbar_scrolling_view_behavior\" />\r\n\r\n    <com.google.android.material.floatingactionbutton.FloatingActionButton\r\n        android:id=\"@+id/fab\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_margin=\"@dimen/fab_margin\"\r\n        android:clickable=\"true\"\r\n        android:focusable=\"true\"\r\n        android:src=\"@drawable/ic_add_black_24dp\"\r\n        app:backgroundTint=\"@color/fui_bgEmail\"\r\n        app:fabSize=\"normal\"\r\n        android:layout_gravity=\"bottom|right|end\"/>\r\n\r\n</androidx.coordinatorlayout.widget.CoordinatorLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_collab.xml	(revision c535a47b7de816784ef413e348894b348a3c6203)
++++ app/src/main/res/layout/activity_collab.xml	(date 1611170680881)
+@@ -12,6 +12,7 @@
+         android:id="@+id/collabview"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
++        android:layout_margin="10dp"
+         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+ 
+     <com.google.android.material.floatingactionbutton.FloatingActionButton
+diff --git .idea/shelf/Uncommitted_changes_before_Update_at_20-Jan-21_4_41_PM__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_20-Jan-21_4_41_PM__Default_Changelist_.xml
+diff --git .idea/shelf/Uncommitted_changes_before_Update_at_18-Jan-21_11_50_PM__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_18-Jan-21_11_50_PM__Default_Changelist_.xml

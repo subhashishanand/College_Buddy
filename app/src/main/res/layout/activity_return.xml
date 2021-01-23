@@ -5,79 +5,191 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".sidebar.oldOrders.ReturnActivity"
+    android:background="@drawable/returnback"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/productImageView"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbarwrap"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        app:srcCompat="@drawable/bags" />
+        android:background="@color/fui_transparent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/productName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="productName" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:titleTextColor="#000"
+            style="@style/CustomTheme"
+            android:backgroundTint="@color/fui_transparent"
+            android:background="@color/colorAccent">
 
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="productDescription"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="Orders"/>
 
-    <TextView
-        android:id="@+id/mrp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="mrp"/>
-    <TextView
-        android:id="@+id/discount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="discount"/>
-    <TextView
-        android:id="@+id/price"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Price"/>
-    <TextView
-        android:id="@+id/orderId"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="orderId"/>
-    <TextView
-        android:id="@+id/orderTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="orderTime"/>
-    <TextView
-        android:id="@+id/quantity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="quantity"/>
-    <TextView
-        android:id="@+id/orderStatus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="orderStatus"/>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Why are you returning item"/>
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:weightSum="3">
 
-    <EditText
-        android:id="@+id/reasonEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Give a proper reason"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/returnButton"/>
+                <ImageView
+                    android:id="@+id/productImageView"
+                    android:layout_width="100dp"
+                    android:layout_height="120dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="28dp"
+                    android:src="@drawable/drawerback"/>
 
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_gravity="center"
+                    android:weightSum="3"
+                    android:layout_weight="2">
+
+                    <TextView
+                        android:id="@+id/productName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:padding="10dp"
+                        android:textSize="16sp"
+                        android:layout_weight="1"
+                        android:maxLength="25"/>
+
+                    <TextView
+                        android:id="@+id/description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:padding="10dp"
+                        android:layout_weight="1"
+                        android:maxLength="25"/>
+
+                    <TextView
+                        android:id="@+id/price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:padding="10dp"
+                        android:layout_weight="1"
+                        android:maxLength="25"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@drawable/returnrectangle"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="70dp">
+
+                <RadioGroup
+                    android:id="@+id/radiogroup"
+                    android:layout_width="wrap_content"
+                    android:layout_margin="25dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content">
+                    <RadioButton
+                        android:id="@+id/reason1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Wrong Item Was Sent"
+                        android:layout_margin="10dp"
+                        android:onClick="checkButton"/>
+
+                    <RadioButton
+                        android:id="@+id/reason2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="The Product Was Damaged"
+                        android:layout_margin="10dp"
+                        android:onClick="checkButton"/>
+                    <RadioButton
+                        android:id="@+id/reason3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="Performance or Quality Not Adequate"
+                        android:onClick="checkButton"/>
+
+
+                </RadioGroup>
+
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="18sp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="Please Tell Us What Went Wrong and help us in improving your Buddy !"
+                android:textColor="@color/black"
+                android:textStyle="bold"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@drawable/returnrectangle"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp">
+
+            <MultiAutoCompleteTextView
+                android:id="@+id/reasonEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:maxLength="150"
+                android:padding="15dp"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+               android:foregroundGravity="center_vertical"/>
+
+
+        </LinearLayout>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Return"
+                android:textColor="@color/white"
+                android:background="@drawable/rounded_button"
+                android:layout_gravity="center"
+                android:layout_margin="20dp"
+                android:id="@+id/returnButton"/>
+
+        </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>

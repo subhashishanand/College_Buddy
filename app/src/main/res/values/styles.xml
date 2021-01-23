@@ -9,7 +9,7 @@
     </style>
 
     <style name="MyTheme" parent="AppTheme">
-        <item name="android:background">@android:color/white</item>
+        <item name="android:background">@color/fui_transparent</item>
     </style>
 
 <!--    bunk-->

@@ -1,9 +1,11 @@
 package com.printhub.printhub.sidebar.oldOrders;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.printhub.printhub.HomeScreen.MainnewActivity;
@@ -42,6 +43,13 @@ public class ReplacementActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_replacement);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitle("");
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         productName=findViewById(R.id.productName);
         productDescription=findViewById(R.id.description);
         mrp=findViewById(R.id.mrp);
@@ -68,11 +76,9 @@ public class ReplacementActivity extends AppCompatActivity {
                 price.setText(documentSnapshot.getString("price"));
                 Picasso.with(ReplacementActivity.this).load(documentSnapshot.getString("productImage"));
                 orderId.setText(documentSnapshot.getString("orderId"));
-                Timestamp timestamp=documentSnapshot.getTimestamp("orderedTime");
-                Date date =new Date();
-                date.setTime(timestamp.getNanoseconds());
-                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("hh:mm aa  dd/MM/yyyy");
-                orderTime.setText(simpleDateFormat.format(date));
+                long milliseconds=documentSnapshot.getTimestamp("orderedTime").toDate().getTime();
+                String dateString= DateFormat.format("dd/MM/yyyy",new Date(milliseconds)).toString();
+                orderTime.setText(dateString);
                 quantity.setText(documentSnapshot.getString("quantity"));
                 orderStatus.setText(documentSnapshot.getString("status"));
             }
@@ -85,11 +91,18 @@ public class ReplacementActivity extends AppCompatActivity {
                     public void onSuccess(Void unused) {
                         orderStatus.setText("Replace requested");
                         Toasty.success(ReplacementActivity.this, "Replace request submitted").show();
-                        Intent intent=new Intent(getApplicationContext(), MainnewActivity.class);
+                        Intent intent=new Intent(getApplicationContext(), OrdersActivity.class);
                         startActivity(intent);
                     }
                 });
             }
         });
+    }
+
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

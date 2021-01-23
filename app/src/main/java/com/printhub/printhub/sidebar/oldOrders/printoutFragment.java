@@ -119,9 +119,9 @@ public class printoutFragment extends Fragment {
 
     private void LoadData() {
         if(lastDocumentSnapshot == null){
-            query = db.collection(cityName).document(collegeName).collection("printOrders").whereEqualTo("userId",firebaseUserId).limit(10);
+            query = db.collection(cityName).document(collegeName).collection("printOrders").orderBy("orderedTime", Query.Direction.DESCENDING).limit(10);
         }else{
-            query = db.collection(cityName).document(collegeName).collection("printOrders").whereEqualTo("userId",firebaseUserId).startAfter(lastDocumentSnapshot).limit(10);
+            query = db.collection(cityName).document(collegeName).collection("printOrders").orderBy("orderedTime", Query.Direction.DESCENDING).startAfter(lastDocumentSnapshot).limit(10);
         }
         query.get().addOnSuccessListener(getActivity(), new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -136,18 +136,22 @@ public class printoutFragment extends Fragment {
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
-                    String fileName = documentSnapshot.getString("fileName");
-                    String custom = documentSnapshot.getString("custom") ;
-                    String status = documentSnapshot.getString("status");
-                    String color = documentSnapshot.getString("color");
-                    String doubleSide = documentSnapshot.getString("doubleSided");
-                    String start = documentSnapshot.getString("startPageNo");
-                    String end = documentSnapshot.getString("endPageNo");
-                    String orderId = documentSnapshot.getString("orderId");
-                    String quantity = documentSnapshot.getString("copy");
-                    Log.e("alisha",fileName+" "+ quantity);
+                    if(documentSnapshot.getString("userId").equals(firebaseUserId)){
+                        String fileName = documentSnapshot.getString("fileName");
+                        String custom = documentSnapshot.getString("custom") ;
+                        String status = documentSnapshot.getString("status");
+                        String color = documentSnapshot.getString("color");
+                        String doubleSide = documentSnapshot.getString("doubleSided");
+                        String start = documentSnapshot.getString("startPageNo");
+                        String end = documentSnapshot.getString("endPageNo");
+                        String orderId = documentSnapshot.getString("orderId");
+                        String quantity = documentSnapshot.getString("copy");
+                        Log.e("alisha",fileName+" "+ quantity);
 
-                    ((PrintAdapter)mRecyclerView.getAdapter()).update(fileName,custom,status,color,doubleSide,start,end, orderId, quantity);
+                        ((PrintAdapter)mRecyclerView.getAdapter()).update(fileName,custom,status,color,doubleSide,start,end, orderId, quantity);
+
+                    }
+
                     //quantity-copies,
                 }
             }
