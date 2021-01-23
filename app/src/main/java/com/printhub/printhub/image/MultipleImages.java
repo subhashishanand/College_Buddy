@@ -255,6 +255,20 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
             }
         });
 
+//        custom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                String text = custom.getSelectedItem().toString();
+//                config.set(position,text);
+//                Log.e("pos",config.get(position));
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
+
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -264,19 +278,7 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                     editCopies.setText(noOfCopies.get(position).toString());
                     color.setChecked(colorPrint.get(position));
                     poster.setChecked(posterPrint.get(position));
-//                    custom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                        @Override
-//                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                            String text = custom.getSelectedItem().toString();
-//                            config.set(position,text);
-//                            Log.e("pos",config.get(position));
-//                        }
-//
-//                        @Override
-//                        public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//                        }
-//                    });
+
                 }
                 else{
                     Toast.makeText(MultipleImages.this, "No More Images... ", Toast.LENGTH_SHORT).show();
