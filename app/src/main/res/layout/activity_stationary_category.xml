@@ -45,11 +45,10 @@
             <ImageView
                 android:id="@+id/notebook"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
-                android:src="@drawable/notebook"/>
+                android:src="@drawable/notebooknewnew" />
 <!--            <View-->
 <!--                android:layout_width="match_parent"-->
 <!--                android:layout_height="2dp"-->
@@ -61,10 +60,11 @@
             <ImageView
                 android:id="@+id/sheets"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="180dp"
+                android:layout_marginTop="-10dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:src="@drawable/sheetsandcharts"/>
+                android:src="@drawable/sheetsnewnew"/>
 <!--            <View-->
 <!--                android:layout_width="match_parent"-->
 <!--                android:layout_height="2dp"-->
@@ -75,10 +75,11 @@
             <ImageView
                 android:id="@+id/pen"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="180dp"
                 android:layout_marginLeft="5dp"
+                android:layout_marginTop="-10dp"
                 android:layout_marginRight="5dp"
-                android:src="@drawable/penandpencil"/>
+                android:src="@drawable/pennew"/>
 <!--            <View-->
 <!--                android:layout_width="match_parent"-->
 <!--                android:layout_height="2dp"-->
@@ -89,10 +90,11 @@
             <ImageView
                 android:id="@+id/stationary"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="180dp"
                 android:layout_marginLeft="5dp"
+                android:layout_marginTop="-10dp"
                 android:layout_marginRight="5dp"
-                android:src="@drawable/stationary"/>
+                android:src="@drawable/statinarynewnew2"/>
 <!--            <View-->
 <!--                android:layout_width="match_parent"-->
 <!--                android:layout_height="2dp"-->
@@ -103,11 +105,12 @@
             <ImageView
                 android:id="@+id/misc"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="180dp"
+                android:layout_marginTop="-10dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="10dp"
-                android:src="@drawable/misc"/>
+                android:src="@drawable/miscnewnew"/>
 
         </LinearLayout>
 
