@@ -313,7 +313,7 @@ public class Stationary extends AppCompatActivity {
             holder.price.setText("Rs. " + prices.get(position));
             holder.mrp.setText(mrps.get(position));
             holder.discount.setText(discounts.get(position) + "% off");
-            Picasso.with(Stationary.this).load(productImages.get(position)).into(holder.productImage);
+            Picasso.with(Stationary.this).load(productImages.get(position)).placeholder(R.drawable.drawerback).into(holder.productImage);
         }
 
         @Override

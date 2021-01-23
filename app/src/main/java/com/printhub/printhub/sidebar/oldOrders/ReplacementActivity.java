@@ -16,8 +16,10 @@ import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -48,6 +50,9 @@ public class ReplacementActivity extends AppCompatActivity {
     RadioButton radioButton;
     ProgressDialog progressDialog;
     int radioid =-1;
+    LottieAnimationView tv_no_cards ;
+    ScrollView scrollView;
+
 
 
     @Override
@@ -62,6 +67,7 @@ public class ReplacementActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         progressDialog = new ProgressDialog(this);
+        scrollView= findViewById(R.id.scrollbar);
         progressDialog.setMessage("Submitting Return Request");
         progressDialog.setCancelable(false);
         productName=findViewById(R.id.productName);
@@ -72,16 +78,20 @@ public class ReplacementActivity extends AppCompatActivity {
         replaceButton=findViewById(R.id.replaceButton);
         returnButton=findViewById(R.id.returnButton);
         radioGroup = findViewById(R.id.radiogroup);
-
+        tv_no_cards= findViewById(R.id.tv_no_cards);
         uid=getIntent().getStringExtra("uid");
         db=FirebaseFirestore.getInstance();
         db.collection(cityName).document(collegeName).collection("productOrders").document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (tv_no_cards.getVisibility() == View.VISIBLE) {
+                    tv_no_cards.setVisibility(View.GONE);
+                }
+                scrollView.setVisibility(View.VISIBLE);
                 productName.setText(documentSnapshot.getString("productName"));
                 productDescription.setText(documentSnapshot.getString("description"));
                 int shownprice = Integer.parseInt(documentSnapshot.getString("price"))-Integer.parseInt(documentSnapshot.getString("couponSaving"));
-                price.setText("Refunded Amount:"+String.valueOf(shownprice)+"");
+                price.setText("Ordered Amount:"+String.valueOf(shownprice)+"");
                 int data= (int)Integer.parseInt(documentSnapshot.getString("replaceCount"))+1;
                 replaceCount = String.valueOf(data);
                 Picasso.with(ReplacementActivity.this).load(documentSnapshot.getString("productImage")).placeholder(R.drawable.drawerback).into(productImageView);

@@ -228,4 +228,13 @@
         android:onClick="PlaceOrder"
         android:layout_alignParentBottom="true" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/checkout_loader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"
+        android:visibility="gone"
+        app:lottie_fileName="loadinganim.json" />
+
 </RelativeLayout>

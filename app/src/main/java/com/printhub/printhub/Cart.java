@@ -1,5 +1,6 @@
 package com.printhub.printhub;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
@@ -50,6 +51,7 @@ public class Cart extends AppCompatActivity {
     public static MyAdapter myAdapter;
     boolean stock = true;
     private LottieAnimationView emptytext;
+    ProgressDialog progressDialog;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -68,6 +70,9 @@ public class Cart extends AppCompatActivity {
 
         //check Internet Connection
         new CheckInternetConnection(this).checkConnection();
+        progressDialog =new ProgressDialog(this);
+        progressDialog.setMessage("Please Wait");
+        progressDialog.setCancelable(false);
 
         //retrieve session values and display on listviews
         // getValues();
@@ -126,6 +131,7 @@ public class Cart extends AppCompatActivity {
                     }
                     emptytext.setVisibility(View.GONE);
                 }
+
 
 
             }
@@ -215,6 +221,7 @@ public class Cart extends AppCompatActivity {
 //    }
 
     public void checkout(View view) {
+        progressDialog.show();
         if(new CheckInternetConnection(this).isInternetConnected()){
             Toasty.normal(Cart.this, "Calculating Total Cost").show();
             stock=true;
@@ -225,6 +232,7 @@ public class Cart extends AppCompatActivity {
                             .document(myAdapter.keys.get(i)).get().addOnSuccessListener(this, new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            progressDialog.dismiss();
                             if(!documentSnapshot.getString("stock").equals("available")){
                                 stock = false;
                                 Toasty.error(Cart.this, "Item no "+finalI+" not present at selected amount" );
@@ -253,9 +261,12 @@ public class Cart extends AppCompatActivity {
                 @Override
                 public void run() {
                     if(totalcost==0){
+                        progressDialog.dismiss();
                         Toasty.error(Cart.this, "No items selected").show();
                     }else {
+                        progressDialog.dismiss();
                         if(stock) {
+                            progressDialog.dismiss();
                             Intent intent = new Intent(Cart.this, OrderDetails.class);
                             intent.putExtra("totalPrice", Float.toString(totalcost));
                             //intent.putExtra("cartproducts",cartcollect);
@@ -266,6 +277,7 @@ public class Cart extends AppCompatActivity {
                 }
             },1000);
         }else{
+            progressDialog.dismiss();
             new CheckInternetConnection(this).checkConnection();
         }
 

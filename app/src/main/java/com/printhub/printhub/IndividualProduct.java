@@ -6,15 +6,21 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.printhub.printhub.prodcutscategory.Stationary;
@@ -22,6 +28,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Map;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
@@ -57,12 +64,15 @@ public class IndividualProduct extends AppCompatActivity {
     TextView mrp;
     @BindView(R.id.discount)
     TextView discount;
+    LinearLayout cartLayout;
+    ScrollView scrollView;
 
     private int quantity = 1;
     String key;
     double price;
     //DataSnapshot itemSnapshot;
     DocumentSnapshot finalDocumentSnapshot;
+    private LottieAnimationView tv_no_item,cart_loader;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private DocumentReference documentReference = db.collection(cityName).document(collegeName);
     TextView stockTextView;
@@ -83,6 +93,11 @@ public class IndividualProduct extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        tv_no_item = findViewById(R.id.tv_no_cards);
+        cart_loader= findViewById(R.id.cart_loader);
+        cartLayout=findViewById(R.id.cartlayout);
+        scrollView =findViewById(R.id.scrollbar);
+
 
 
         //initialize();
@@ -90,6 +105,9 @@ public class IndividualProduct extends AppCompatActivity {
                 .document(getIntent().getStringExtra("key")).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (tv_no_item.getVisibility() == View.VISIBLE) {
+                    tv_no_item.setVisibility(View.GONE);
+                }
                 key = documentSnapshot.getId();
                 stockTextView.setText(documentSnapshot.getString("stock"));
                 finalDocumentSnapshot = documentSnapshot;
@@ -100,8 +118,19 @@ public class IndividualProduct extends AppCompatActivity {
                 mrp.setText(documentSnapshot.getString("mrp"));
                 productdesc.setText(documentSnapshot.getString("description"));
                 Picasso.with(IndividualProduct.this).load(documentSnapshot.getString("productImage")).into(productimage);
+                cartLayout.setVisibility(View.VISIBLE);
+                scrollView.setVisibility(View.VISIBLE);
             }
         });
+//        db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId)
+//                .collection("Wishlist").document(key).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+//            @Override
+//            public void onEvent( DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+//                if(documentSnapshot.exists()){
+//                    addToWishlist.playAnimation();
+//                }
+//            }
+//        });
 
         db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId)
                 .collection("Wishlist").get().addOnSuccessListener(this, new OnSuccessListener<QuerySnapshot>() {
@@ -164,8 +193,8 @@ public class IndividualProduct extends AppCompatActivity {
     }
 //
     public void addToCart(View view) {
-
-
+        cart_loader.setVisibility(View.VISIBLE);
+        cart_loader.playAnimation();
         Map<String, Object> map = finalDocumentSnapshot.getData();
         map.put("quantity",quantity+"");
         map.put("cost",quantity*price+"");
@@ -175,28 +204,62 @@ public class IndividualProduct extends AppCompatActivity {
                 .collection("productCart").document(key).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+                cart_loader.pauseAnimation();
+                cart_loader.setVisibility(View.GONE);
                 Toasty.success(IndividualProduct.this, "Added to cart").show();
             }
         });
 }
 
     public void addToWishList(View view) {
-        addToWishlist.playAnimation();
-        Map<String, Object> map = finalDocumentSnapshot.getData();
-        map.put("price",price+"");
-        map.put("productId", key);
-        map.put("userId",firebaseUserId);
-        documentReference.collection("users").document(firebaseUserId)
-                .collection("Wishlist").document(key).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+
+//        addToWishlist.playAnimation();
+//        Map<String, Object> map = finalDocumentSnapshot.getData();
+//        map.put("price",price+"");
+//        map.put("productId", key);
+//        map.put("userId",firebaseUserId);
+//        documentReference.collection("users").document(firebaseUserId)
+//                .collection("Wishlist").document(key).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                Toasty.success(IndividualProduct.this, "Added to Wishlist").show();
+//            }
+//        });
+
+        db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId)
+                .collection("Wishlist").document(key).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(Void aVoid) {
-                Toasty.success(IndividualProduct.this, "Added to Wishlist").show();
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(!task.getResult().exists()){
+                    addToWishlist.playAnimation();
+                    Map<String, Object> map = finalDocumentSnapshot.getData();
+                    map.put("price",price+"");
+                    map.put("productId", key);
+                    map.put("userId",firebaseUserId);
+                    documentReference.collection("users").document(firebaseUserId)
+                            .collection("Wishlist").document(key).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toasty.success(IndividualProduct.this, "Added to Wishlist").show();
+                        }
+                    });
+
+                }else{
+                    Toasty.success(IndividualProduct.this, "Deleted from Wishlist").show();
+                    addToWishlist.setProgress(0);
+                    documentReference.collection("users").document(firebaseUserId)
+                            .collection("Wishlist").document(key).delete();
+                }
+
             }
         });
+
 
     }
 
     public void goToCart(View view) {
+        cart_loader.playAnimation();
+        cart_loader.setVisibility(View.VISIBLE);
         Map<String, Object> map = finalDocumentSnapshot.getData();
         map.put("quantity",quantity+"");
         map.put("cost",quantity*price+"");
@@ -206,9 +269,10 @@ public class IndividualProduct extends AppCompatActivity {
                 .collection("productCart").document(key).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+                cart_loader.setVisibility(View.GONE);
+                cart_loader.pauseAnimation();
                 startActivity(new Intent(IndividualProduct.this, Cart.class));
                 finish();
-
             }
         });
     }

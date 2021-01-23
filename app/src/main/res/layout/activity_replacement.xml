@@ -8,6 +8,8 @@
     android:background="@drawable/returnback"
     android:orientation="vertical">
 
+
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/toolbarwrap"
         android:layout_width="match_parent"
@@ -32,7 +34,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/scrollbar"
+        android:visibility="gone">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -185,6 +189,16 @@
 
         </LinearLayout>
     </ScrollView>
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/tv_no_cards"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="loadinganim.json" />
+
 
 
 </LinearLayout>

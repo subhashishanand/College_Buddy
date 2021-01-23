@@ -68,6 +68,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
     String discountprice;
     int couponSaving=0;
     TextView payable_amount,discount_amount;
+    LottieAnimationView checkout_loader;
 
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -100,6 +101,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
         progressDialog = new ProgressDialog(OrderDetails.this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setTitle("Payment processing...");
+        progressDialog.setMessage("Payment processing...");
         progressDialog.setProgress(0);
         progressDialog.setCancelable(false);
         submit.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +121,10 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
     }
 
     private void couponVerify(){
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Applying Coupon");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         String couponCode = couponText.getText().toString();
         if(null!=couponCode && !couponCode.isEmpty()){
             //couponText.setEnabled(false);
@@ -126,6 +132,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     if(documentSnapshot.exists()){
+                        progressDialog.dismiss();
 
                        submit.setText("Applied");
                       int discountper= Integer.parseInt(documentSnapshot.getString("discount"));
@@ -143,6 +150,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
                          Toasty.success(OrderDetails.this, "Your Discount Coupon is applied").show();
 
                     }else{
+                        progressDialog.dismiss();
                         couponText.setText("");
                         couponText.setEnabled(true);
                         submit.setText("Apply");
@@ -159,6 +167,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
 
 
         }else{
+            progressDialog.dismiss();
             discountprice = amount;
             submit.setText("Apply");
             discount_amount.setText("0.00");
@@ -283,6 +292,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
         @Override
         protected void onPreExecute() {
             this.dialog.setMessage("Please wait");
+            this.dialog.setCancelable(false);
             this.dialog.show();
         }
 

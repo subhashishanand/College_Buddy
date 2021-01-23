@@ -15,8 +15,10 @@ import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -46,7 +48,8 @@ public class ReturnActivity extends AppCompatActivity {
     RadioButton radioButton;
     ProgressDialog progressDialog;
     int radioid =-1;
-
+    LottieAnimationView tv_no_cards;
+    ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class ReturnActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setTitle("");
+        scrollView= findViewById(R.id.scrollbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -69,6 +73,7 @@ public class ReturnActivity extends AppCompatActivity {
         reasonEditText=findViewById(R.id.reasonEditText);
         returnButton=findViewById(R.id.returnButton);
         radioGroup = findViewById(R.id.radiogroup);
+        tv_no_cards= findViewById(R.id.tv_no_cards);
 
 
 
@@ -76,6 +81,10 @@ public class ReturnActivity extends AppCompatActivity {
         db.collection(cityName).document(collegeName).collection("productOrders").document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (tv_no_cards.getVisibility() == View.VISIBLE) {
+                    tv_no_cards.setVisibility(View.GONE);
+                }
+                scrollView.setVisibility(View.VISIBLE);
                 productName.setText(documentSnapshot.getString("productName"));
                 productDescription.setText(documentSnapshot.getString("description"));
                 int shownprice = Integer.parseInt(documentSnapshot.getString("price"))-Integer.parseInt(documentSnapshot.getString("couponSaving"));
