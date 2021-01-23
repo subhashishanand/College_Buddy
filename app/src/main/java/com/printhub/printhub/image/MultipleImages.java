@@ -77,7 +77,7 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
     private ArrayList<String> config;
     String customString="1 in 1 page";
     String[] perPage;
-    private ArrayList<Integer> spinnerConfig;
+   // private ArrayList<Integer> spinnerConfig;
 
     private StorageReference mStorageRef;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -115,7 +115,7 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
         posterPrint=new ArrayList<>();
         eachCost=new ArrayList<>();
         config=new ArrayList<>();
-        spinnerConfig=new ArrayList<>();
+        //spinnerConfig=new ArrayList<>();
 
         //spinner populate
         ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(this,R.array.Print, android.R.layout.simple_spinner_item);
@@ -234,6 +234,19 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                     editCopies.setText(noOfCopies.get(position).toString());
                     color.setChecked(colorPrint.get(position));
                     poster.setChecked(posterPrint.get(position));
+//                    custom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                        @Override
+//                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                            String text = custom.getSelectedItem().toString();
+//                            config.set(position,text);
+//                            Log.e("pos",config.get(position));
+//                        }
+//
+//                        @Override
+//                        public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//                        }
+//                    });
 
                 }
                 else{
@@ -251,12 +264,39 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                     editCopies.setText(noOfCopies.get(position).toString());
                     color.setChecked(colorPrint.get(position));
                     poster.setChecked(posterPrint.get(position));
+//                    custom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                        @Override
+//                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                            String text = custom.getSelectedItem().toString();
+//                            config.set(position,text);
+//                            Log.e("pos",config.get(position));
+//                        }
+//
+//                        @Override
+//                        public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//                        }
+//                    });
                 }
                 else{
                     Toast.makeText(MultipleImages.this, "No More Images... ", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+//        custom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                String text = custom.getSelectedItem().toString();
+//                config.set(position,text);
+//                Log.e("pos",config.get(position));
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
     }
 
     private void pickImagesIntent(){
@@ -298,9 +338,14 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                         colorPrint.add(false);
                         posterPrint.add(false);
                         eachCost.add(2);
-                        config.add("1");
+                        config.add("Default Config");
+
 
                     }
+
+
+                    //Checking Size
+                    Log.e("size", String.valueOf(config.size()));
 
                     //Setting first image to image switcher
                     imageIs.setImageURI(imageUris.get(0));
@@ -325,7 +370,7 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                     colorPrint.add(false);
                     posterPrint.add(false);
                     eachCost.add(2);
-                    config.add("1");
+                    config.add("default");
 
                     imageIs.setImageURI(imageUris.get(0));
                     editCopies.setText(noOfCopies.get(0).toString());
@@ -367,6 +412,14 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
         }
         tv.setText(sum+"");
     }
+
+//    @Override
+//    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//        String text = custom.getSelectedItem().toString();
+//        config.set(position,text);
+//        Log.e("pos",config.get(position));
+//
+//    }
     public static boolean isConnectionAvailable(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager != null) {
@@ -480,11 +533,9 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
         }
     }
 
+
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//        customString = parent.getSelectedItem().toString();
-//        perPage=customString.split(" ");
-//        config.set(position,perPage[0]);
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
     }
 

@@ -130,7 +130,7 @@ public class IndividualProduct extends AppCompatActivity {
     public void shareProduct(View view) {
         Intent sharingIntent = new Intent(Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        String shareBody = "Found amazing " + productname.getText().toString() + "on Print Hub App";
+        String shareBody = "Found this amazing" + productname.getText().toString() + "on CollegeBuddy application. Check it out";
         sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
         startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }

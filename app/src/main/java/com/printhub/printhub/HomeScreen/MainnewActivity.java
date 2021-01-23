@@ -302,7 +302,7 @@ public class MainnewActivity extends AppCompatActivity {
                                 break;
                             case 9:
                                 new EasyFeedback.Builder(MainnewActivity.this)
-                                        .withEmail("printhub.connect@gmail.com")
+                                        .withEmail("vaibhavkumar1000@gmail.com")
                                         .withSystemInfo()
                                         .build()
                                         .start();

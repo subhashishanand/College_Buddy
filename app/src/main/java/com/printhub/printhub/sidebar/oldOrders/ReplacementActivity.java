@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.printhub.printhub.HomeScreen.MainnewActivity;
 import com.printhub.printhub.R;
 import com.squareup.picasso.Picasso;
 
@@ -84,6 +85,8 @@ public class ReplacementActivity extends AppCompatActivity {
                     public void onSuccess(Void unused) {
                         orderStatus.setText("Replace requested");
                         Toasty.success(ReplacementActivity.this, "Replace request submitted").show();
+                        Intent intent=new Intent(getApplicationContext(), MainnewActivity.class);
+                        startActivity(intent);
                     }
                 });
             }

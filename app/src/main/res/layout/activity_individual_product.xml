@@ -277,7 +277,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="center"
+
+                    android:gravity="right"
                     android:onClick="addToWishList"
                     android:orientation="horizontal"
                     android:weightSum="2">
@@ -285,7 +286,7 @@
                     <com.airbnb.lottie.LottieAnimationView
                         android:id="@+id/add_to_wishlist"
                         android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_height="match_parent"
                         android:foregroundGravity="center"
                         android:visibility="visible"
                         app:lottie_fileName="heart.json" />
@@ -296,7 +297,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
                         android:layout_weight="1"
-                        android:gravity="left"
+                        android:gravity="right"
                         android:text="Wishlist"
                         android:textColor="@color/gen_black"
                         android:textSize="12dp" />
@@ -344,7 +345,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="Your Custom Message"
+                android:text="In case of any complaints please contact us we will surely resolve your issue"
                 android:textColor="@color/gen_black"
                 android:textSize="16dp" />
 
