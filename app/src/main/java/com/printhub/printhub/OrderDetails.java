@@ -194,10 +194,17 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
                             @Override
                             public void onSuccess(Void aVoid) {
                                 if (myAdapter.colors.size() == (finalI + 1)) {
-                                    Intent intent = new Intent(OrderDetails.this, OrderPlaced.class);
-                                    intent.putExtra("orderid", orderId);
-                                    startActivity(intent);
-                                    finish();
+                                    if(status.equals("Order received")) {
+                                        Intent intent = new Intent(OrderDetails.this, OrderPlaced.class);
+                                        intent.putExtra("orderid", orderId);
+                                        startActivity(intent);
+                                        finish();
+                                    }else{
+                                        Intent intent = new Intent(OrderDetails.this, OrderPendingActivity.class);
+                                        intent.putExtra("orderid", orderId);
+                                        startActivity(intent);
+                                        finish();
+                                    }
                                 }
                             }
                         });
@@ -218,10 +225,17 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
                             @Override
                             public void onSuccess(Void aVoid) {
                                 if (myAdapter.colors.size() == (finalI + 1)) {
-                                    Intent intent = new Intent(OrderDetails.this, OrderPlaced.class);
-                                    intent.putExtra("orderid", orderId);
-                                    startActivity(intent);
-                                    finish();
+                                    if(status.equals("Order received")) {
+                                        Intent intent = new Intent(OrderDetails.this, OrderPlaced.class);
+                                        intent.putExtra("orderid", orderId);
+                                        startActivity(intent);
+                                        finish();
+                                    }else{
+                                        Intent intent = new Intent(OrderDetails.this, OrderPendingActivity.class);
+                                        intent.putExtra("orderid", orderId);
+                                        startActivity(intent);
+                                        finish();
+                                    }
                                 }
                             }
                         });
@@ -329,12 +343,12 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
         if(sat.equals("TXN_SUCCESS")){
             status = "Order received";
             parentShifting();
+            Toasty.success(this, status, Toast.LENGTH_SHORT).show();
         }else if(sat.equals("PENDING")){
             status = "Payment pending";
-            parentShifting();
+            Toasty.normal(this,"Payment Pending if money deducted, order status will change soon").show();
         }
         Log.e("abcdefg ", status);
-        Toast.makeText(this, status, Toast.LENGTH_SHORT).show();
     }
 
     @Override
