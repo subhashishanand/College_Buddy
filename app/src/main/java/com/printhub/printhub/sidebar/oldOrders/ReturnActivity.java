@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.printhub.printhub.HomeScreen.MainnewActivity;
 import com.printhub.printhub.R;
 import com.squareup.picasso.Picasso;
 
@@ -81,6 +82,8 @@ public class ReturnActivity extends AppCompatActivity {
                     public void onSuccess(Void unused) {
                         orderStatus.setText("Return requested");
                         Toasty.success(ReturnActivity.this, "Return request submitted").show();
+                        Intent intent=new Intent(getApplicationContext(), MainnewActivity.class);
+                        startActivity(intent);
                     }
                 });
             }
