@@ -34,6 +34,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.printhub.printhub.R;
+import com.printhub.printhub.WebServices.WebViewActivity;
 import com.printhub.printhub.bunkManager.Subjectlist;
 import com.printhub.printhub.collab.collabClass;
 import com.printhub.printhub.prodcutscategory.Stationary;
@@ -52,6 +53,7 @@ import javax.security.auth.login.LoginException;
 import es.dmoral.toasty.Toasty;
 import io.grpc.internal.LogExceptionRunnable;
 
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
 import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
 import static com.printhub.printhub.HomeScreen.MainnewActivity.firebaseUserId;
@@ -96,6 +98,17 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
             holder.linkTextView.setVisibility(View.VISIBLE);
             holder.linkView.setVisibility(View.VISIBLE);
             holder.setLink(eventsClass.getLink());
+            holder.linkTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(context,"Redirecting you to link",Toast.LENGTH_SHORT).show();
+                    String link =  eventsClass.getLink();
+                    Intent i = new Intent(context, WebViewActivity.class);
+                    i.putExtra("Link",link );
+                    context.startActivity(i);
+                }
+            });
+
         }
 
         //countlike
