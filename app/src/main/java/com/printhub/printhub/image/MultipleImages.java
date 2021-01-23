@@ -15,6 +15,7 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -39,6 +40,7 @@ import android.widget.ViewSwitcher;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -61,7 +63,7 @@ import static com.printhub.printhub.HomeScreen.MainnewActivity.firebaseUserId;
 public class MultipleImages extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private ImageSwitcher imageIs;
-    private Button previousBtn,nextBtn,selectImageBtn,checkout;
+    private Button previousBtn,nextBtn,selectImageBtn,checkout,getTotalCost;
     private EditText editCopies;
     private TextView totalCost;
     private Switch color,poster;
@@ -71,23 +73,25 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
     private ArrayList<Integer> noOfCopies;
     private ArrayList<Boolean> colorPrint;
     private ArrayList<Boolean> posterPrint;
-    private ArrayList<Integer> eachCost;
+    private ArrayList<Double> eachCost;
 
     //To Save the config
     private ArrayList<String> config;
     String customString="1 in 1 page";
     String[] perPage;
-   // private ArrayList<Integer> spinnerConfig;
+    // private ArrayList<Integer> spinnerConfig;
+
+    double colorPosterRate=20,blackPosterRate=12,colorRate=10,singleSidedPrice=2;
 
     private StorageReference mStorageRef;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private StorageTask mUploadTask;
-    private double costValue=2;
+    double sum=0;
 
 
     private static final int PICK_IMAGES_CODE=0;
     int copies = 1;
-    String  colorPrintEnabled = "No",posterEnabled="No";
+    Boolean colorPrintEnable=false,posterEnable=false;
 
     //position of selected image
     int position=0;
@@ -106,7 +110,7 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
         totalCost=findViewById(R.id.totalCost);
         checkout=findViewById(R.id.checkout);
         custom=findViewById(R.id.custom);
-
+        getTotalCost=findViewById(R.id.getTotalCost);
 
         //init list
         imageUris=new ArrayList<>();
@@ -124,6 +128,16 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
         custom.setOnItemSelectedListener(MultipleImages.this);
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
+
+        db.collection(cityName).document(collegeName).collection("printingPrice").document("printPrice").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                colorRate=documentSnapshot.getDouble("color");
+                singleSidedPrice=documentSnapshot.getDouble("singleSided");
+                colorPosterRate=documentSnapshot.getDouble("colorPoster");
+                blackPosterRate=documentSnapshot.getDouble("blackPoster");
+            }
+        });
 
         if(ContextCompat.checkSelfPermission(MultipleImages.this, Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED) {
             pickImagesIntent();
@@ -144,6 +158,7 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
             @Override
             public void onClick(View v) {
                 Log.e("config",config.get(0));
+                sumTotal();
                 uploadImages();
             }
         });
@@ -154,17 +169,21 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                 if(imageUris.size()==0){
                     Toast.makeText(MultipleImages.this, "No file selected", Toast.LENGTH_SHORT).show();
                 }else {
-                    if (colorPrintEnabled.equals("No")) {
-                        colorPrintEnabled = "Yes";
-                        colorPrint.set(position, true);
-                        sumTotal(noOfCopies,colorPrint,posterPrint,totalCost);
-                    } else {
-                        colorPrintEnabled = "No";
+                    if (colorPrintEnable) {
+                        colorPrintEnable = false;
                         colorPrint.set(position, false);
-                        sumTotal(noOfCopies,colorPrint,posterPrint,totalCost);
-                    }
+                    } else {
+                        colorPrintEnable = true;
+                        colorPrint.set(position, true);              }
                 }
 
+            }
+        });
+
+        getTotalCost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sumTotal();
             }
         });
 
@@ -174,14 +193,12 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                 if(imageUris.size()==0){
                     Toast.makeText(MultipleImages.this, "No file selected", Toast.LENGTH_SHORT).show();
                 }else {
-                    if (posterEnabled.equals("No")) {
-                        posterEnabled = "Yes";
-                        posterPrint.set(position, true);
-                        sumTotal(noOfCopies,colorPrint,posterPrint,totalCost);
-                    } else {
-                        posterEnabled = "No";
+                    if (posterEnable) {
+                        posterEnable = false;
                         posterPrint.set(position, false);
-                        sumTotal(noOfCopies,colorPrint,posterPrint,totalCost);
+                    } else {
+                        posterEnable = true;
+                        posterPrint.set(position, true);
                     }
                 }
 
@@ -214,7 +231,6 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                     copies = 1;
                     Toast.makeText(MultipleImages.this, "default Copies is 1", Toast.LENGTH_SHORT).show();
                 }
-                sumTotal(noOfCopies,colorPrint,posterPrint,totalCost);
             }
         });
 
@@ -268,7 +284,6 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
 //
 //            }
 //        });
-
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -339,7 +354,7 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                         noOfCopies.add(1);
                         colorPrint.add(false);
                         posterPrint.add(false);
-                        eachCost.add(2);
+                        eachCost.add(singleSidedPrice);
                         config.add("Default Config");
 
 
@@ -358,7 +373,6 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                     //Setting Switches
                     color.setChecked(colorPrint.get(0));
                     poster.setChecked(posterPrint.get(0));
-                    sumTotal(noOfCopies,colorPrint,posterPrint,totalCost);
 
                     //Setting Position
                     position = 0;
@@ -371,7 +385,7 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                     noOfCopies.add(1);
                     colorPrint.add(false);
                     posterPrint.add(false);
-                    eachCost.add(2);
+                    eachCost.add(singleSidedPrice);
                     config.add("default");
 
                     imageIs.setImageURI(imageUris.get(0));
@@ -379,7 +393,6 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                     color.setChecked(colorPrint.get(0));
                     poster.setChecked(posterPrint.get(0));
                     position = 0;
-                    sumTotal(noOfCopies,colorPrint,posterPrint,totalCost);
                 }
             }else{
                 Toasty.error(this, "no image selected").show();
@@ -389,33 +402,37 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
 
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
-    }
-    @Override
+       onBackPressed();
+       return true;
+    }    @Override
     public void onBackPressed() {
         super.onBackPressed();
     }
 
 
     //Total Cost Calculation
-    public static void sumTotal(List<Integer> copies,List<Boolean> color,List<Boolean> poster,TextView tv) {
-        double sum=0;
-        for (int i = 0; i < copies.size(); i++) {
-            if(color.get(i) && poster.get(i)){
-                sum+=copies.get(i)*20;
-            }else if(color.get(i)){
-                sum+=copies.get(i)*10;
-            }else if(poster.get(i)){
-                sum+=copies.get(i)*12;
-            }else{
-                sum+=copies.get(i)*2;
-            }
-        }
-        tv.setText(sum+"");
+  void sumTotal() {
+             sum=0;
+             for (int i = 0; i < noOfCopies.size(); i++) {
+                 if(colorPrint.get(i) && posterPrint.get(i)){
+                     eachCost.set(i,noOfCopies.get(i)*colorPosterRate);
+                     sum+=eachCost.get(i);
+                 }else if(colorPrint.get(i)){
+                     eachCost.set(i,noOfCopies.get(i)*colorRate);
+                     sum+=eachCost.get(i);
+                 }else if(posterPrint.get(i)){
+                     eachCost.set(i,noOfCopies.get(i)*blackPosterRate);
+                     sum+=eachCost.get(i);
+                 }else{
+                     eachCost.set(i,noOfCopies.get(i)*singleSidedPrice);
+                     sum+=eachCost.get(i);
+                 }
+             }
+             totalCost.setText(sum+"");
     }
 
-//    @Override
+
+    //    @Override
 //    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 //        String text = custom.getSelectedItem().toString();
 //        config.set(position,text);
@@ -494,7 +511,8 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                                         progressDialog.setProgress(0);
                                     }
                                 }
-                            }).addOnFailureListener(new OnFailureListener() {                                @Override
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
                                 public void onFailure(@NonNull Exception e) {
                                     if(finalJ==(imageUris.size()-1)){
                                         progressDialog.dismiss();

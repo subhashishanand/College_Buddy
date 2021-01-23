@@ -96,7 +96,7 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
     Integer pageNumber = 0;
     String pdfFileName;
 
-    double blackRate=0,colorRate=0,doubleSidedPrice=0,singleSidedPrice=0,pageLimit=0,pageLimitDiscount=0;
+    double colorRate=0,doubleSidedPrice=0,singleSidedPrice=0,pageLimit=0,pageLimitDiscount=0;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -503,11 +503,10 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
         if(rem!=0) {
             page = page+1;
         }
-        if(blackRate==0 || colorRate==0 || doubleSidedPrice==0 || singleSidedPrice==0 || pageLimit==0 || pageLimitDiscount!=0){
+        if(colorRate==0 || doubleSidedPrice==0 || singleSidedPrice==0){
             db.collection(cityName).document(collegeName).collection("printingPrice").document("printPrice").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    blackRate=documentSnapshot.getDouble("black");
                     colorRate=documentSnapshot.getDouble("color");
                     doubleSidedPrice=documentSnapshot.getDouble("doubleSided");
                     singleSidedPrice=documentSnapshot.getDouble("singleSided");

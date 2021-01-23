@@ -132,6 +132,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+        <Button
+            android:id="@+id/getTotalCost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:text="Get Total Cost"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="30dp"
