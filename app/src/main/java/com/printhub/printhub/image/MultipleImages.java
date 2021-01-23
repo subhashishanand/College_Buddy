@@ -47,6 +47,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+import com.printhub.printhub.Cart;
 import com.printhub.printhub.R;
 import com.printhub.printhub.pdf.pdfActivity;
 
@@ -63,12 +64,12 @@ import static com.printhub.printhub.HomeScreen.MainnewActivity.firebaseUserId;
 public class MultipleImages extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private ImageSwitcher imageIs;
-    private Button previousBtn,nextBtn,selectImageBtn,checkout,getTotalCost;
+    private Button previousBtn,nextBtn,selectImageBtn,checkout,getTotalCost,deleteImages;
     private EditText editCopies;
     private TextView totalCost;
     private Switch color,poster;
     private Spinner custom;
-
+    private boolean isCheckoutOut=true;
     private ArrayList<Uri> imageUris;
     private ArrayList<Integer> noOfCopies;
     private ArrayList<Boolean> colorPrint;
@@ -111,6 +112,7 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
         checkout=findViewById(R.id.checkout);
         custom=findViewById(R.id.custom);
         getTotalCost=findViewById(R.id.getTotalCost);
+        deleteImages=findViewById(R.id.deleteImages);
 
         //init list
         imageUris=new ArrayList<>();
@@ -157,9 +159,16 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("config",config.get(0));
-                sumTotal();
-                uploadImages();
+                if(isCheckoutOut) {
+                    Log.e("config", config.get(0));
+                    sumTotal();
+                    uploadImages();
+
+
+
+                }else{
+                    Toast.makeText(getApplicationContext(),"Please Add another Item to checkOut Again",Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -237,6 +246,9 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
         selectImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!isCheckoutOut){
+                    isCheckoutOut=true;
+                }
                 pickImagesIntent();
             }
         });
@@ -250,19 +262,6 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                     editCopies.setText(noOfCopies.get(position).toString());
                     color.setChecked(colorPrint.get(position));
                     poster.setChecked(posterPrint.get(position));
-//                    custom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                        @Override
-//                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                            String text = custom.getSelectedItem().toString();
-//                            config.set(position,text);
-//                            Log.e("pos",config.get(position));
-//                        }
-//
-//                        @Override
-//                        public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//                        }
-//                    });
 
                 }
                 else{
@@ -270,20 +269,6 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                 }
             }
         });
-
-//        custom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                String text = custom.getSelectedItem().toString();
-//                config.set(position,text);
-//                Log.e("pos",config.get(position));
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -301,19 +286,65 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
             }
         });
 
-//        custom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                String text = custom.getSelectedItem().toString();
-//                config.set(position,text);
-//                Log.e("pos",config.get(position));
-//            }
+        deleteImages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                if(noOfCopies.size()==1){
+                    imageUris.remove(position);
+                    noOfCopies.remove(position);
+                    eachCost.remove(position);
+                    colorPrint.remove(position);
+                    posterPrint.remove(position);
+                    pickImagesIntent();
+
+
+                }
+                else if(position==(noOfCopies.size()-1)){
+                    imageUris.remove(position);
+                    noOfCopies.remove(position);
+                    eachCost.remove(position);
+                    colorPrint.remove(position);
+                    posterPrint.remove(position);
+                    position--;
+                    imageIs.setImageURI(imageUris.get(position));
+                    editCopies.setText(noOfCopies.get(position).toString());
+                    color.setChecked(colorPrint.get(position));
+                    poster.setChecked(posterPrint.get(position));
+
+                }else {
+                    imageUris.remove(position);
+                    noOfCopies.remove(position);
+                    eachCost.remove(position);
+                    colorPrint.remove(position);
+                    posterPrint.remove(position);
+                    imageIs.setImageURI(imageUris.get(position));
+                    editCopies.setText(noOfCopies.get(position).toString());
+                    color.setChecked(colorPrint.get(position));
+                    poster.setChecked(posterPrint.get(position));
+                }
+//                for (int i = position; i < noOfCopies.size()-1; i++) {
 //
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
+//                    noOfCopies.set(position,noOfCopies.get(position+1));
+//                    if(colorPrint.get(i) && posterPrint.get(i)){
+//                        eachCost.set(i,noOfCopies.get(i)*colorPosterRate);
+//                        sum+=eachCost.get(i);
+//                    }else if(colorPrint.get(i)){
+//                        eachCost.set(i,noOfCopies.get(i)*colorRate);
+//                        sum+=eachCost.get(i);
+//                    }else if(posterPrint.get(i)){
+//                        eachCost.set(i,noOfCopies.get(i)*blackPosterRate);
+//                        sum+=eachCost.get(i);
+//                    }else{
+//                        eachCost.set(i,noOfCopies.get(i)*singleSidedPrice);
+//                        sum+=eachCost.get(i);
+//                    }
+//                }
+            }
+        });
+
+
     }
 
     private void pickImagesIntent(){
@@ -458,7 +489,6 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
     private void uploadImages() {
         if(imageUris.size()==0){
             Toast.makeText(MultipleImages.this, "No file selected", Toast.LENGTH_SHORT).show();
-            return;
         }
         ProgressDialog progressDialog = new ProgressDialog(MultipleImages.this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -506,6 +536,9 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                                     if(finalJ==(imageUris.size()-1)){
                                         progressDialog.dismiss();
                                         Toasty.success(MultipleImages.this, "File added to your cart").show();
+                                        Intent intent = new Intent(getApplicationContext(), Cart.class);
+                                        startActivity(intent);
+                                        finish();
                                     }else{
                                         progressDialog.setTitle("("+finalJ+"/"+imageUris.size()+") Uploading file...");
                                         progressDialog.setProgress(0);

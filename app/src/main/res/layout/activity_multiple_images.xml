@@ -46,7 +46,8 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:showDividers="middle"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="7">
             <View
                 android:layout_width="10dp"
                 android:layout_height="match_parent"
@@ -57,22 +58,42 @@
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_below="@id/imageIs"
                 android:layout_width="wrap_content"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 />
             <View
-                android:layout_width="170dp"
+                android:layout_width="10dp"
+                android:layout_weight="2"
                 android:layout_height="match_parent"
                 android:padding="5dp" />
-
+            <Button
+                android:id="@+id/deleteImages"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:layout_weight="1"/>
+            <View
+                android:layout_width="10dp"
+                android:layout_weight="2"
+                android:layout_height="match_parent"
+                android:padding="5dp" />
             <Button
                 android:text="Next"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:id="@+id/nextBtn"
+                android:layout_weight="1"
                 android:layout_alignParentEnd="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/imageIs"
                 android:layout_alignParentRight="true" />
+            <View
+                android:layout_width="10dp"
+                android:layout_height="match_parent"
+                android:padding="5dp" />
+
+
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -131,30 +152,36 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="4">
+
         <Button
             android:id="@+id/getTotalCost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_weight="1"
             android:text="Get Total Cost"/>
-
+        <View
+            android:layout_width="10dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent"
+            android:padding="5dp" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:text="TotalCost"
+            android:text="Rs"
+
             android:textColor="@color/black"
             android:textSize="25dp"/>
 
-        <View
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:outlineAmbientShadowColor="@color/black"
-            android:padding="5dp" />
+
         <TextView
             android:layout_width="80dp"
             android:id="@+id/totalCost"
             android:layout_height="30dp"
+            android:layout_weight="1"
+            android:paddingStart="5dp"
             android:text="0"
             android:textSize="25dp"
             />

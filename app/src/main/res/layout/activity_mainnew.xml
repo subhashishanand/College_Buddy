@@ -267,7 +267,7 @@
                         <ImageView
                             android:id="@+id/quickacess"
                             style="@style/homegridimage"
-                            android:src="@drawable/pens" />
+                            android:src="@drawable/allinone" />
 
                         <TextView
                             style="@style/homegridtext"
