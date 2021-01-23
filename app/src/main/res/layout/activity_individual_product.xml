@@ -247,6 +247,7 @@
                     android:gravity="center"
                     android:onClick="similarProduct"
                     android:orientation="horizontal"
+                    android:visibility="gone"
                     android:weightSum="2">
 
                     <ImageView
@@ -358,6 +359,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
                 app:mtf_image="@drawable/bubble"
+                android:visibility="gone"
                 app:mtf_labelColor="#34495e">
 
                 <EditText

@@ -92,7 +92,7 @@ public class collabAdapter extends RecyclerView.Adapter<collabAdapter.ViewHolder
                     String userName=task.getResult().getString("name");
                     String imageurl = task.getResult().getString("imageLink").toString().trim();
                     holder.username.setText(userName);
-                    Picasso.with(context).load(imageurl).into(holder.userimage);
+                    Picasso.with(context).load(imageurl).placeholder(R.drawable.avtarimage).into(holder.userimage);
                 }
             }
         });

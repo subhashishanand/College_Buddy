@@ -164,8 +164,8 @@ public class postEvent extends AppCompatActivity {
                 final String eventId = UUID.randomUUID().toString().substring(0,16);
                 if(!TextUtils.isEmpty(eventhead) && null!=mImageUri && !TextUtils.isEmpty(desc) && !TextUtils.isEmpty(clubName.getText()) && !TextUtils.isEmpty(chooseDateTextView.getText()) && !TextUtils.isEmpty(chooseTimeTextView.getText())){
                     progressDialog.show();
-                    String random= new RandomString(15, ThreadLocalRandom.current()).nextString();;
-                    StorageReference filepath= storageReference.child("clubEventImages").child(random+".jpg");
+                   // String random= new RandomString(15, ThreadLocalRandom.current()).nextString();;
+                    StorageReference filepath= storageReference.child("clubEventImages").child(eventId+mImageUri.getLastPathSegment());
                     filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {

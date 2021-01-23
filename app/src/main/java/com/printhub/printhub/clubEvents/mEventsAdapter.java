@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.allyants.notifyme.NotifyMe;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -75,7 +76,7 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
     }
     @Override
     public ViewHolder onCreateViewHolder(@NonNull  ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.club_events_cardlayout,parent,false);
+        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.club_event_cardlayout,parent,false);
         db= FirebaseFirestore.getInstance();
         return new ViewHolder(view);
     }
@@ -86,11 +87,11 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
         String postkey =  eventsClass.getEventid();
         String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         holder.setDescText(eventsClass.getDescription());
-        holder.setName(eventsClass.clubName);
         holder.setTime(eventsClass.getActivityTime());
         holder.setDate(eventsClass.getActivityDate());
-        Picasso.with(context).load(blog_list.get(position).getImageUrl()).into(holder.clubEventPost);
-        holder.setName(eventsClass.getClubName());
+        holder.eventName.setText(eventsClass.getEventTitle());
+        Picasso.with(context).load(blog_list.get(position).getImageUrl()).placeholder(R.drawable.sendtimer).into(holder.clubEventPost);
+        holder.setName("Club Name: "+eventsClass.getClubName());
         if(null!=eventsClass.getLink() &&!eventsClass.getLink().isEmpty()){
             holder.linkTextView.setVisibility(View.VISIBLE);
             holder.setLink(eventsClass.getLink());
@@ -166,6 +167,7 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
         holder.reminderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                holder.reminderButton.playAnimation();
                 Calendar calendar=Calendar.getInstance();
                 SimpleDateFormat simpleDateFormat= new SimpleDateFormat("dd/MM/yyyy hh:mm aa");
                 try {
@@ -190,6 +192,7 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
                             .rrule("FREQ=MINUTELY;INTERVAL=10;COUNT=2")
                             .build();
                     Toasty.success(context,"We will remind you", Toasty.LENGTH_SHORT).show();
+                    holder.reminderButton.pauseAnimation();
             }
         });
 
@@ -206,15 +209,16 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private View mView;
-        private MultiAutoCompleteTextView descView;
+        private TextView descView,eventName;
         private TextView timeTextView, dateTextView,linkTextView,text_action;
         ImageView clubEventPost,interest;
-        private Button reminderButton;
         private TextView blogDate,authorName;
+        LottieAnimationView reminderButton;
         public ViewHolder(@NonNull  View itemView) {
 
             super(itemView);
             mView=itemView;
+            eventName= mView.findViewById(R.id.eventName);
             reminderButton=mView.findViewById(R.id.reminderButton);
             clubEventPost= mView.findViewById(R.id.clubEventPost);
             interest= mView.findViewById(R.id.saveClubEvent);
@@ -244,7 +248,7 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
         }
         public void setPostingTime(String date){
             blogDate=mView.findViewById(R.id.blogdate);
-            blogDate.setText("posted date:"+date);
+            blogDate.setText("Posted On:"+date);
         }
 
         public void setName(String name){

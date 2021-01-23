@@ -1,32 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".collab.collabActivity"
-    android:fitsSystemWindows="true">
+    tools:context=".collab.collabActivity">
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/collabview"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbarwrap"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:titleTextColor="#000"
+            style="@style/CustomTheme"
+            android:background="@color/colorAccent">
+
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="39dp"
+        android:layout_marginBottom="40dp"
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/ic_add_black_24dp"
         app:backgroundTint="@color/fui_bgEmail"
-        app:fabSize="normal"
-        android:layout_gravity="bottom|right|end"/>
+        app:fabSize="normal" />
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbarwrap">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/collabview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
+    </FrameLayout>
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/tv_no_cards"
@@ -38,4 +60,15 @@
         android:layout_centerVertical="true"
         app:lottie_autoPlay="true"/>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/emptyBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="empty_list.json"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

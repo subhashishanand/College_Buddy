@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/collab_back"
+    android:layout_marginLeft="4dp"
+    android:layout_marginRight="4dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="28dp"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
+            android:weightSum="5">
+
+            <TextView
+                android:id="@+id/eventName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="fill"
+                android:textSize="24sp"
+                android:padding="5dp"
+                android:layout_weight="3"
+                android:textStyle="bold"
+                android:maxLength="30"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/blogdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12/04/2000"
+                android:layout_weight="2"
+                android:layout_marginRight="9dp"
+                android:gravity="top|right"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/authorName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="fill"
+            android:textSize="16sp"
+            android:padding="5dp"
+            android:layout_weight="3"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="20dp"
+            android:maxLength="60"
+            android:layout_marginRight="20dp"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:id="@+id/clubEventPost"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/sendtimer"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+
+
+        <TextView
+            android:id="@+id/blog_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_marginTop="2dp"
+            android:textSize="16sp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="20dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp"
+            android:text="Link"
+            android:visibility="gone"
+            android:textColor="@color/black"
+            android:id="@+id/linkTextView"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/clubEventDate"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="20sp"
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:textStyle="bold|italic"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/clubEventTime"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="20sp"
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:layout_gravity="fill"
+                android:textStyle="bold|italic"/>
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="10dp">
+            <ImageView
+                android:id="@+id/saveClubEvent"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:foregroundGravity="center"
+                android:visibility="visible"
+                android:layout_gravity="center"
+                android:layout_marginRight="4dp"
+                android:src="@drawable/like_grey"/>
+
+            <TextView
+                android:id="@+id/text_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical"
+                android:text="Interested"
+                android:layout_weight="1"
+                android:textColor="@color/gen_black"
+                android:textSize="16dp" />
+
+
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/reminderButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:foregroundGravity="center"
+                android:visibility="visible"
+                android:layout_gravity="right"
+                android:gravity="center_vertical|right"
+                android:layout_weight="0.3"
+                app:lottie_fileName="remainder.json" />
+
+
+        </LinearLayout>
+
+
+
+
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
