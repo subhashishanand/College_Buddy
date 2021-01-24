@@ -9,23 +9,27 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
-
     <application
         android:allowBackup="true"
-        android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".globalEvents.GlobalActivity"
+        <activity android:name=".sidebar.oldOrders.replaceLapsed"></activity>
+        <activity
+            android:name=".globalEvents.GlobalActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".OrderPendingActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".sidebar.oldOrders.ReplacementActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".sidebar.oldOrders.ReturnActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".OrderPendingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".sidebar.oldOrders.ReplacementActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".sidebar.oldOrders.ReturnActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".registration.eventInterestActivity"
             android:screenOrientation="portrait" />

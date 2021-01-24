@@ -33,6 +33,7 @@
     <ImageSwitcher
         android:id="@+id/imageIs"
         android:layout_width="match_parent"
+
         android:layout_height="400dp"/>
     <View
         android:layout_width="match_parent"

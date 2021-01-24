@@ -25,6 +25,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -122,7 +124,10 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
         eachCost=new ArrayList<>();
         config=new ArrayList<>();
         //spinnerConfig=new ArrayList<>();
-
+        Animation in = AnimationUtils.loadAnimation(this,android.R.anim.slide_in_left);
+       // Animation out = AnimationUtils.loadAnimation(this,android.R.anim.slide_out_right);
+        imageIs.setInAnimation(in);
+       // imageIs.setOutAnimation(out);
         //spinner populate
         ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(this,R.array.Print, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
