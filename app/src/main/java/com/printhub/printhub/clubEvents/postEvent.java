@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -75,6 +76,10 @@ public class postEvent extends AppCompatActivity {
     private StorageReference storageReference;
     private String currUserId;
     private FirebaseFirestore firebaseFirestore;
+    String postkey;
+    String url="";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +102,20 @@ public class postEvent extends AppCompatActivity {
         progressDialog=new ProgressDialog(this);
         progressDialog.setMessage("Uploading Event...");
         progressDialog.setCancelable(false);
+        postkey= getIntent().getStringExtra("postKey");
+        if(null!=postkey && !postkey.isEmpty()){
+            updatePost();
+        }else{
+            postButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    final String eventId = UUID.randomUUID().toString().substring(0,16);
+                    postData(eventId);
+
+                }
+            });
+        }
 
         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -155,94 +174,6 @@ public class postEvent extends AppCompatActivity {
         });
 
 
-        postButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String desc=postDes.getText().toString();
-                String tempLink= linkTextView.getText().toString();
-                String eventhead= eventTitle.getText().toString();
-                final String eventId = UUID.randomUUID().toString().substring(0,16);
-                if(!TextUtils.isEmpty(eventhead) && null!=mImageUri && !TextUtils.isEmpty(desc) && !TextUtils.isEmpty(clubName.getText()) && !TextUtils.isEmpty(chooseDateTextView.getText()) && !TextUtils.isEmpty(chooseTimeTextView.getText())){
-                    progressDialog.show();
-                   // String random= new RandomString(15, ThreadLocalRandom.current()).nextString();;
-                    StorageReference filepath= storageReference.child("clubEventImages").child(eventId+mImageUri.getLastPathSegment());
-                    filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-//                            //Compressing Image File
-//                            File newImageFile=new File(mImageUri.getPath());
-//                            try {
-//                                compressedImageFile = new Compressor(postEvent.this)
-//                                        .setQuality(75)
-//                                        .compressToBitmap(newImageFile);
-//                            } catch (IOException e) {
-//                                Log.e("Error ","The compress functionality is not working correctly");
-//                            }
-//
-//
-//                            ByteArrayOutputStream baos=new ByteArrayOutputStream();
-//                            compressedImageFile.compress(Bitmap.CompressFormat.JPEG,100,baos);
-//                            byte[] thumbData=baos.toByteArray();
-//
-//                            UploadTask uploadTask=storageReference.child("clubEventImages").child(random+".thumbjpg").putBytes(thumbData);
-//
-//                            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                                @Override
-//                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//
-//                                }
-//                            }).addOnFailureListener(new OnFailureListener() {
-//                                @Override
-//                                public void onFailure(@NonNull  Exception e) {
-//
-//                                }
-//                            });
-
-                             filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                 @Override
-                                 public void onSuccess(Uri uri) {
-                                     Map<String,Object> postMap=new HashMap<>();
-                                     Uri url = uri;
-                                     postMap.put("imageUrl",url.toString());
-                                     postMap.put("description",desc);
-                                     postMap.put("timestamp",FieldValue.serverTimestamp());
-                                     postMap.put("clubName",clubName.getText().toString());
-                                     postMap.put("activityDate",chooseDateTextView.getText().toString());
-                                     postMap.put("activityTime", chooseTimeTextView.getText().toString());
-                                     postMap.put("link",tempLink);
-                                     postMap.put("eventid",eventId);
-                                     postMap.put("eventTitle",eventhead);
-
-                                     firebaseFirestore.collection(cityName).document(collegeName).collection("clubActivity").document(eventId).set(postMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                         @Override
-                                         public void onSuccess(Void unused) {
-                                             progressDialog.dismiss();
-                                             Intent intent=new Intent(getApplicationContext(),clubActivity.class);
-                                             startActivity(intent);
-                                             finish();
-                                             Toast.makeText(postEvent.this, "Post is Uploaded Succesfully", Toast.LENGTH_LONG).show();
-                                         }
-                                     });
-                                 }
-                             }).addOnFailureListener(new OnFailureListener() {
-                                 @Override
-                                 public void onFailure(@NonNull Exception e) {
-                                     Toast.makeText(postEvent.this, "Image is Added to storage but uri cant be featched", Toast.LENGTH_LONG).show();
-                                 }
-                             });
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(postEvent.this, "Image is not added to the storage", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }else{
-                    Toasty.error(postEvent.this, "Fill all arguments",Toasty.LENGTH_LONG).show();
-                }
-            }
-        });
 
         postImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -362,5 +293,161 @@ public class postEvent extends AppCompatActivity {
         }
 
     }
+    public void postData(String eventId){
+        String desc=postDes.getText().toString();
+        String tempLink= linkTextView.getText().toString();
+        String eventhead= eventTitle.getText().toString();
+
+        if(!TextUtils.isEmpty(eventhead) && null!=mImageUri && !TextUtils.isEmpty(desc) && !TextUtils.isEmpty(clubName.getText()) && !TextUtils.isEmpty(chooseDateTextView.getText()) && !TextUtils.isEmpty(chooseTimeTextView.getText())){
+            progressDialog.show();
+            // String random= new RandomString(15, ThreadLocalRandom.current()).nextString();;
+            StorageReference filepath= storageReference.child("clubEventImages").child(eventId+mImageUri.getLastPathSegment());
+            filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+//                            //Compressing Image File
+//                            File newImageFile=new File(mImageUri.getPath());
+//                            try {
+//                                compressedImageFile = new Compressor(postEvent.this)
+//                                        .setQuality(75)
+//                                        .compressToBitmap(newImageFile);
+//                            } catch (IOException e) {
+//                                Log.e("Error ","The compress functionality is not working correctly");
+//                            }
+//
+//
+//                            ByteArrayOutputStream baos=new ByteArrayOutputStream();
+//                            compressedImageFile.compress(Bitmap.CompressFormat.JPEG,100,baos);
+//                            byte[] thumbData=baos.toByteArray();
+//
+//                            UploadTask uploadTask=storageReference.child("clubEventImages").child(random+".thumbjpg").putBytes(thumbData);
+//
+//                            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                                @Override
+//                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//
+//                                }
+//                            }).addOnFailureListener(new OnFailureListener() {
+//                                @Override
+//                                public void onFailure(@NonNull  Exception e) {
+//
+//                                }
+//                            });
+
+                    filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Map<String,Object> postMap=new HashMap<>();
+                            Uri url = uri;
+                            postMap.put("imageUrl",url.toString());
+                            postMap.put("description",desc);
+                            postMap.put("timestamp",FieldValue.serverTimestamp());
+                            postMap.put("clubName",clubName.getText().toString());
+                            postMap.put("activityDate",chooseDateTextView.getText().toString());
+                            postMap.put("activityTime", chooseTimeTextView.getText().toString());
+                            postMap.put("link",tempLink);
+                            postMap.put("eventid",eventId);
+                            postMap.put("eventTitle",eventhead);
+                            postMap.put("userid",firebaseUserId);
+                            postMap.put("status","Unverified");
+
+                            firebaseFirestore.collection(cityName).document(collegeName).collection("clubActivity").document(eventId).set(postMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    progressDialog.dismiss();
+                                    Intent intent=new Intent(getApplicationContext(),clubActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                    Toast.makeText(postEvent.this, "Post is Uploaded Succesfully", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(postEvent.this, "Image is Added to storage but uri cant be featched", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(postEvent.this, "Image is not added to the storage", Toast.LENGTH_LONG).show();
+                }
+            });
+        }else{
+            Toasty.error(postEvent.this, "Fill all arguments",Toasty.LENGTH_LONG).show();
+        }
+
+    }
+
+    public void updatePost(String eventId,String url){
+        String desc=postDes.getText().toString();
+        String tempLink= linkTextView.getText().toString();
+        String eventhead= eventTitle.getText().toString();
+
+        if(!TextUtils.isEmpty(eventhead) && !TextUtils.isEmpty(desc) && !TextUtils.isEmpty(clubName.getText()) && !TextUtils.isEmpty(chooseDateTextView.getText()) && !TextUtils.isEmpty(chooseTimeTextView.getText())){
+            progressDialog.show();
+            // String random= new RandomString(15, ThreadLocalRandom.current()).nextString();;
+                            Map<String,Object> postMap=new HashMap<>();
+                            postMap.put("imageUrl",url);
+                            postMap.put("description",desc);
+                            postMap.put("timestamp",FieldValue.serverTimestamp());
+                            postMap.put("clubName",clubName.getText().toString());
+                            postMap.put("activityDate",chooseDateTextView.getText().toString());
+                            postMap.put("activityTime", chooseTimeTextView.getText().toString());
+                            postMap.put("link",tempLink);
+                            postMap.put("eventid",eventId);
+                            postMap.put("eventTitle",eventhead);
+                            postMap.put("userid",firebaseUserId);
+                            postMap.put("status","Unverified");
+
+                            firebaseFirestore.collection(cityName).document(collegeName).collection("clubActivity").document(eventId).set(postMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    progressDialog.dismiss();
+                                    Intent intent=new Intent(getApplicationContext(),clubActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                    Toast.makeText(postEvent.this, "Post is Uploaded Succesfully", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+    }
+
+
+
+    private void updatePost(){
+        postButton.setText("Update");
+        firebaseFirestore.collection(cityName).document(collegeName).collection("clubActivity").document(postkey).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                clubName.setText(documentSnapshot.getString("clubName"));
+                eventTitle.setText(documentSnapshot.getString("eventTitle"));
+                Picasso.with(getApplicationContext()).load(documentSnapshot.getString("imageUrl")).placeholder(R.drawable.padrao).into(postImage);
+                postDes.setText(documentSnapshot.getString("description"));
+                linkTextView.setText(documentSnapshot.getString("link"));
+                chooseDateTextView.setText(documentSnapshot.getString("activityDate"));
+                chooseTimeTextView.setText(documentSnapshot.getString("activityTime"));
+                url = documentSnapshot.getString("imageUrl");
+            }
+        });
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(mImageUri==null){
+                    updatePost(postkey,url);
+                }else{
+                    postData(postkey);
+                }
+            }
+        });
+
+    }
+
+
+
 
 }

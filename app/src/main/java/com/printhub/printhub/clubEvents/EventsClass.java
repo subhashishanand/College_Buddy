@@ -8,12 +8,12 @@ import java.util.Date;
 
 public class EventsClass {
 
-    public String clubName,description,imageUrl,activityDate,activityTime,link,eventid,eventTitle;
+    public String clubName,description,imageUrl,activityDate,activityTime,link,eventid,eventTitle,userid,status;
     public Date timestamp;
 
     public EventsClass(){}
 
-    public EventsClass(String clubName, String description, String imageUrl, Date timestamp,String activityDate, String activityTime, String link,String eventid,String eventTitle) {
+    public EventsClass(String clubName, String description, String imageUrl, Date timestamp,String activityDate, String activityTime, String link,String eventid,String eventTitle,String userid,String status) {
         this.clubName= clubName;
         this.description = description;
         this.imageUrl = imageUrl;
@@ -23,6 +23,8 @@ public class EventsClass {
         this.link=link;
         this.eventid= eventid;
         this.eventTitle= eventTitle;
+        this.userid= userid;
+        this.status= status;
     }
 
     public String getClubName() {
@@ -95,5 +97,21 @@ public class EventsClass {
 
     public void setEventTitle(String eventTitle) {
         this.eventTitle = eventTitle;
+    }
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

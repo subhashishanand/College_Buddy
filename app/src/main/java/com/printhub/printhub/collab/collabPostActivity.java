@@ -1,7 +1,9 @@
 package com.printhub.printhub.collab;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,27 +13,38 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.printhub.printhub.HomeScreen.MainnewActivity;
 import com.printhub.printhub.R;
 import com.printhub.printhub.clubEvents.clubActivity;
 import com.printhub.printhub.clubEvents.postEvent;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import es.dmoral.toasty.Toasty;
+
 import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
 import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
+import static com.printhub.printhub.bunkManager.RecyclerAdapter.getApplicationContext;
 
 public class collabPostActivity extends AppCompatActivity {
     EditText domainField,descField,mobileText,whatsappText,linkedinText,githubText;
     Button postButton;
     private FirebaseFirestore firebaseFirestore;
     ProgressDialog progressDialog;
+    String postkey;
 
 
     @Override
@@ -49,15 +62,22 @@ public class collabPostActivity extends AppCompatActivity {
         progressDialog= new ProgressDialog(this);
         progressDialog.setMessage("Uploading Post");
         progressDialog.setCancelable(false);
-        postButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                postData();
-            }
-        });
+        postkey= getIntent().getStringExtra("postKey");
+        if(null!=postkey && !postkey.isEmpty()){
+            updatePost();
+        }else{
+            postButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final String advKey = UUID.randomUUID().toString().substring(0,16);
+                    postData(advKey);
+                }
+            });
+        }
+
 
     }
-    public void postData(){
+    public void postData(String advKey){
         progressDialog.show();
         String domain = domainField.getText().toString();
         String description = descField.getText().toString();
@@ -66,7 +86,6 @@ public class collabPostActivity extends AppCompatActivity {
         String whatsAppno= whatsappText.getText().toString();
         String githubId= githubText.getText().toString();
         String linkedinId=  linkedinText.getText().toString();
-        final String advKey = UUID.randomUUID().toString().substring(0,16);
         if(!TextUtils.isEmpty(domain) && !TextUtils.isEmpty(description)){
             if(!TextUtils.isEmpty(mobileno) || !TextUtils.isEmpty(whatsAppno)){
                 if(mobileno.length()==10 || whatsAppno.length()==10){
@@ -96,7 +115,7 @@ public class collabPostActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void unused) {
                             progressDialog.dismiss();
-                            Toast.makeText(collabPostActivity.this, "Your Post Is Activated within 12 hours", Toast.LENGTH_LONG).show();
+                            Toast.makeText(collabPostActivity.this, "Your Post Is Uploaded", Toast.LENGTH_LONG).show();
                             Intent intent=new Intent(getApplicationContext(), collabActivity.class);
                             startActivity(intent);
                             finish();
@@ -122,4 +141,36 @@ public class collabPostActivity extends AppCompatActivity {
 
 
     }
+
+    private void updatePost(){
+        postButton.setText("Update");
+        firebaseFirestore.collection(cityName).document(collegeName).collection("collab").document(postkey).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                descField.setText(documentSnapshot.getString("description"));
+                domainField.setText(documentSnapshot.getString("domain"));
+                if(null!=documentSnapshot.getString("mobileNo")){
+                    mobileText.setText(documentSnapshot.getString("mobileNo"));
+                }
+                if(null!=documentSnapshot.getString("whatsApp")){
+                    whatsappText.setText(documentSnapshot.getString("whatsApp"));
+                }
+                if(null!=documentSnapshot.getString("githubId")){
+                    githubText.setText(documentSnapshot.getString("githubId"));
+                }
+                if(null!=documentSnapshot.getString("linkedinId")){
+                    linkedinText.setText(documentSnapshot.getString("linkedinId"));
+                }
+
+            }
+        });
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postData(postkey);
+            }
+        });
+
+    }
+
 }

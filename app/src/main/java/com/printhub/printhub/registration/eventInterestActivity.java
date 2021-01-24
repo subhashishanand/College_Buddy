@@ -11,7 +11,9 @@ import android.view.View;
 import android.widget.AbsListView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -94,11 +96,7 @@ public class eventInterestActivity extends AppCompatActivity {
 
 
     private void loadData(){
-        if (lastDocumentSnapshot == null) {
-            query = firebaseFirestore.collection(cityName).document(collegeName).collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("eventinterest").orderBy("timestamp", Query.Direction.DESCENDING).limit(10);
-        } else {
-            query = firebaseFirestore.collection(cityName).document(collegeName).collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("eventinterest").orderBy("timestamp", Query.Direction.DESCENDING).startAfter(lastDocumentSnapshot).limit(10);
-        }
+        query = firebaseFirestore.collection(cityName).document(collegeName).collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("eventinterest").orderBy("timestamp", Query.Direction.DESCENDING);
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -112,8 +110,24 @@ public class eventInterestActivity extends AppCompatActivity {
                         tv_no_item.setVisibility(View.GONE);
                     }
                     lastDocumentSnapshot = documentSnapshot;
-                    EventsClass cc=documentSnapshot.toObject(EventsClass.class);
-                    ((mEventsAdapter)recyclerView.getAdapter()).update(cc);
+                    String key =documentSnapshot.getId();
+                    if (tv_no_item.getVisibility() == View.VISIBLE) {
+                        tv_no_item.setVisibility(View.GONE);
+                    }
+                    if(null!=key && !key.isEmpty()){
+                        firebaseFirestore.collection(cityName).document(collegeName).collection("clubActivity").document(key).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if(task.getResult().exists()){
+                                    EventsClass cc=task.getResult().toObject(EventsClass.class);
+                                    ((mEventsAdapter)recyclerView.getAdapter()).update(cc);
+                                }
+
+
+                            }
+                        });
+                    }
+
                 }
             }
         });

@@ -9,10 +9,12 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +35,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.printhub.printhub.Cart;
 import com.printhub.printhub.IndividualProduct;
 import com.printhub.printhub.R;
 import com.printhub.printhub.WebServices.WebViewActivity;
@@ -48,6 +51,7 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
 
+import static com.firebase.ui.auth.AuthUI.canHandleIntent;
 import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
 import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
@@ -109,6 +113,36 @@ public class collabAdapter extends RecyclerView.Adapter<collabAdapter.ViewHolder
 
             }
         });
+        if(userid.equals(postuser_id)){
+            holder.menuOtion.setVisibility(View.VISIBLE);
+            holder.menuOtion.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PopupMenu popupMenu= new PopupMenu(context,holder.menuOtion);
+                    popupMenu.inflate(R.menu.updatepost);
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch(item.getItemId()){
+                                case R.id.item1:
+                                    callUpdate(postkey,userid) ;
+                                    break;
+                                case R.id.item2:
+                                    CallDelete(postkey,userid);
+                                    break;
+                                default:
+                                    break;
+                            }
+                            return false;
+                        }
+                    });
+                    popupMenu.show();
+                }
+            });
+        }else{
+            holder.menuOtion.setVisibility(View.GONE);
+        }
+
         //getlike
         db.collection(cityName).document(collegeName).collection("collab").document(postkey).collection("Likes").document(userid).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -179,6 +213,8 @@ public class collabAdapter extends RecyclerView.Adapter<collabAdapter.ViewHolder
             public void onClick(View v) {
                  //holder.interest.playAnimation();
                 collabClass collabClass = new collabClass(collab_list.get(position).getDomain(),collab_list.get(position).getDescription(),collab_list.get(position).getMobileNo(),collab_list.get(position).getWhatsApp(),collab_list.get(position).getGithubId(),collab_list.get(position).getLinkedinId(),collab_list.get(position).getStatus(),collab_list.get(position).getUserid(),collab_list.get(position).getTimestamp(),postkey);
+                Map<String,Object> interestmap = new HashMap<>();
+                interestmap.put("postkey", postkey);
 
                 db.collection(cityName).document(collegeName).collection("collab").document(postkey).collection("Likes").document(userid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -228,7 +264,7 @@ public class collabAdapter extends RecyclerView.Adapter<collabAdapter.ViewHolder
         CircleImageView userimage;
         ImageView github,linkedin,whatsapp,call;
         ImageView interest;
-        private TextView username,postdate,domain,description,text_action;
+        private TextView username,postdate,domain,description,text_action,menuOtion;
         public ViewHolder(@NonNull  View itemView) {
 
             super(itemView);
@@ -244,6 +280,7 @@ public class collabAdapter extends RecyclerView.Adapter<collabAdapter.ViewHolder
             domain= mView.findViewById(R.id.domain);
             description= mView.findViewById(R.id.description);
             text_action = mView.findViewById(R.id.text_action);
+            menuOtion= mView.findViewById(R.id.menuoption);
 
 
 
@@ -256,4 +293,23 @@ public class collabAdapter extends RecyclerView.Adapter<collabAdapter.ViewHolder
 //        }
 
     }
+
+    private void callUpdate(String postKey,String userid){
+        Intent intent = new Intent(context, collabPostActivity.class);
+        intent.putExtra("postKey", postKey);
+        context.startActivity(intent);
+        //((Activity)context).finish();
+
+    }
+
+    private void CallDelete(String postKey,String userid){
+        db.collection(cityName).document(collegeName).collection("collab").document(postKey).collection("Likes").document(userid).delete();
+        db.collection(cityName).document(collegeName).collection("collab").document(postKey).delete();
+        context.startActivity(new Intent(context, collabActivity.class));
+        ((Activity)context).finish();
+
+    }
+
+
+
 }

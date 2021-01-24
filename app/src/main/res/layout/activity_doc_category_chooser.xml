@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".image.docCategoryChooser"
+    android:gravity="center"
     android:background="@drawable/choos_file_category">
 
 
@@ -19,7 +20,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textStyle="bold"
         android:layout_gravity="center"
-        android:layout_marginTop="330dp"
+        android:gravity="center"
         android:textColor="#ffffff"
         android:background="@drawable/rounded_button"/>
 

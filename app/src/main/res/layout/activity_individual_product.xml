@@ -303,13 +303,13 @@
                     android:orientation="horizontal"
                     android:weightSum="2">
 
-                    <com.airbnb.lottie.LottieAnimationView
+                    <ImageView
                         android:id="@+id/add_to_wishlist"
                         android:layout_width="40dp"
                         android:layout_height="match_parent"
                         android:foregroundGravity="center"
                         android:visibility="visible"
-                        app:lottie_fileName="heart.json" />
+                        android:src="@drawable/like_grey"/>
 
                     <TextView
                         android:id="@+id/text_action3"

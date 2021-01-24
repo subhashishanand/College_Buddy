@@ -9,11 +9,13 @@ import android.text.format.DateFormat;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +38,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.printhub.printhub.R;
 import com.printhub.printhub.WebServices.WebViewActivity;
 import com.printhub.printhub.bunkManager.Subjectlist;
+import com.printhub.printhub.collab.collabActivity;
 import com.printhub.printhub.collab.collabClass;
+import com.printhub.printhub.collab.collabPostActivity;
 import com.printhub.printhub.prodcutscategory.Stationary;
 import com.squareup.picasso.Picasso;
 
@@ -87,6 +91,7 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
     public void onBindViewHolder(@NonNull  ViewHolder holder, int position) {
         EventsClass eventsClass=blog_list.get(position);
         String postkey =  eventsClass.getEventid();
+        String postuser_id= eventsClass.getUserid();
         String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         holder.setDescText(eventsClass.getDescription());
         holder.setTime(eventsClass.getActivityTime());
@@ -110,6 +115,37 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
             });
 
         }
+
+        if(userid.equals(postuser_id)){
+            holder.menuOtion.setVisibility(View.VISIBLE);
+            holder.menuOtion.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PopupMenu popupMenu= new PopupMenu(context,holder.menuOtion);
+                    popupMenu.inflate(R.menu.updatepost);
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch(item.getItemId()){
+                                case R.id.item1:
+                                    callUpdate(postkey,userid) ;
+                                    break;
+                                case R.id.item2:
+                                    CallDelete(postkey,userid);
+                                    break;
+                                default:
+                                    break;
+                            }
+                            return false;
+                        }
+                    });
+                    popupMenu.show();
+                }
+            });
+        }else{
+            holder.menuOtion.setVisibility(View.GONE);
+        }
+
 
         //countlike
         db.collection(cityName).document(collegeName).collection("clubActivity").document(postkey).collection("Likes").addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -144,7 +180,7 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 //holder.interest.playAnimation();
-                EventsClass eventsClass1 = new EventsClass(eventsClass.getClubName(),eventsClass.getDescription(),eventsClass.getImageUrl(),eventsClass.getTimestamp(), eventsClass.getActivityDate(),eventsClass.getActivityTime(),eventsClass.getLink(),eventsClass.getEventid(),eventsClass.getEventTitle());
+                EventsClass eventsClass1 = new EventsClass(eventsClass.getClubName(),eventsClass.getDescription(),eventsClass.getImageUrl(),eventsClass.getTimestamp(), eventsClass.getActivityDate(),eventsClass.getActivityTime(),eventsClass.getLink(),eventsClass.getEventid(),eventsClass.getEventTitle(),eventsClass.getUserid(),eventsClass.getStatus());
 
                 db.collection(cityName).document(collegeName).collection("clubActivity").document(postkey).collection("Likes").document(userid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -224,7 +260,7 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
 
         private View mView;
         private TextView descView,eventName;
-        private TextView timeTextView, dateTextView,linkTextView,text_action,linkView;
+        private TextView timeTextView, dateTextView,linkTextView,text_action,linkView,menuOtion;
         ImageView clubEventPost,interest;
         private TextView blogDate,authorName;
         LottieAnimationView reminderButton;
@@ -239,6 +275,7 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
             text_action= mView.findViewById(R.id.text_action);
             linkTextView= mView.findViewById(R.id.linkTextView);
             linkView = mView.findViewById(R.id.linkview);
+            menuOtion= mView.findViewById(R.id.menuoption);
             //descView=mView.findViewById(R.id.blog_desc);
         }
 
@@ -271,4 +308,23 @@ public class mEventsAdapter extends RecyclerView.Adapter<mEventsAdapter.ViewHold
             authorName.setText(name);
         }
     }
+
+    private void callUpdate(String postKey,String userid){
+        Intent intent = new Intent(context, postEvent.class);
+        intent.putExtra("postKey", postKey);
+        context.startActivity(intent);
+        //((Activity)context).finish();
+
+    }
+
+    private void CallDelete(String postKey,String userid){
+        db.collection(cityName).document(collegeName).collection("clubActivity").document(postKey).collection("Likes").document(userid).delete();
+        db.collection(cityName).document(collegeName).collection("clubActivity").document(postKey).delete();
+        context.startActivity(new Intent(context, clubActivity.class));
+        ((Activity)context).finish();
+
+
+
+    }
+
 }

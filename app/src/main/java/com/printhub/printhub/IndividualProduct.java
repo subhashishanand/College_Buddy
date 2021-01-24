@@ -58,7 +58,7 @@ public class IndividualProduct extends AppCompatActivity {
     @BindView(R.id.quantityProductPage)
     EditText quantityProductPage;
     @BindView(R.id.add_to_wishlist)
-    LottieAnimationView addToWishlist;
+    ImageView addToWishlist;
     @BindView(R.id.custommessage)
     EditText custommessage;
     @BindView(R.id.mrp)
@@ -144,7 +144,7 @@ public class IndividualProduct extends AppCompatActivity {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
                     if(documentSnapshot.getId().equals(getIntent().getStringExtra("key"))){
-                        addToWishlist.playAnimation();
+                        addToWishlist.setImageDrawable(getApplicationContext().getDrawable(R.drawable.like_red));
                     }
 
                 }
@@ -165,7 +165,7 @@ public class IndividualProduct extends AppCompatActivity {
     public void shareProduct(View view) {
         Intent sharingIntent = new Intent(Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        String shareBody = "Found this amazing" + productname.getText().toString() + "on CollegeBuddy application. Check it out";
+        String shareBody = "Found this amazing " + productname.getText().toString() + " on CollegeBuddy application. Check it out " +"https://play.google.com/store/apps/details?id=com.printhub.signup";
         sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
         startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
@@ -235,7 +235,7 @@ public class IndividualProduct extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(!task.getResult().exists()){
-                    addToWishlist.playAnimation();
+                    addToWishlist.setImageDrawable(getApplicationContext().getDrawable(R.drawable.like_red));
                     Map<String, Object> map = finalDocumentSnapshot.getData();
                     map.put("price",price+"");
                     map.put("productId", key);
@@ -250,7 +250,7 @@ public class IndividualProduct extends AppCompatActivity {
 
                 }else{
                     Toasty.success(IndividualProduct.this, "Deleted from Wishlist").show();
-                    addToWishlist.setAnimation(0);
+                    addToWishlist.setImageDrawable(getApplicationContext().getDrawable(R.drawable.like_grey));
                     documentReference.collection("users").document(firebaseUserId)
                             .collection("Wishlist").document(key).delete();
                 }
