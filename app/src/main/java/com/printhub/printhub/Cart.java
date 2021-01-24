@@ -97,6 +97,9 @@ public class Cart extends AppCompatActivity {
         //using staggered grid pattern in recyclerview
         mLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(Cart.this));
+        myAdapter= new MyAdapter(mRecyclerView, Cart.this, new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(),new ArrayList<String>(), new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>());
+        mRecyclerView.setAdapter(myAdapter);
 
         db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId)
                 .collection("productCart").get().addOnSuccessListener(this, new OnSuccessListener<QuerySnapshot>() {
@@ -106,14 +109,11 @@ public class Cart extends AppCompatActivity {
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
-                   emptytext.setVisibility(View.VISIBLE);
+                    emptytext.setVisibility(View.VISIBLE);
                 }else{
                     for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
                         if (tv_no_item.getVisibility() == View.VISIBLE) {
                             tv_no_item.setVisibility(View.GONE);
-                        }
-                        if (emptytext.getVisibility() == View.VISIBLE) {
-                            emptytext.setVisibility(View.GONE);
                         }
                         String cartKey =documentSnapshot.getId();
                         String quantity =documentSnapshot.getString("quantity");
@@ -131,9 +131,6 @@ public class Cart extends AppCompatActivity {
                             }
                         });
                     }
-                    if (emptytext.getVisibility() == View.VISIBLE) {
-                        emptytext.setVisibility(View.GONE);
-                    }
                 }
 
 
@@ -150,14 +147,11 @@ public class Cart extends AppCompatActivity {
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
-                   emptytext.setVisibility(View.VISIBLE);
+                    emptytext.setVisibility(View.VISIBLE);
                 }else {
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                         if (tv_no_item.getVisibility() == View.VISIBLE) {
                             tv_no_item.setVisibility(View.GONE);
-                        }
-                        if (emptytext.getVisibility() == View.VISIBLE) {
-                            emptytext.setVisibility(View.GONE);
                         }
                         String fileName = documentSnapshot.getString("fileName");
                         String key = documentSnapshot.getId();
@@ -171,16 +165,10 @@ public class Cart extends AppCompatActivity {
                         totalcost = totalcost + Float.parseFloat(cost);
                         ((MyAdapter) mRecyclerView.getAdapter()).update(fileName, key, startingPageNo, endingPageNo, doubleSided, custom, copy, cost, color);
                     }
-                    if (emptytext.getVisibility() == View.VISIBLE) {
-                        emptytext.setVisibility(View.GONE);
-                    }
+
                 }
             }
         });
-
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(Cart.this));
-        myAdapter= new MyAdapter(mRecyclerView, Cart.this, new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(),new ArrayList<String>(), new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>());
-        mRecyclerView.setAdapter(myAdapter);
 
 //        if(session.getCartValue()>0) {
 //            populateRecyclerView();
@@ -379,6 +367,9 @@ public class Cart extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            if (emptytext.getVisibility() == View.VISIBLE) {
+                emptytext.setVisibility(View.GONE);
+            }
             if(!colors.get(position).equals("notUse")){
                 holder.productName.setText(productNames.get(position));
                 holder.cost.setText("Cost: "+costs.get(position));

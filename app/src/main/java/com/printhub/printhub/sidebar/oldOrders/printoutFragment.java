@@ -45,6 +45,7 @@ public class printoutFragment extends Fragment {
     private DocumentSnapshot lastDocumentSnapshot;
     Boolean isScrolling = false;
     LottieAnimationView noData;
+    PrintAdapter myAdapter;
 
 
     @Override
@@ -73,7 +74,7 @@ public class printoutFragment extends Fragment {
 //                    if (tv_no_item.getVisibility() == View.VISIBLE) {
 //                        tv_no_item.setVisibility(View.GONE);
 //                    }
-//                    if(documentSnapshot.getString("userId").equals(firebaseUserId)){
+//                     if(documentSnapshot.getString("userId").equals(firebaseUserId)){
 //                        String fileName = documentSnapshot.getString("fileName");
 //                        String custom = documentSnapshot.getString("custom") ;
 //                        String status = documentSnapshot.getString("status");
@@ -103,7 +104,7 @@ public class printoutFragment extends Fragment {
         }
 
 
-        PrintAdapter myAdapter = new PrintAdapter(mRecyclerView, getContext(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(),new ArrayList<Date>());
+        myAdapter = new PrintAdapter(mRecyclerView, getContext(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(),new ArrayList<Date>());
         mRecyclerView.setAdapter(myAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -141,14 +142,13 @@ public class printoutFragment extends Fragment {
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
-                    noData.setVisibility(View.VISIBLE);
+                    if(myAdapter.getItemCount()==0) {
+                        noData.setVisibility(View.VISIBLE);
+                    }
                 }else {
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                         if (tv_no_item.getVisibility() == View.VISIBLE) {
                             tv_no_item.setVisibility(View.GONE);
-                        }
-                        if (noData.getVisibility() == View.VISIBLE) {
-                            noData.setVisibility(View.GONE);
                         }
                         lastDocumentSnapshot = documentSnapshot;
                         if (documentSnapshot.getString("userId").equals(firebaseUserId)) {
@@ -168,9 +168,6 @@ public class printoutFragment extends Fragment {
                         }
 
                         //quantity-copies,
-                    }
-                    if (noData.getVisibility() == View.VISIBLE) {
-                        noData.setVisibility(View.GONE);
                     }
                 }
 
@@ -236,6 +233,9 @@ public class printoutFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            if (noData.getVisibility() == View.VISIBLE) {
+                noData.setVisibility(View.GONE);
+            }
             holder.fileName.setText(fileNames.get(position));
             holder.quantity.setText("Copy: " + quantities.get(position));
             holder.status.setText("Status: "+ statuses.get(position));
