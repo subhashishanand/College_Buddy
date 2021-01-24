@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="4"
+    tools:context=".sidebar.oldOrders.replaceLapsed">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_weight="1"/>
+    <TextView
+        android:id="@+id/lapsed"
+        android:layout_width="344dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:text="Oops! It looks like you have reached the limit for replacing this product please try again"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_weight="1"
+        tools:layout_editor_absoluteX="189dp" />
+
+    <Button
+        android:id="@+id/orderBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lapsed"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+
+        android:layout_marginBottom="345dp"
+        android:text="Button" />
+
+</LinearLayout>
