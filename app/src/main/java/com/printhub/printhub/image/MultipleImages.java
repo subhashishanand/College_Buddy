@@ -608,7 +608,7 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
 
         new TapTargetSequence(this)
                 .targets(
-                        TapTarget.forView(findViewById(R.id.visitingcards), "Collab Projects", "Connect with Friends for Your Project!")
+                        TapTarget.forView(findViewById(R.id.pickImagesBtn), "Add Images", "Adding more image from folder")
                                 .targetCircleColor(R.color.colorAccent)
                                 .titleTextColor(R.color.colorAccent)
                                 .titleTextSize(25)
@@ -619,7 +619,7 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                                 .tintTarget(true)
                                 .transparentTarget(true)
                                 .outerCircleColor(R.color.first),
-                        TapTarget.forView(findViewById(R.id.clubActivityCard), "Club Activities", "This is gateway to all your club activities in one place")
+                        TapTarget.forView(findViewById(R.id.getTotalCost), "Total Cost", "To get total cost click on the button")
                                 .targetCircleColor(R.color.colorAccent)
                                 .titleTextColor(R.color.colorAccent)
                                 .titleTextSize(25)
@@ -630,18 +630,7 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                                 .tintTarget(true)
                                 .transparentTarget(true)
                                 .outerCircleColor(R.color.second),
-                        TapTarget.forView(findViewById(R.id.globalEvents), "Global Events", "This is chance to participate in some of the most popular events and internship across India")
-                                .targetCircleColor(R.color.colorAccent)
-                                .titleTextColor(R.color.colorAccent)
-                                .titleTextSize(25)
-                                .descriptionTextSize(15)
-                                .descriptionTextColor(R.color.colorAccent2)
-                                .drawShadow(true)
-                                .cancelable(true)// Whether tapping outside the outer circle dismisses the view
-                                .tintTarget(true)
-                                .transparentTarget(true)
-                                .outerCircleColor(R.color.third),
-                        TapTarget.forView(findViewById(R.id.globalEvents), "Web Services", "Quick access to most used applications")
+                        TapTarget.forView(findViewById(R.id.checkout), "Checkout button", "Printout document added to your cart")
                                 .targetCircleColor(R.color.colorAccent)
                                 .titleTextColor(R.color.colorAccent)
                                 .titleTextSize(25)
