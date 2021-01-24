@@ -236,7 +236,7 @@ public class stationaryFragment extends Fragment {
                             public boolean onMenuItemClick(MenuItem item) {
                                 switch(item.getItemId()){
                                     case R.id.item1:
-                                        callReplace(keys.get(position)) ;
+                                        callReplace(keys.get(position),replacecount) ;
                                         break;
                                     case R.id.item2:
                                         callReturn(keys.get(position));
@@ -281,10 +281,16 @@ public class stationaryFragment extends Fragment {
                 orderedDate = itemView.findViewById(R.id.orderDate);
             }
         }
-        private void callReplace(String uid){
-            Intent intent=new Intent(getContext(), ReplacementActivity.class);
-            intent.putExtra("uid",uid);
-            startActivity(intent);
+        private void callReplace(String uid,int replaceCount){
+            if(replaceCount<3){
+                Intent intent=new Intent(getContext(), ReplacementActivity.class);
+                intent.putExtra("uid",uid);
+                startActivity(intent);
+            }else{
+                Intent intent=new Intent(getContext(), replaceLapsed.class);
+                startActivity(intent);
+            }
+
         }
         private void callReturn(String uid){
             Intent intent =new Intent(getContext(), ReturnActivity.class);
