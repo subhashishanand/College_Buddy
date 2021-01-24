@@ -227,7 +227,7 @@ public class MainnewActivity extends AppCompatActivity {
         //Adding nav drawer items ------------------------------------------------------------------
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(1).withName(R.string.home).withIcon(R.drawable.home);
         PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.myprofile).withIcon(R.drawable.profile);
-        PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier(3).withName("Orders").withIcon(R.drawable.orders);
+        PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier(3).withName("Orders History").withIcon(R.drawable.orders);
         PrimaryDrawerItem item4 = new PrimaryDrawerItem().withIdentifier(4).withName(R.string.wishlist).withIcon(R.drawable.wishlist);
         PrimaryDrawerItem item5 = new PrimaryDrawerItem().withIdentifier(5).withName(R.string.cart).withIcon(R.drawable.cart);
         PrimaryDrawerItem item6 = new PrimaryDrawerItem().withIdentifier(6).withName(R.string.logout).withIcon(R.drawable.logout);
