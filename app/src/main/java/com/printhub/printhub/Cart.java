@@ -71,7 +71,7 @@ public class Cart extends AppCompatActivity {
         //check Internet Connection
         new CheckInternetConnection(this).checkConnection();
         progressDialog =new ProgressDialog(this);
-        progressDialog.setMessage("Please Wait");
+        progressDialog.setMessage("Please Wait...");
         progressDialog.setCancelable(false);
 
         //retrieve session values and display on listviews

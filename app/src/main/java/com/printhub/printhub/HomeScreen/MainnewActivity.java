@@ -155,39 +155,50 @@ public class MainnewActivity extends AppCompatActivity {
 
             new TapTargetSequence(this)
                     .targets(
-                            TapTarget.forView(findViewById(R.id.view_profile), "Profile", "You can view and edit your profile here !")
-                                    .targetCircleColor(R.color.colorAccent)
-                                    .titleTextColor(R.color.colorAccent)
-                                    .titleTextSize(25)
-                                    .descriptionTextSize(15)
-                                    .descriptionTextColor(R.color.colorAccent2)
-                                    .drawShadow(true)                   // Whether to draw a drop shadow or not
-                                    .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
-                                    .tintTarget(true)
-                                    .transparentTarget(true)
-                                    .outerCircleColor(R.color.third),
-                            TapTarget.forView(findViewById(R.id.cart), "Your Cart", "Here is Shortcut to your cart !")
-                                    .targetCircleColor(R.color.colorAccent)
-                                    .titleTextColor(R.color.colorAccent)
-                                    .titleTextSize(25)
-                                    .descriptionTextSize(15)
-                                    .descriptionTextColor(R.color.colorAccent2)
-                                    .drawShadow(true)
-                                    .cancelable(false)// Whether tapping outside the outer circle dismisses the view
-                                    .tintTarget(true)
-                                    .transparentTarget(true)
-                                    .outerCircleColor(R.color.second),
                             TapTarget.forView(findViewById(R.id.visitingcards), "Collab Projects", "Connect with Friends for Your Project!")
                                     .targetCircleColor(R.color.colorAccent)
                                     .titleTextColor(R.color.colorAccent)
                                     .titleTextSize(25)
                                     .descriptionTextSize(15)
                                     .descriptionTextColor(R.color.colorAccent2)
-                                    .drawShadow(true)
-                                    .cancelable(false)// Whether tapping outside the outer circle dismisses the view
+                                    .drawShadow(true)                   // Whether to draw a drop shadow or not
+                                    .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
                                     .tintTarget(true)
                                     .transparentTarget(true)
-                                    .outerCircleColor(R.color.fourth))
+                                    .outerCircleColor(R.color.first),
+                            TapTarget.forView(findViewById(R.id.clubActivityCard), "Club Activities", "This is gateway to all your club activities in one place")
+                                    .targetCircleColor(R.color.colorAccent)
+                                    .titleTextColor(R.color.colorAccent)
+                                    .titleTextSize(25)
+                                    .descriptionTextSize(15)
+                                    .descriptionTextColor(R.color.colorAccent2)
+                                    .drawShadow(true)
+                                    .cancelable(true)// Whether tapping outside the outer circle dismisses the view
+                                    .tintTarget(true)
+                                    .transparentTarget(true)
+                                    .outerCircleColor(R.color.second),
+                            TapTarget.forView(findViewById(R.id.globalEvents), "Global Events", "This is chance to participate in some of the most popular events and internship across India")
+                                    .targetCircleColor(R.color.colorAccent)
+                                    .titleTextColor(R.color.colorAccent)
+                                    .titleTextSize(25)
+                                    .descriptionTextSize(15)
+                                    .descriptionTextColor(R.color.colorAccent2)
+                                    .drawShadow(true)
+                                    .cancelable(true)// Whether tapping outside the outer circle dismisses the view
+                                    .tintTarget(true)
+                                    .transparentTarget(true)
+                                    .outerCircleColor(R.color.third),
+                            TapTarget.forView(findViewById(R.id.webServices), "Quick access to most used applications")
+                                    .targetCircleColor(R.color.colorAccent)
+                                    .titleTextColor(R.color.colorAccent)
+                                    .titleTextSize(25)
+                                    .descriptionTextSize(15)
+                                    .descriptionTextColor(R.color.colorAccent2)
+                                    .drawShadow(true)
+                                    .cancelable(true)// Whether tapping outside the outer circle dismisses the view
+                                    .tintTarget(true)
+                                    .transparentTarget(true)
+                                    .outerCircleColor(R.color.third))
                     .listener(new TapTargetSequence.Listener() {
                         // This listener will tell us when interesting(tm) events happen in regards
                         // to the sequence
@@ -208,7 +219,6 @@ public class MainnewActivity extends AppCompatActivity {
                     }).start();
 
     }
-
     private void inflateNavDrawer() {
 
         //set Custom toolbar to activity -----------------------------------------------------------
@@ -310,13 +320,13 @@ public class MainnewActivity extends AppCompatActivity {
                             case 10:
                                 startActivity(new Intent(MainnewActivity.this, HelpCenter.class));
                                 break;
-                            case 11:
+                            case 12:
                                 prefs.edit().putBoolean("firstrun", true).commit();
                                 //session.setFirstTimeLaunch(true);
                                 startActivity(new Intent(MainnewActivity.this, WelcomeActivity.class));
                                 finish();
                                 break;
-                            case 12:
+                            case 13:
                                 if (result != null && result.isDrawerOpen()) {
                                     result.closeDrawer();
                                 }

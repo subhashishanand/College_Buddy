@@ -133,10 +133,10 @@
 
 
                         <RelativeLayout
+                            android:id="@+id/clubActivityCard"
                             style="@style/homegridcard"
                             android:onClick="bagsActivity"
-                            android:background="@drawable/button_back"
-                            >
+                            android:background="@drawable/button_back">
 
                             <ImageView
                                 android:id="@+id/bags"
@@ -184,6 +184,7 @@
                         </RelativeLayout>
 
                         <RelativeLayout
+                            android:id="@+id/globalEvents"
                             style="@style/homegridcard"
                             android:onClick="eventActivity"
                             android:background="@drawable/button_back"
@@ -259,6 +260,7 @@
 
 
                     <RelativeLayout
+                        android:id="@+id/webServices"
                         style="@style/homegridcard"
                         android:onClick="QuickAcessAcitivity"
                         android:background="@drawable/button_back"

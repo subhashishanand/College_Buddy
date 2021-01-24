@@ -1,5 +1,6 @@
 package com.printhub.printhub;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -76,6 +77,7 @@ public class IndividualProduct extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private DocumentReference documentReference = db.collection(cityName).document(collegeName);
     TextView stockTextView;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +99,10 @@ public class IndividualProduct extends AppCompatActivity {
         cart_loader= findViewById(R.id.cart_loader);
         cartLayout=findViewById(R.id.cartlayout);
         scrollView =findViewById(R.id.scrollbar);
+
+        progressDialog =new ProgressDialog(this);
+        progressDialog.setMessage("Please Wait");
+        progressDialog.setCancelable(false);
 
 
 
@@ -193,8 +199,7 @@ public class IndividualProduct extends AppCompatActivity {
     }
 //
     public void addToCart(View view) {
-        cart_loader.setVisibility(View.VISIBLE);
-        cart_loader.playAnimation();
+        progressDialog.show();
         Map<String, Object> map = finalDocumentSnapshot.getData();
         map.put("quantity",quantity+"");
         map.put("cost",quantity*price+"");
@@ -204,8 +209,7 @@ public class IndividualProduct extends AppCompatActivity {
                 .collection("productCart").document(key).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                cart_loader.pauseAnimation();
-                cart_loader.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 Toasty.success(IndividualProduct.this, "Added to cart").show();
             }
         });
@@ -246,7 +250,7 @@ public class IndividualProduct extends AppCompatActivity {
 
                 }else{
                     Toasty.success(IndividualProduct.this, "Deleted from Wishlist").show();
-                    addToWishlist.setProgress(0);
+                    addToWishlist.setAnimation(0);
                     documentReference.collection("users").document(firebaseUserId)
                             .collection("Wishlist").document(key).delete();
                 }
@@ -258,8 +262,7 @@ public class IndividualProduct extends AppCompatActivity {
     }
 
     public void goToCart(View view) {
-        cart_loader.playAnimation();
-        cart_loader.setVisibility(View.VISIBLE);
+        progressDialog.show();
         Map<String, Object> map = finalDocumentSnapshot.getData();
         map.put("quantity",quantity+"");
         map.put("cost",quantity*price+"");
@@ -269,8 +272,7 @@ public class IndividualProduct extends AppCompatActivity {
                 .collection("productCart").document(key).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                cart_loader.setVisibility(View.GONE);
-                cart_loader.pauseAnimation();
+                progressDialog.show();
                 startActivity(new Intent(IndividualProduct.this, Cart.class));
                 finish();
             }

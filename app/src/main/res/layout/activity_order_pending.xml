@@ -50,6 +50,13 @@
                 android:textColor="#424242"
                 android:layout_margin="20dp"
                 android:text="@string/pending_payment"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your order Id is :"
+                android:textStyle="bold"/>
+
             <TextView
                 android:id="@+id/pendingOrderId"
                 android:layout_marginTop="10dp"

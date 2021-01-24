@@ -71,6 +71,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
     LottieAnimationView checkout_loader;
 
 
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     //This is the test commit
@@ -98,12 +99,6 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
         //check Internet Connection
         new CheckInternetConnection(this).checkConnection();
 
-        progressDialog = new ProgressDialog(OrderDetails.this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setTitle("Payment processing...");
-        progressDialog.setMessage("Payment processing...");
-        progressDialog.setProgress(0);
-        progressDialog.setCancelable(false);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -220,6 +215,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
                                             if (myAdapter.colors.size() == (finalI + 1)) {
                                                 Intent intent = new Intent(OrderDetails.this, OrderPlaced.class);
                                                 intent.putExtra("orderid", orderId);
+                                                progressDialog.dismiss();
                                                 startActivity(intent);
                                                 finish();
                                             }
@@ -229,6 +225,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
                                     if (myAdapter.colors.size() == (finalI + 1)) {
                                         Intent intent = new Intent(OrderDetails.this, OrderPendingActivity.class);
                                         intent.putExtra("orderid", orderId);
+                                        progressDialog.dismiss();
                                         startActivity(intent);
                                         finish();
                                     }
@@ -259,6 +256,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
                                             if (myAdapter.colors.size() == (finalI + 1)) {
                                                 Intent intent = new Intent(OrderDetails.this, OrderPlaced.class);
                                                 intent.putExtra("orderid", orderId);
+                                                progressDialog.dismiss();
                                                 startActivity(intent);
                                                 finish();
                                             }
@@ -268,6 +266,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
                                     if (myAdapter.colors.size() == (finalI + 1)) {
                                         Intent intent = new Intent(OrderDetails.this, OrderPendingActivity.class);
                                         intent.putExtra("orderid", orderId);
+                                        progressDialog.show();
                                         startActivity(intent);
                                         finish();
                                     }
@@ -378,12 +377,18 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
         String sat = bundle.getString("STATUS");
         if(sat.equals("TXN_SUCCESS")){
             status = "Order received";
+            progressDialog = new ProgressDialog(OrderDetails.this);
+            progressDialog.setMessage("Payment processing...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
             parentShifting();
-            Toasty.success(this, status, Toast.LENGTH_SHORT).show();
         }else if(sat.equals("PENDING")){
             status = "Payment pending";
+            progressDialog = new ProgressDialog(OrderDetails.this);
+            progressDialog.setMessage("Payment processing...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
             parentShifting();
-            Toasty.normal(this,"Payment Pending if money deducted, order status will change soon").show();
         }
         Log.e("abcdefg ", status);
     }
