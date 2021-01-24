@@ -142,35 +142,36 @@ public class printoutFragment extends Fragment {
                         tv_no_item.setVisibility(View.GONE);
                     }
                     noData.setVisibility(View.VISIBLE);
-                }
-                for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
-                    if (tv_no_item.getVisibility() == View.VISIBLE) {
-                        tv_no_item.setVisibility(View.GONE);
+                }else {
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        if (tv_no_item.getVisibility() == View.VISIBLE) {
+                            tv_no_item.setVisibility(View.GONE);
+                        }
+                        if (noData.getVisibility() == View.VISIBLE) {
+                            noData.setVisibility(View.GONE);
+                        }
+                        lastDocumentSnapshot = documentSnapshot;
+                        if (documentSnapshot.getString("userId").equals(firebaseUserId)) {
+                            String fileName = documentSnapshot.getString("fileName");
+                            String custom = documentSnapshot.getString("custom");
+                            String status = documentSnapshot.getString("status");
+                            String color = documentSnapshot.getString("color");
+                            String doubleSide = documentSnapshot.getString("doubleSided");
+                            String start = documentSnapshot.getString("startPageNo");
+                            String end = documentSnapshot.getString("endPageNo");
+                            String orderId = documentSnapshot.getString("orderId");
+                            String quantity = documentSnapshot.getString("copy");
+                            long milliseconds = documentSnapshot.getTimestamp("orderedTime").toDate().getTime();
+                            Date date = documentSnapshot.getTimestamp("orderedTime").toDate();
+                            ((PrintAdapter) mRecyclerView.getAdapter()).update(fileName, custom, status, color, doubleSide, start, end, orderId, quantity, date);
+
+                        }
+
+                        //quantity-copies,
                     }
                     if (noData.getVisibility() == View.VISIBLE) {
                         noData.setVisibility(View.GONE);
                     }
-                    lastDocumentSnapshot=documentSnapshot;
-                    if(documentSnapshot.getString("userId").equals(firebaseUserId)){
-                        String fileName = documentSnapshot.getString("fileName");
-                        String custom = documentSnapshot.getString("custom") ;
-                        String status = documentSnapshot.getString("status");
-                        String color = documentSnapshot.getString("color");
-                        String doubleSide = documentSnapshot.getString("doubleSided");
-                        String start = documentSnapshot.getString("startPageNo");
-                        String end = documentSnapshot.getString("endPageNo");
-                        String orderId = documentSnapshot.getString("orderId");
-                        String quantity = documentSnapshot.getString("copy");
-                        long milliseconds=documentSnapshot.getTimestamp("orderedTime").toDate().getTime();
-                        Date date= documentSnapshot.getTimestamp("orderedTime").toDate();
-                        ((PrintAdapter)mRecyclerView.getAdapter()).update(fileName,custom,status,color,doubleSide,start,end, orderId, quantity,date);
-
-                    }
-
-                    //quantity-copies,
-                }
-                if (noData.getVisibility() == View.VISIBLE) {
-                    noData.setVisibility(View.GONE);
                 }
 
              }

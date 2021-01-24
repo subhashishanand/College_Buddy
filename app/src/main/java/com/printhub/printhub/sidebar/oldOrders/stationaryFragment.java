@@ -117,35 +117,36 @@ public class stationaryFragment extends Fragment {
                         tv_no_item.setVisibility(View.GONE);
                     }
                     noData.setVisibility(View.VISIBLE);
-                }
-                for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
-                    lastDocumentSnapshot = documentSnapshot;
-                    if (tv_no_item.getVisibility() == View.VISIBLE) {
-                        tv_no_item.setVisibility(View.GONE);
+                }else {
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        lastDocumentSnapshot = documentSnapshot;
+                        if (tv_no_item.getVisibility() == View.VISIBLE) {
+                            tv_no_item.setVisibility(View.GONE);
+                        }
+                        if (noData.getVisibility() == View.VISIBLE) {
+                            noData.setVisibility(View.GONE);
+                        }
+                        if (documentSnapshot.getString("userId").equals(firebaseUserId)) {
+                            String productName = documentSnapshot.getString("productName");
+                            String quantity = documentSnapshot.getString("quantity");
+                            String status = documentSnapshot.getString("status");
+                            String price = documentSnapshot.getString("price");
+                            String mrp = documentSnapshot.getString("mrp");
+                            String discount = documentSnapshot.getString("discount");
+                            String productImage = documentSnapshot.getString("productImage");
+                            String orderId = documentSnapshot.getString("orderId");
+                            String couponSaving = documentSnapshot.getString("couponSaving");
+                            String replaceCount = documentSnapshot.getString("replaceCount");
+                            long milliseconds = documentSnapshot.getTimestamp("orderedTime").toDate().getTime();
+                            Date date = documentSnapshot.getTimestamp("orderedTime").toDate();
+                            String key = documentSnapshot.getId();
+                            ((OrderAdapter) mRecyclerView.getAdapter()).update(productName, quantity, status, price, mrp, discount, productImage, orderId, key, date, couponSaving, replaceCount);
+                        }
+                        if (noData.getVisibility() == View.VISIBLE) {
+                            noData.setVisibility(View.GONE);
+                        }
+                        //quantity-copies,
                     }
-                    if (noData.getVisibility() == View.VISIBLE) {
-                        noData.setVisibility(View.GONE);
-                    }
-                    if(documentSnapshot.getString("userId").equals(firebaseUserId)){
-                        String productName = documentSnapshot.getString("productName");
-                        String quantity = documentSnapshot.getString("quantity");
-                        String status = documentSnapshot.getString("status");
-                        String price = documentSnapshot.getString("price");
-                        String mrp = documentSnapshot.getString("mrp");
-                        String discount = documentSnapshot.getString("discount");
-                        String productImage = documentSnapshot.getString("productImage");
-                        String orderId = documentSnapshot.getString("orderId");
-                        String couponSaving =  documentSnapshot.getString("couponSaving");
-                        String replaceCount = documentSnapshot.getString("replaceCount");
-                        long milliseconds=documentSnapshot.getTimestamp("orderedTime").toDate().getTime();
-                         Date date= documentSnapshot.getTimestamp("orderedTime").toDate();
-                        String key=documentSnapshot.getId();
-                        ((OrderAdapter)mRecyclerView.getAdapter()).update(productName,quantity,status,price,mrp,discount,productImage, orderId, key,date,couponSaving,replaceCount);
-                    }
-                    if (noData.getVisibility() == View.VISIBLE) {
-                        noData.setVisibility(View.GONE);
-                    }
-                    //quantity-copies,
                 }
             }
         });
