@@ -106,13 +106,15 @@ public class Cart extends AppCompatActivity {
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
-                    emptytext.setVisibility(View.VISIBLE);
+                   emptytext.setVisibility(View.VISIBLE);
                 }else{
                     for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
                         if (tv_no_item.getVisibility() == View.VISIBLE) {
                             tv_no_item.setVisibility(View.GONE);
                         }
-                        emptytext.setVisibility(View.GONE);
+                        if (emptytext.getVisibility() == View.VISIBLE) {
+                            emptytext.setVisibility(View.GONE);
+                        }
                         String cartKey =documentSnapshot.getId();
                         String quantity =documentSnapshot.getString("quantity");
                         String cost =documentSnapshot.getString("cost");
@@ -129,7 +131,9 @@ public class Cart extends AppCompatActivity {
                             }
                         });
                     }
-                    emptytext.setVisibility(View.GONE);
+                    if (emptytext.getVisibility() == View.VISIBLE) {
+                        emptytext.setVisibility(View.GONE);
+                    }
                 }
 
 
@@ -146,13 +150,15 @@ public class Cart extends AppCompatActivity {
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
-                    emptytext.setVisibility(View.VISIBLE);
+                   emptytext.setVisibility(View.VISIBLE);
                 }
                 for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
-                    emptytext.setVisibility(View.GONE);
+                    if (emptytext.getVisibility() == View.VISIBLE) {
+                        emptytext.setVisibility(View.GONE);
+                    }
                     String fileName = documentSnapshot.getString("fileName");
                     String key = documentSnapshot.getId();
                     String color = documentSnapshot.getString("color");
@@ -164,6 +170,9 @@ public class Cart extends AppCompatActivity {
                     String cost = documentSnapshot.getString("cost");
                     totalcost = totalcost+Float.parseFloat(cost);
                     ((MyAdapter) mRecyclerView.getAdapter()).update(fileName,key,startingPageNo,endingPageNo,doubleSided,custom,copy,cost,color);
+                }
+                if (emptytext.getVisibility() == View.VISIBLE) {
+                    emptytext.setVisibility(View.GONE);
                 }
             }
         });

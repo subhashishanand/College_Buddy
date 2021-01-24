@@ -147,6 +147,9 @@ public class printoutFragment extends Fragment {
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
+                    if (noData.getVisibility() == View.VISIBLE) {
+                        noData.setVisibility(View.GONE);
+                    }
                     lastDocumentSnapshot=documentSnapshot;
                     if(documentSnapshot.getString("userId").equals(firebaseUserId)){
                         String fileName = documentSnapshot.getString("fileName");
@@ -166,7 +169,11 @@ public class printoutFragment extends Fragment {
 
                     //quantity-copies,
                 }
-            }
+                if (noData.getVisibility() == View.VISIBLE) {
+                    noData.setVisibility(View.GONE);
+                }
+
+             }
         });
     }
 

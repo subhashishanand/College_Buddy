@@ -123,6 +123,9 @@ public class stationaryFragment extends Fragment {
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
+                    if (noData.getVisibility() == View.VISIBLE) {
+                        noData.setVisibility(View.GONE);
+                    }
                     if(documentSnapshot.getString("userId").equals(firebaseUserId)){
                         String productName = documentSnapshot.getString("productName");
                         String quantity = documentSnapshot.getString("quantity");
@@ -139,7 +142,9 @@ public class stationaryFragment extends Fragment {
                         String key=documentSnapshot.getId();
                         ((OrderAdapter)mRecyclerView.getAdapter()).update(productName,quantity,status,price,mrp,discount,productImage, orderId, key,date,couponSaving,replaceCount);
                     }
-
+                    if (noData.getVisibility() == View.VISIBLE) {
+                        noData.setVisibility(View.GONE);
+                    }
                     //quantity-copies,
                 }
             }
