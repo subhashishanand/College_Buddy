@@ -57,6 +57,43 @@ public class printoutFragment extends Fragment {
         noData =  v.findViewById(R.id.no_data);
         //check Internet Connection
         new CheckInternetConnection(getContext()).checkConnection();
+
+
+//
+//        db.collection(cityName).document(collegeName).collection("printOrders").orderBy("orderedTime", Query.Direction.DESCENDING).get().addOnSuccessListener(getActivity(), new OnSuccessListener<QuerySnapshot>() {
+//            @Override
+//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                if(queryDocumentSnapshots.isEmpty()){
+//                    if (tv_no_item.getVisibility() == View.VISIBLE) {
+//                        tv_no_item.setVisibility(View.GONE);
+//                    }
+//                    noData.setVisibility(View.VISIBLE);
+//                }
+//                for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
+//                    if (tv_no_item.getVisibility() == View.VISIBLE) {
+//                        tv_no_item.setVisibility(View.GONE);
+//                    }
+//                    if(documentSnapshot.getString("userId").equals(firebaseUserId)){
+//                        String fileName = documentSnapshot.getString("fileName");
+//                        String custom = documentSnapshot.getString("custom") ;
+//                        String status = documentSnapshot.getString("status");
+//                        String color = documentSnapshot.getString("color");
+//                        String doubleSide = documentSnapshot.getString("doubleSided");
+//                        String start = documentSnapshot.getString("startPageNo");
+//                        String end = documentSnapshot.getString("endPageNo");
+//                        String orderId = documentSnapshot.getString("orderId");
+//                        String quantity = documentSnapshot.getString("copy");
+//                        long milliseconds=documentSnapshot.getTimestamp("orderedTime").toDate().getTime();
+//                        Date date= documentSnapshot.getTimestamp("orderedTime").toDate();
+//                        ((PrintAdapter)mRecyclerView.getAdapter()).update(fileName,custom,status,color,doubleSide,start,end, orderId, quantity,date);
+//                        //quantity-copies,
+//
+//                    }
+//
+//                }
+//            }
+//        });
+        LoadData();
         manager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(manager);
 
@@ -65,40 +102,6 @@ public class printoutFragment extends Fragment {
             mRecyclerView.setHasFixedSize(true);
         }
 
-
-        db.collection(cityName).document(collegeName).collection("printOrders").orderBy("orderedTime", Query.Direction.DESCENDING).get().addOnSuccessListener(getActivity(), new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if(queryDocumentSnapshots.isEmpty()){
-                    if (tv_no_item.getVisibility() == View.VISIBLE) {
-                        tv_no_item.setVisibility(View.GONE);
-                    }
-                    noData.setVisibility(View.VISIBLE);
-                }
-                for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
-                    if (tv_no_item.getVisibility() == View.VISIBLE) {
-                        tv_no_item.setVisibility(View.GONE);
-                    }
-                    if(documentSnapshot.getString("userId").equals(firebaseUserId)){
-                        String fileName = documentSnapshot.getString("fileName");
-                        String custom = documentSnapshot.getString("custom") ;
-                        String status = documentSnapshot.getString("status");
-                        String color = documentSnapshot.getString("color");
-                        String doubleSide = documentSnapshot.getString("doubleSided");
-                        String start = documentSnapshot.getString("startPageNo");
-                        String end = documentSnapshot.getString("endPageNo");
-                        String orderId = documentSnapshot.getString("orderId");
-                        String quantity = documentSnapshot.getString("copy");
-                        long milliseconds=documentSnapshot.getTimestamp("orderedTime").toDate().getTime();
-                        Date date= documentSnapshot.getTimestamp("orderedTime").toDate();
-                        ((PrintAdapter)mRecyclerView.getAdapter()).update(fileName,custom,status,color,doubleSide,start,end, orderId, quantity,date);
-                        //quantity-copies,
-
-                    }
-
-                }
-            }
-        });
 
         PrintAdapter myAdapter = new PrintAdapter(mRecyclerView, getContext(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(),new ArrayList<Date>());
         mRecyclerView.setAdapter(myAdapter);
@@ -134,7 +137,7 @@ public class printoutFragment extends Fragment {
         query.get().addOnSuccessListener(getActivity(), new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if(queryDocumentSnapshots.isEmpty()){
+                if(lastDocumentSnapshot==null){
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
@@ -144,6 +147,7 @@ public class printoutFragment extends Fragment {
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
+                    lastDocumentSnapshot=documentSnapshot;
                     if(documentSnapshot.getString("userId").equals(firebaseUserId)){
                         String fileName = documentSnapshot.getString("fileName");
                         String custom = documentSnapshot.getString("custom") ;
