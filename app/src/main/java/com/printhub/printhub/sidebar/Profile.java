@@ -13,11 +13,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.printhub.printhub.Cart;
 import com.printhub.printhub.CheckInternetConnection;
+import com.printhub.printhub.HomeScreen.MainnewActivity;
 import com.printhub.printhub.registration.DetailActivity;
 
 import com.printhub.printhub.R;
 import com.printhub.printhub.registration.eventInterestActivity;
 import com.printhub.printhub.registration.interestActivity;
+import com.printhub.printhub.sidebar.oldOrders.OrdersActivity;
 import com.squareup.picasso.Picasso;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,7 +35,7 @@ public class Profile extends AppCompatActivity {
 
     private TextView name, mobileNo, detail,rollnumber;
     private ImageView updateDetails;
-    private LinearLayout addressview,eventInterest;
+    private LinearLayout addressview,eventInterest,orderSection;
     CircleImageView userImage;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -73,6 +75,7 @@ public class Profile extends AppCompatActivity {
         userImage = findViewById(R.id.userPic);
         rollnumber = findViewById(R.id.rollNumberTextview);
         eventInterest = findViewById(R.id.eventInterest);
+        orderSection =findViewById(R.id.orderSection);
 
         eventInterest.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,6 +98,13 @@ public class Profile extends AppCompatActivity {
             public void onClick(View view) {
 
                startActivity(new Intent(Profile.this, interestActivity.class));
+            }
+        });
+
+        orderSection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Profile.this, OrdersActivity.class));
             }
         });
     }

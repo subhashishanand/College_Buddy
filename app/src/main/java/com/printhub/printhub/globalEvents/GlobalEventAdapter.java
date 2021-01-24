@@ -11,10 +11,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.allyants.notifyme.NotifyMe;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -28,6 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.printhub.printhub.R;
+import com.printhub.printhub.WebServices.WebViewActivity;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -42,6 +45,7 @@ import es.dmoral.toasty.Toasty;
 
 import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
 import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
+import static com.printhub.printhub.HomeScreen.MainnewActivity.firebaseUserId;
 
 public class GlobalEventAdapter extends RecyclerView.Adapter<GlobalEventAdapter.ViewHolder> {
     List<GlobalEventClass> blog_list;
@@ -62,13 +66,14 @@ public class GlobalEventAdapter extends RecyclerView.Adapter<GlobalEventAdapter.
 
     @Override
     public GlobalEventAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.club_events_cardlayout,parent,false);
+        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.club_event_cardlayout,parent,false);
         db= FirebaseFirestore.getInstance();
         return new GlobalEventAdapter.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull GlobalEventAdapter.ViewHolder holder, int position) {
+        holder.location.setVisibility(View.VISIBLE);
         GlobalEventClass globalEventsClass=blog_list.get(position);
         String postkey =  globalEventsClass.getEventid();
         String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -76,11 +81,23 @@ public class GlobalEventAdapter extends RecyclerView.Adapter<GlobalEventAdapter.
         holder.setName(globalEventsClass.getName());
         holder.setTime(globalEventsClass.getActivityTime());
         holder.setDate(globalEventsClass.getActivityDate());
-        Picasso.with(context).load(blog_list.get(position).getImageUrl()).into(holder.EventPost);
+        Picasso.with(context).load(blog_list.get(position).getImageUrl()).placeholder(R.drawable.collegebuddy).into(holder.EventPost);
         holder.setName(globalEventsClass.getName());
+        holder.location.setText(globalEventsClass.getLocaton());
+        holder.eventName.setText(globalEventsClass.getEventTitle());
         if(null!=globalEventsClass.getLink() &&!globalEventsClass.getLink().isEmpty()){
             holder.linkTextView.setVisibility(View.VISIBLE);
             holder.setLink(globalEventsClass.getLink());
+            holder.linkTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(context,"Redirecting you to link",Toast.LENGTH_SHORT).show();
+                    String link =  globalEventsClass.getLink();
+                    Intent i = new Intent(context, WebViewActivity.class);
+                    i.putExtra("Link",link );
+                    context.startActivity(i);
+                }
+            });
         }
 
         //countlike
@@ -135,10 +152,10 @@ public class GlobalEventAdapter extends RecyclerView.Adapter<GlobalEventAdapter.
                             });
                             Map<String,Object> likemap = new HashMap<>();
                             likemap.put("timestamp", FieldValue.serverTimestamp());
-                            db.collection(cityName).document(collegeName).collection("globalEvent").document(postkey).collection("Likes").document(userid).set(likemap);
+                            db.collection("globalEvent").document(postkey).collection("Likes").document(userid).set(likemap);
                         }else{
                             db.collection(cityName).document(collegeName).collection("users").document(userid).collection("eventinterest").document(postkey).delete();
-                            db.collection(cityName).document(collegeName).collection("globalEvent").document(postkey).collection("Likes").document(userid).delete();
+                            db.collection("globalEvent").document(postkey).collection("Likes").document(userid).delete();
                         }
 
                     }
@@ -153,6 +170,7 @@ public class GlobalEventAdapter extends RecyclerView.Adapter<GlobalEventAdapter.
         holder.reminderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                holder.reminderButton.playAnimation();
                 Calendar calendar=Calendar.getInstance();
                 SimpleDateFormat simpleDateFormat= new SimpleDateFormat("dd/MM/yyyy hh:mm aa");
                 try {
@@ -176,6 +194,7 @@ public class GlobalEventAdapter extends RecyclerView.Adapter<GlobalEventAdapter.
                         .large_icon(R.mipmap.ic_launcher_round)
                         .rrule("FREQ=MINUTELY;INTERVAL=10;COUNT=2")
                         .build();
+                holder.reminderButton.pauseAnimation();
                 Toasty.success(context,"We will remind you", Toasty.LENGTH_SHORT).show();
             }
         });
@@ -193,10 +212,10 @@ public class GlobalEventAdapter extends RecyclerView.Adapter<GlobalEventAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private View mView;
-        private MultiAutoCompleteTextView descView;
-        private TextView timeTextView, dateTextView,linkTextView,text_action;
+        private TextView descView;
+        private TextView timeTextView, dateTextView,linkTextView,text_action,location,eventName;
         ImageView EventPost,interest;
-        private Button reminderButton;
+        private LottieAnimationView reminderButton;
         private TextView blogDate,authorName;
         public ViewHolder(@NonNull  View itemView) {
 
@@ -207,6 +226,8 @@ public class GlobalEventAdapter extends RecyclerView.Adapter<GlobalEventAdapter.
             interest= mView.findViewById(R.id.saveClubEvent);
             text_action= mView.findViewById(R.id.text_action);
             linkTextView= mView.findViewById(R.id.linkTextView);
+            location = mView.findViewById(R.id.location);
+            eventName= mView.findViewById(R.id.eventName);
             //descView=mView.findViewById(R.id.blog_desc);
         }
 
@@ -217,12 +238,12 @@ public class GlobalEventAdapter extends RecyclerView.Adapter<GlobalEventAdapter.
 
         public void setDate(String date){
             dateTextView=mView.findViewById(R.id.clubEventDate);
-            dateTextView.setText(date);
+            dateTextView.setText("Date: "+date);
         }
 
         public void setTime(String time){
             timeTextView=mView.findViewById(R.id.clubEventTime);
-            timeTextView.setText(time);
+            timeTextView.setText("Time: "+time);
         }
 
         public void setDescText(String descText){
@@ -231,12 +252,12 @@ public class GlobalEventAdapter extends RecyclerView.Adapter<GlobalEventAdapter.
         }
         public void setPostingTime(String date){
             blogDate=mView.findViewById(R.id.blogdate);
-            blogDate.setText("posted date:"+date);
+            blogDate.setText("posted on:"+date);
         }
 
         public void setName(String name){
             authorName=mView.findViewById(R.id.authorName);
-            authorName.setText(name);
+            authorName.setText("Organiser Name: "+name);
         }
     }
 }

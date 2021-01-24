@@ -2,6 +2,7 @@ package com.printhub.printhub.globalEvents;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -53,6 +54,12 @@ public class GlobalActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.my_recycler_view);
         tv_no_item = findViewById(R.id.tv_no_cards);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         if (mRecyclerView != null) {
             //to enable optimization of recyclerview
             mRecyclerView.setHasFixedSize(true);
@@ -91,9 +98,9 @@ public class GlobalActivity extends AppCompatActivity {
 
     private void loadData(){
         if (lastDocumentSnapshot == null) {
-            query = firebaseFirestore.collection("globalEvent").orderBy("timestamp", Query.Direction.DESCENDING).limit(5);
+            query = firebaseFirestore.collection("globalEvent").orderBy("timestamp", Query.Direction.DESCENDING).limit(10);
         } else {
-            query = firebaseFirestore.collection("globalEvent").orderBy("timestamp", Query.Direction.DESCENDING).startAfter(lastDocumentSnapshot).limit(5);
+            query = firebaseFirestore.collection("globalEvent").orderBy("timestamp", Query.Direction.DESCENDING).startAfter(lastDocumentSnapshot).limit(10);
         }
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -118,5 +125,21 @@ public class GlobalActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }
