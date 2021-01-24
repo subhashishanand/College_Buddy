@@ -96,7 +96,12 @@ public class eventInterestActivity extends AppCompatActivity {
 
 
     private void loadData(){
-        query = firebaseFirestore.collection(cityName).document(collegeName).collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("eventinterest").orderBy("timestamp", Query.Direction.DESCENDING);
+        if (lastDocumentSnapshot == null) {
+            query = firebaseFirestore.collection(cityName).document(collegeName).collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("eventinterest").orderBy("timestamp", Query.Direction.DESCENDING).limit(10);
+        }else{
+            query = firebaseFirestore.collection(cityName).document(collegeName).collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("eventinterest").orderBy("timestamp", Query.Direction.DESCENDING).startAfter(lastDocumentSnapshot).limit(10);
+        }
+
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -106,19 +111,19 @@ public class eventInterestActivity extends AppCompatActivity {
                     }
                 }
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                    if (tv_no_item.getVisibility() == View.VISIBLE) {
-                        tv_no_item.setVisibility(View.GONE);
-                    }
+//                    if (tv_no_item.getVisibility() == View.VISIBLE) {
+//                        tv_no_item.setVisibility(View.GONE);
+//                    }
                     lastDocumentSnapshot = documentSnapshot;
                     String key =documentSnapshot.getId();
-                    if (tv_no_item.getVisibility() == View.VISIBLE) {
-                        tv_no_item.setVisibility(View.GONE);
-                    }
                     if(null!=key && !key.isEmpty()){
                         firebaseFirestore.collection(cityName).document(collegeName).collection("clubActivity").document(key).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 if(task.getResult().exists()){
+                                    if (tv_no_item.getVisibility() == View.VISIBLE) {
+                                        tv_no_item.setVisibility(View.GONE);
+                                    }
                                     EventsClass cc=task.getResult().toObject(EventsClass.class);
                                     ((mEventsAdapter)recyclerView.getAdapter()).update(cc);
                                 }

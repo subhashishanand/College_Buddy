@@ -58,7 +58,7 @@ public class AboutusActivity extends AppCompatActivity {
     }
 
     public void addDotIndicator(){
-        dots = new TextView[7];
+        dots = new TextView[5];
         for (int i=0; i<dots.length; i++){
             dots[i] = new TextView(this);
             dots[i].setText(Html.fromHtml("&#8266;"));
@@ -70,7 +70,7 @@ public class AboutusActivity extends AppCompatActivity {
     }
 
     private void addBottomDots(int currentPage) {
-        dots = new TextView[7];
+        dots = new TextView[5];
         dotsLayout.removeAllViews();
         for (int i = 0; i < dots.length; i++) {
             dots[i] = new TextView(this);

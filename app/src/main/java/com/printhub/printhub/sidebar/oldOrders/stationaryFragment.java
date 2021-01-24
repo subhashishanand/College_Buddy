@@ -116,17 +116,17 @@ public class stationaryFragment extends Fragment {
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
-                    noData.setVisibility(View.VISIBLE);
+                   noData.setVisibility(View.VISIBLE);
                 }else {
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                         lastDocumentSnapshot = documentSnapshot;
                         if (tv_no_item.getVisibility() == View.VISIBLE) {
                             tv_no_item.setVisibility(View.GONE);
                         }
-                        if (noData.getVisibility() == View.VISIBLE) {
-                            noData.setVisibility(View.GONE);
-                        }
                         if (documentSnapshot.getString("userId").equals(firebaseUserId)) {
+                            if (noData.getVisibility() == View.VISIBLE) {
+                                noData.setVisibility(View.GONE);
+                            }
                             String productName = documentSnapshot.getString("productName");
                             String quantity = documentSnapshot.getString("quantity");
                             String status = documentSnapshot.getString("status");
@@ -142,11 +142,12 @@ public class stationaryFragment extends Fragment {
                             String key = documentSnapshot.getId();
                             ((OrderAdapter) mRecyclerView.getAdapter()).update(productName, quantity, status, price, mrp, discount, productImage, orderId, key, date, couponSaving, replaceCount);
                         }
-                        if (noData.getVisibility() == View.VISIBLE) {
-                            noData.setVisibility(View.GONE);
-                        }
                         //quantity-copies,
                     }
+                    if (noData.getVisibility() == View.VISIBLE) {
+                        noData.setVisibility(View.GONE);
+                    }
+
                 }
             }
         });
@@ -212,6 +213,9 @@ public class stationaryFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            if (noData.getVisibility() == View.VISIBLE) {
+                noData.setVisibility(View.GONE);
+            }
             holder.productName.setText(productNames.get(position));
             holder.quantity.setText("Quantity: " + quantities.get(position));
             holder.status.setText("Status: "+ statuses.get(position));

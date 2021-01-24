@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="4"
+    android:gravity="center"
     tools:context=".sidebar.oldOrders.replaceLapsed">
     <View
         android:layout_width="match_parent"
@@ -16,9 +17,11 @@
         android:layout_width="344dp"
         android:layout_gravity="center_horizontal"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="Oops! It looks like you have reached the limit for replacing this product please try again"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_weight="1"
+        android:textSize="20sp"
         tools:layout_editor_absoluteX="189dp" />
 
     <Button
@@ -29,7 +32,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-
+        android:background="@drawable/rounded_button"
         android:layout_marginBottom="345dp"
         android:text="Button" />
 

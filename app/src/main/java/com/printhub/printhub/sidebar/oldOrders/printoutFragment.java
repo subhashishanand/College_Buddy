@@ -45,7 +45,6 @@ public class printoutFragment extends Fragment {
     private DocumentSnapshot lastDocumentSnapshot;
     Boolean isScrolling = false;
     LottieAnimationView noData;
-    PrintAdapter myAdapter;
 
 
     @Override
@@ -74,7 +73,7 @@ public class printoutFragment extends Fragment {
 //                    if (tv_no_item.getVisibility() == View.VISIBLE) {
 //                        tv_no_item.setVisibility(View.GONE);
 //                    }
-//                     if(documentSnapshot.getString("userId").equals(firebaseUserId)){
+//                    if(documentSnapshot.getString("userId").equals(firebaseUserId)){
 //                        String fileName = documentSnapshot.getString("fileName");
 //                        String custom = documentSnapshot.getString("custom") ;
 //                        String status = documentSnapshot.getString("status");
@@ -104,7 +103,7 @@ public class printoutFragment extends Fragment {
         }
 
 
-        myAdapter = new PrintAdapter(mRecyclerView, getContext(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(),new ArrayList<Date>());
+        PrintAdapter myAdapter = new PrintAdapter(mRecyclerView, getContext(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(),new ArrayList<Date>());
         mRecyclerView.setAdapter(myAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -142,33 +141,37 @@ public class printoutFragment extends Fragment {
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
-                    if(myAdapter.getItemCount()==0) {
-                        noData.setVisibility(View.VISIBLE);
-                    }
-                }else {
-                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        if (tv_no_item.getVisibility() == View.VISIBLE) {
-                            tv_no_item.setVisibility(View.GONE);
-                        }
-                        lastDocumentSnapshot = documentSnapshot;
-                        if (documentSnapshot.getString("userId").equals(firebaseUserId)) {
-                            String fileName = documentSnapshot.getString("fileName");
-                            String custom = documentSnapshot.getString("custom");
-                            String status = documentSnapshot.getString("status");
-                            String color = documentSnapshot.getString("color");
-                            String doubleSide = documentSnapshot.getString("doubleSided");
-                            String start = documentSnapshot.getString("startPageNo");
-                            String end = documentSnapshot.getString("endPageNo");
-                            String orderId = documentSnapshot.getString("orderId");
-                            String quantity = documentSnapshot.getString("copy");
-                            long milliseconds = documentSnapshot.getTimestamp("orderedTime").toDate().getTime();
-                            Date date = documentSnapshot.getTimestamp("orderedTime").toDate();
-                            ((PrintAdapter) mRecyclerView.getAdapter()).update(fileName, custom, status, color, doubleSide, start, end, orderId, quantity, date);
+                    noData.setVisibility(View.VISIBLE);
+                }
 
-                        }
-
-                        //quantity-copies,
+                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    if (tv_no_item.getVisibility() == View.VISIBLE) {
+                        tv_no_item.setVisibility(View.GONE);
                     }
+                    lastDocumentSnapshot = documentSnapshot;
+                    if (documentSnapshot.getString("userId").equals(firebaseUserId)) {
+                        if (noData.getVisibility() == View.VISIBLE) {
+                            noData.setVisibility(View.GONE);
+                        }
+                        String fileName = documentSnapshot.getString("fileName");
+                        String custom = documentSnapshot.getString("custom");
+                        String status = documentSnapshot.getString("status");
+                        String color = documentSnapshot.getString("color");
+                        String doubleSide = documentSnapshot.getString("doubleSided");
+                        String start = documentSnapshot.getString("startPageNo");
+                        String end = documentSnapshot.getString("endPageNo");
+                        String orderId = documentSnapshot.getString("orderId");
+                        String quantity = documentSnapshot.getString("copy");
+                        long milliseconds = documentSnapshot.getTimestamp("orderedTime").toDate().getTime();
+                        Date date = documentSnapshot.getTimestamp("orderedTime").toDate();
+                        ((PrintAdapter) mRecyclerView.getAdapter()).update(fileName, custom, status, color, doubleSide, start, end, orderId, quantity, date);
+
+                    }
+
+                    //quantity-copies,
+                }
+                if (noData.getVisibility() == View.VISIBLE) {
+                    noData.setVisibility(View.GONE);
                 }
 
              }
