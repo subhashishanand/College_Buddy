@@ -25,19 +25,32 @@
                 android:text="Image prints"/>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
+    <ScrollView
+        android:id="@+id/scrollbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingTop="8dp"
+        android:paddingRight="5dp"
+        android:scrollbars="none">
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="vertical">
     <View
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="10dp"
         android:outlineAmbientShadowColor="@color/black"
         android:padding="5dp" />
     <ImageSwitcher
         android:id="@+id/imageIs"
         android:layout_width="match_parent"
-
         android:layout_height="400dp"/>
     <View
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="5dp"
+        android:background="@color/colorPrimaryDark"
         android:padding="5dp" />
     <LinearLayout
         android:layout_width="match_parent"
@@ -96,28 +109,34 @@
 
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:weightSum="5"
             android:orientation="horizontal">
             <View
-                android:layout_width="30dp"
+                android:layout_width="5dp"
                 android:layout_height="match_parent"
-                android:padding="5dp" />
+                android:padding="5dp"
+                android:layout_weight="1"/>
             <Switch
                 android:id="@+id/color_photo"
                 android:layout_width="wrap_content"
                 android:layout_height="44dp"
                 android:padding="10dp"
-                android:text="Color   "
+                android:layout_weight="1"
+                android:text="Color"
                 android:textOff="No"
                 android:textOn="Yes" />
             <View
                 android:layout_width="10dp"
                 android:layout_height="match_parent"
-                android:padding="5dp" />
+                android:padding="5dp"
+                android:layout_weight="1"/>
             <Switch
                 android:id="@+id/poster"
+                android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
@@ -127,21 +146,50 @@
             <View
                 android:layout_width="10dp"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:padding="5dp" />
-            <EditText
-                android:layout_width="wrap_content"
-                android:id="@+id/editCopies"
-                android:layout_height="40dp"
-                android:hint="New Copies"
-                android:inputType="number"/>
+<!--            <EditText-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:id="@+id/editCopies"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:hint="New Copies"-->
+<!--                android:inputType="number"/>-->
         </LinearLayout>
 
     </LinearLayout>
-    <Spinner
-        android:id="@+id/custom"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="6">
+        <View
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"/>
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="40dp"
+           android:textSize="19dp"
+           android:textStyle="bold"
+           android:text="No of Copies"></TextView>
+        <EditText
+           android:layout_width="wrap_content"
+           android:id="@+id/editCopies"
+           android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+           android:hint="New Copies"
+           android:inputType="number"/>
+        <View
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"/>
+       <Spinner
+        android:id="@+id/custom" android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:autofillHints="Print" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/pickImagesBtn"
         android:text="Pick Images"
@@ -186,13 +234,19 @@
             android:text="0"
             android:textSize="25dp"
             />
+
     </LinearLayout>
+       <Button
+           android:id="@+id/checkout"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_gravity="bottom"
+           style="@style/Widget.AppCompat.Button.Colored"
+           android:text="CheckOut" />
 
-    <Button
-        android:id="@+id/checkout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="CheckOut" />
 
+   </LinearLayout>
+
+   </ScrollView>
 
 </LinearLayout>

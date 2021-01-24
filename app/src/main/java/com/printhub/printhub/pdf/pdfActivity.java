@@ -71,7 +71,7 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
     Spinner custom;
     String customString;
     String[] perPage;
-
+    private Boolean isRepeating;
     FirebaseStorage storage;         //used for uploading files .. Ex: pdf
     FirebaseDatabase database;
 
@@ -378,6 +378,7 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
                                     colorPrint ="No";
                                     doubleSided = "No";
                                     Toasty.success(pdfActivity.this,"File added to your cart").show();
+                                    startActivity(new Intent(pdfActivity.this,Cart.class));
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
