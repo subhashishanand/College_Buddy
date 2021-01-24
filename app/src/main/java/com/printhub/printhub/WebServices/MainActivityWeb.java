@@ -8,9 +8,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.printhub.printhub.CheckInternetConnection;
+import com.printhub.printhub.HomeScreen.MainnewActivity;
 import com.printhub.printhub.R;
+
+import es.dmoral.toasty.Toasty;
 
 public class MainActivityWeb extends AppCompatActivity {
     private ImageView zomato,dominos,ola,redbus,udemy,twitter;
@@ -117,5 +123,41 @@ public class MainActivityWeb extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    private void tapview() {
+
+        new TapTargetSequence(this)
+                .targets(
+                        TapTarget.forView(findViewById(R.id.zomato), "Web Service", "Just click on the baner and enjoy the services")
+                                .targetCircleColor(R.color.colorAccent)
+                                .titleTextColor(R.color.colorAccent)
+                                .titleTextSize(25)
+                                .descriptionTextSize(15)
+                                .descriptionTextColor(R.color.colorAccent2)
+                                .drawShadow(true)                   // Whether to draw a drop shadow or not
+                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
+                                .tintTarget(true)
+                                .transparentTarget(true)
+                                .outerCircleColor(R.color.first))
+                .listener(new TapTargetSequence.Listener() {
+                    // This listener will tell us when interesting(tm) events happen in regards
+                    // to the sequence
+                    @Override
+                    public void onSequenceFinish() {
+                        Toasty.success(MainActivityWeb.this, " You are ready to go !", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+
+                    }
+
+                    @Override
+                    public void onSequenceCanceled(TapTarget lastTarget) {
+                        // Boo
+                    }
+                }).start();
+
     }
 }

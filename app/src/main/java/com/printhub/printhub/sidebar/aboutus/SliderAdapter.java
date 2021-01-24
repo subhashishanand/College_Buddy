@@ -26,34 +26,27 @@ public class SliderAdapter extends PagerAdapter {
     //Arrays
     public int[] slide_images = {
             R.drawable.circle_logo,
-            R.drawable.group_b,
-            R.drawable.subhu,
-            R.drawable.group_b,
-            R.drawable.group_b,
-            R.drawable.group_b,
-            R.drawable.group_b,
-            R.drawable.group_b
+            R.drawable.circle_logo,
+            R.drawable.circle_logo,
+            R.drawable.circle_logo,
+            R.drawable.circle_logo,
 
     };
 
     public String[] slide_headings = {
-            "PRINT HUB",
-            "Prashant Yadav",
-            "Subhashish Anand",
-            "Vaibhav Singh",
-            "Rahul Raj",
-            "Vaibhav Deep",
-            "Subham Priyadarshi"
+            "College Buddy",
+            "What we do",
+            "Our Inspiration",
+            "Our Vision",
+            "Team Description",
     };
 
     public String[] slide_descs= {
-            "Set to false to disable downscaling the image to fit into the content aread.",
-        "Set to false to disable downscaling the image to fit into the content aread.",
-        "Set to false to disable downscaling the image to fit into the content aread.",
-            "Set to false to disable downscaling the image to fit into the content aread.",
-            "Set to false to disable downscaling the image to fit into the content aread.",
-            "Set to false to disable downscaling the image to fit into the content aread.",
-            "Set to false to disable downscaling the image to fit into the content aread."
+            "One stop solution for all your college needs, you name it we got it. We are an Ed-Tech oriented productivity app where students can collaborate together for solving problems. Get access to events happening in their campus and across the globe, and can save their time by getting their requirements delivered at their doorstep. ",
+            "The array of features the we are proving right now are Collab, Club Activity, Global Events, Bunk Manager, Purchase Stationery, Get Printouts and access to most used applications like Zomato, Uber, twitter and a lot more " ,
+            "We love to have time to chill with friends, getting social, exploring creative projects, learning with friends and most importantly we don't want to bore ourselves with repetitive tasks so we created college buddy. We will do all those tasks you hate and make your life a little simpler and a lot more fun!",
+            "Our goal is to cater every need of college students so that they can focus on what matters the most and achieve their true potential",
+            "We are just a bunch of students who took it upon themselves to improve College experience for everyone. Our team consist of Prahant, Vaibhav, Subhashish, Rahul and one more Vaibhav ;). We are driven towards our vision and will not stop until we make you college life better and more fun!",
     };
 
     @Override
