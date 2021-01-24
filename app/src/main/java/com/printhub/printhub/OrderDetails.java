@@ -209,18 +209,24 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
                         map.put("uid",uid);
                         map.put("couponSaving",productSaving+"");
                         map.put("replaceCount",0+"");
-                        db.collection(cityName).document(collegeName).collection("productOrders").document(uid).set(map);
-                        db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId).collection("productCart")
-                                .document(myAdapter.keys.get(finalI)).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        db.collection(cityName).document(collegeName).collection("productOrders").document(uid).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
-                            public void onSuccess(Void aVoid) {
-                                if (myAdapter.colors.size() == (finalI + 1)) {
-                                    if(status.equals("Order received")) {
-                                        Intent intent = new Intent(OrderDetails.this, OrderPlaced.class);
-                                        intent.putExtra("orderid", orderId);
-                                        startActivity(intent);
-                                        finish();
-                                    }else{
+                            public void onSuccess(Void unused) {
+                                if(status.equals("Order received")) {
+                                    db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId).collection("productCart")
+                                            .document(myAdapter.keys.get(finalI)).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            if (myAdapter.colors.size() == (finalI + 1)) {
+                                                Intent intent = new Intent(OrderDetails.this, OrderPlaced.class);
+                                                intent.putExtra("orderid", orderId);
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                        }
+                                    });
+                                }else {
+                                    if (myAdapter.colors.size() == (finalI + 1)) {
                                         Intent intent = new Intent(OrderDetails.this, OrderPendingActivity.class);
                                         intent.putExtra("orderid", orderId);
                                         startActivity(intent);
@@ -242,18 +248,24 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
                         map.put("orderId", orderId);
                         map.put("status", status);
                         map.put("uid",uid);
-                        db.collection(cityName).document(collegeName).collection("printOrders").document(uid).set(map);
-                        db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId).collection("printCart")
-                                .document(myAdapter.keys.get(finalI)).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        db.collection(cityName).document(collegeName).collection("printOrders").document(uid).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
-                            public void onSuccess(Void aVoid) {
-                                if (myAdapter.colors.size() == (finalI + 1)) {
-                                    if(status.equals("Order received")) {
-                                        Intent intent = new Intent(OrderDetails.this, OrderPlaced.class);
-                                        intent.putExtra("orderid", orderId);
-                                        startActivity(intent);
-                                        finish();
-                                    }else{
+                            public void onSuccess(Void unused) {
+                                if(status.equals("Order received")) {
+                                    db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId).collection("printCart")
+                                            .document(myAdapter.keys.get(finalI)).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            if (myAdapter.colors.size() == (finalI + 1)) {
+                                                Intent intent = new Intent(OrderDetails.this, OrderPlaced.class);
+                                                intent.putExtra("orderid", orderId);
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                        }
+                                    });
+                                }else {
+                                    if (myAdapter.colors.size() == (finalI + 1)) {
                                         Intent intent = new Intent(OrderDetails.this, OrderPendingActivity.class);
                                         intent.putExtra("orderid", orderId);
                                         startActivity(intent);
@@ -370,6 +382,7 @@ public class OrderDetails extends AppCompatActivity implements PaytmPaymentTrans
             Toasty.success(this, status, Toast.LENGTH_SHORT).show();
         }else if(sat.equals("PENDING")){
             status = "Payment pending";
+            parentShifting();
             Toasty.normal(this,"Payment Pending if money deducted, order status will change soon").show();
         }
         Log.e("abcdefg ", status);

@@ -91,5 +91,5 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
-
+    <string name="pending_payment">Unfortunately your order did not get through but if your payment is deducted please be patient we will update your status soon. You can check it in past orders section. If you have any query please feel free to contact us.</string>
 </resources>

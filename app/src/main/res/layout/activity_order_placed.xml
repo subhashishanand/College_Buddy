@@ -37,7 +37,8 @@
                 app:lottie_fileName="orderplaced.json"
                 android:layout_height="250dp"
                 android:foregroundGravity="center"
-                app:lottie_autoPlay="true"/>
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"/>
 
             <TextView
                 android:layout_marginTop="10dp"
