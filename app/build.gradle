@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.firebase-perf'
@@ -46,7 +48,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:17.1.2'
     implementation 'com.google.firebase:firebase-messaging:21.0.0'
     implementation 'com.google.firebase:firebase-analytics:18.0.0'
-    implementation 'com.google.firebase:firebase-perf:19.0.5'
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     implementation 'com.google.android.material:material:1.1.0'
@@ -112,11 +113,18 @@ dependencies {
 
     //Notify Me
     implementation 'com.github.jakebonk:NotifyMe:1.0.1'
+    implementation "androidx.core:core-ktx:+"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //CrashAnalytics
     implementation platform('com.google.firebase:firebase-bom:26.3.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-crashlytics'
+}
+apply plugin: 'com.google.gms.google-services'
+repositories {
+    mavenCentral()
 }
 
 

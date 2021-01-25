@@ -33,6 +33,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -253,13 +255,15 @@ public class DetailActivity extends AppCompatActivity implements AdapterView.OnI
         Map<String, Object> collegeInfo = new HashMap<>();
         collegeInfo.put("cityName", cityName);
         collegeInfo.put("collegeName", collegeName);
-        FirebaseAuth.getInstance().getAccessToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+
+        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(new OnSuccessListener<String>() {
             @Override
-            public void onSuccess(GetTokenResult getTokenResult) {
-                token =getTokenResult.getToken();
-            }
-        });
-                db.collection("users").document(userId).set(collegeInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+            public void onSuccess(String s) {
+                token=s;
+
+
+
+        db.collection("users").document(userId).set(collegeInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 user user1=new user(name ,rollNumber,mobileNumber,collegeName,hostelName,cityName,token,url);
@@ -282,6 +286,9 @@ public class DetailActivity extends AppCompatActivity implements AdapterView.OnI
                         Toasty.error(getApplicationContext(), "Failed!! Check connection and please try again").show();
                     }
                 });
+            }
+        });
+
             }
         });
 

@@ -22,11 +22,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.mikepenz.crossfadedrawerlayout.view.CrossfadeDrawerLayout;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -85,6 +87,7 @@ public class MainnewActivity extends AppCompatActivity {
     public static String firebaseUserId=null,cityName= null, collegeName= null;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     SharedPreferences detail = null,cityNameSharedPref,collegeNameSharedPref,userIdSharedPref;
+
     DatabaseReference mref;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -117,7 +120,7 @@ public class MainnewActivity extends AppCompatActivity {
         prefs = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
 
 
-        
+
 //
         //retrieve session values and display on listviews
 //        //getValues();
