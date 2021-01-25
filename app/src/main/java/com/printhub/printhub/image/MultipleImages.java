@@ -487,17 +487,23 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
     void sumTotal() {
         sum=0;
         for (int i = 0; i < noOfCopies.size(); i++) {
+            String noPages[]=config.get(i).split(" ");
+            int pagesTemp=noOfCopies.get(i)/Integer.parseInt(noPages[0]);
+            int rem = (noOfCopies.get(i))%Integer.parseInt(noPages[0]);
+            if(rem!=0) {
+                pagesTemp++;
+            }
             if(colorPrint.get(i) && posterPrint.get(i)){
-                eachCost.set(i,noOfCopies.get(i)*colorPosterRate);
+                eachCost.set(i,(pagesTemp*colorPosterRate));
                 sum+=eachCost.get(i);
             }else if(colorPrint.get(i)){
-                eachCost.set(i,noOfCopies.get(i)*colorRate);
+                eachCost.set(i,pagesTemp*colorRate);
                 sum+=eachCost.get(i);
             }else if(posterPrint.get(i)){
-                eachCost.set(i,noOfCopies.get(i)*blackPosterRate);
+                eachCost.set(i,pagesTemp*blackPosterRate);
                 sum+=eachCost.get(i);
             }else{
-                eachCost.set(i,noOfCopies.get(i)*singleSidedPrice);
+                eachCost.set(i,pagesTemp*singleSidedPrice);
                 sum+=eachCost.get(i);
             }
         }
