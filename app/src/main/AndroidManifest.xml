@@ -149,9 +149,6 @@
             android:name=".registration.DetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".image.ImageActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".pdf.pdfActivity"
             android:screenOrientation="portrait" />
         <activity
