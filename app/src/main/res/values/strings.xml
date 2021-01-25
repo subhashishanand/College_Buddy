@@ -90,6 +90,12 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="payment_ins">*Please Wait Patiently and do not press Back Button While We are Processing Your Payment.It may take a While.</string>
+
+
+    <string name="event_empty">Looks like you have not added in your interest section yet. You can add a club Activity here that you are interested in, so as to have easy acess later.</string>
+    <string name="collab_empty">Looks like you have not added in your interest section yet. You can add a collab Activity here that you are interested in, so as to have easy acess later.</string>
+
 
     <string name="pending_payment">Unfortunately your order did not get through but if your payment is deducted please be patient we will update your status soon. You can check it in past orders section. If you have any query please feel free to contact us.</string>
 </resources>

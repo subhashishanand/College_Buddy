@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,8 +42,9 @@ public class interestActivity extends AppCompatActivity {
     private DocumentSnapshot lastDocumentSnapshot=null;
     private collabAdapter collabAdapter;
     Query query;
-    private LottieAnimationView tv_no_item;
-
+    private LottieAnimationView tv_no_item,emptyBox;
+    TextView empty_text;
+    FrameLayout frameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,9 @@ public class interestActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         recyclerView = findViewById(R.id.collabview);
         tv_no_item = findViewById(R.id.tv_no_cards);
+        empty_text=findViewById(R.id.empty_text);
+        emptyBox= findViewById(R.id.emptyBox);
+        frameLayout = findViewById(R.id.framelayout);
         manager=new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(manager);
         collabAdapter= new collabAdapter(new ArrayList<>(), interestActivity.this, recyclerView);
@@ -112,6 +118,9 @@ public class interestActivity extends AppCompatActivity {
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                     lastDocumentSnapshot = documentSnapshot;
                     String key =documentSnapshot.getId();
+                    if (tv_no_item.getVisibility() == View.VISIBLE) {
+                        tv_no_item.setVisibility(View.GONE);
+                    }
 
                     if(null!=key && !key.isEmpty()){
                         firebaseFirestore.collection(cityName).document(collegeName).collection("collab").document(key).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -120,6 +129,13 @@ public class interestActivity extends AppCompatActivity {
                                 if(task.getResult().exists()){
                                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                                         tv_no_item.setVisibility(View.GONE);
+                                    }
+                                    if(frameLayout.getVisibility()==View.GONE){
+                                        frameLayout.setVisibility(View.VISIBLE);
+                                    }
+                                    if(emptyBox.getVisibility()==View.VISIBLE){
+                                        emptyBox.setVisibility(View.GONE);
+                                        empty_text.setVisibility(View.GONE);
                                     }
                                     collabClass cc=task.getResult().toObject(collabClass.class);
                                     ((collabAdapter)recyclerView.getAdapter()).update(cc);

@@ -167,6 +167,7 @@
 
                         <RelativeLayout
                             style="@style/homegridcard"
+                            android:id="@+id/bunkmanager"
                             android:onClick="calendarsActivity"
                             android:background="@drawable/button_back"
                             >

@@ -22,16 +22,43 @@
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@id/emptyBox"
+        android:layout_width="300dp"
+        app:lottie_fileName="empty_list.json"
+        android:layout_height="300dp"
+        app:lottie_loop="true"
+        android:layout_below="@id/toolbarwrap"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        app:lottie_autoPlay="true"/>
+
+    <TextView
+        android:id="@+id/empty_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_below="@id/emptyBox"
+        android:gravity="center"
+        android:layout_margin="20dp"
+        android:text="@string/collab_empty"/>
+
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbarwrap">
+        android:layout_below="@+id/toolbarwrap"
+        android:visibility="gone"
+        android:id="@+id/framelayout">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/collabview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical" />
     </FrameLayout>
+
+
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/tv_no_cards"
@@ -41,17 +68,9 @@
         app:lottie_loop="true"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:background="@color/white"
         app:lottie_autoPlay="true"/>
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/emptyBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:lottie_loop="true"
-        app:lottie_autoPlay="true"
-        app:lottie_fileName="empty_list.json"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+
 
 </RelativeLayout>

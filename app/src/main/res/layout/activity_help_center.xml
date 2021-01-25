@@ -56,17 +56,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_margin="8dp"
                 android:weightSum="4">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Email Id"/>
+                    android:textSize="17sp"
+                    android:text="Email Id: "/>
                 <TextView
                     android:id="@+id/email"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
+                    android:textSize="17sp"
                     android:text="collegebuddy.connect@gmail.com"/>
 
                 <View
@@ -78,18 +81,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:weightSum="4">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:textSize="17sp"
+                    android:gravity="center"
                     android:text="Instagram" />
                 <TextView
                     android:id="@+id/insta"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
+                    android:textSize="17sp"
+                    android:gravity="center"
                     android:text="college_buddy_india"/>
 
                 <View
@@ -101,17 +112,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
                 android:weightSum="4">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textSize="17sp"
+                    android:gravity="center"
                     android:text="Contact "/>
                 <TextView
                     android:id="@+id/contact"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
+                    android:gravity="center"
+                    android:textSize="17sp"
                     android:text="6200690081"/>
 
                 <View
@@ -123,17 +141,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
                 android:weightSum="4">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textSize="17sp"
+                    android:gravity="center"
                     android:text="Contact"/>
                 <TextView
                     android:id="@+id/contactAlt"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
+                    android:textSize="17sp"
+                    android:gravity="center"
+
                     android:text="8219730474"/>
 
                 <View
@@ -145,17 +171,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
                 android:weightSum="4">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textSize="17sp"
+                    android:gravity="center"
+
                     android:text="Contact"/>
                 <TextView
                     android:id="@+id/contactAlt2"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:textSize="17sp"
                     android:layout_weight="2"
+                    android:gravity="center"
+
                     android:text="7979757341"/>
 
                 <View
@@ -167,17 +202,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
                 android:weightSum="4">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="center"
+
+                    android:textSize="17sp"
                     android:text="Contact"/>
                 <TextView
                     android:id="@+id/contactAlt3"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
+                    android:textSize="17sp"
+                    android:gravity="center"
                     android:text="9149356913"/>
 
                 <View

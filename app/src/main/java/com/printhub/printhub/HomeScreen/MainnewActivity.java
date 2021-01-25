@@ -188,7 +188,7 @@ public class MainnewActivity extends AppCompatActivity {
                                     .tintTarget(true)
                                     .transparentTarget(true)
                                     .outerCircleColor(R.color.third),
-                            TapTarget.forView(findViewById(R.id.webServices), "Quick access to most used applications")
+                            TapTarget.forView(findViewById(R.id.bunkmanager),"Bunk Manager" ,"Manage Your Attendance")
                                     .targetCircleColor(R.color.colorAccent)
                                     .titleTextColor(R.color.colorAccent)
                                     .titleTextSize(25)

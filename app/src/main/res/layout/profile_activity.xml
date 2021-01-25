@@ -19,7 +19,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/edit"
-                android:layout_marginTop="165dp"
+                android:layout_marginTop="175dp"
                 android:layout_marginRight="63dp"
                 android:layout_gravity="end"/>
 

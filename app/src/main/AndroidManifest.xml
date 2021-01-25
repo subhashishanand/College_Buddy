@@ -86,20 +86,16 @@
         <!-- android:theme="@style/WhiteTheme" /> -->
         <activity
             android:name=".prodcutscategory.Bags"
-            android:screenOrientation="portrait"
-            android:theme="@style/WhiteTheme" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".prodcutscategory.Keychains"
-            android:screenOrientation="portrait"
-            android:theme="@style/WhiteTheme" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".prodcutscategory.Stationary"
-            android:screenOrientation="portrait"
-            android:theme="@style/WhiteTheme" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".prodcutscategory.StationaryCategory"
-            android:screenOrientation="portrait"
-            android:theme="@style/WhiteTheme" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".HomeScreen.MainnewActivity"
             android:screenOrientation="portrait" />

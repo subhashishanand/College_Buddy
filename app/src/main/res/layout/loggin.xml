@@ -21,7 +21,7 @@
                 style="@style/FirebaseUI.Button.AccountChooser.PhoneButton"
                 android:text="@string/fui_sign_in_with_phone"
                 tools:ignore="UnusedIds"
-                android:background="#5EF5AD"
+                android:background="#E1921C"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_centerHorizontal="true" />
@@ -35,7 +35,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_centerHorizontal="true"
-                android:background="#5EF5AD"
+                android:background="#E1921C"
                 tools:ignore="UnusedIds" />
 
 

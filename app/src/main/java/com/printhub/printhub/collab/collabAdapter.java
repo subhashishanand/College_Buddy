@@ -163,6 +163,7 @@ public class collabAdapter extends RecyclerView.Adapter<collabAdapter.ViewHolder
             holder.github.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Toast.makeText(context,"Redirecting you to Github",Toast.LENGTH_SHORT).show();
                     String link=collab_list.get(position).getGithubId();
                     Intent intent = new Intent(context, WebViewActivity.class);
                     intent.putExtra("Link", link);
@@ -178,6 +179,7 @@ public class collabAdapter extends RecyclerView.Adapter<collabAdapter.ViewHolder
             holder.whatsapp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Toast.makeText(context,"Redirecting you to WhatsApp",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(context, WebViewActivity.class);
                     intent.putExtra("Link", whatsapplink);
                     context.startActivity(intent);
@@ -192,6 +194,7 @@ public class collabAdapter extends RecyclerView.Adapter<collabAdapter.ViewHolder
                 holder.call.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Toast.makeText(context,"Redirecting you to Call",Toast.LENGTH_SHORT).show();
                         if(ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
                             ActivityCompat.requestPermissions((Activity) context,new String[]{Manifest.permission.CALL_PHONE},9);
                         }else{

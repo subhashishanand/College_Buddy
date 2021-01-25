@@ -41,10 +41,16 @@ public class HelpCenter extends AppCompatActivity {
         email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getApplicationContext(), WebViewActivity.class);
                 Toast.makeText(getApplicationContext(), "Forwarding you to our email", Toast.LENGTH_SHORT).show();
-                intent.putExtra("Link","collegebuddy.connect@gmail.com");
-                startActivity(intent);
+
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("plain/text");
+                intent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[] {"collegebuddy.connect@gmail.com"});
+                intent.putExtra(android.content.Intent.EXTRA_SUBJECT,"Let's Connect");
+                intent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+                startActivity(Intent.createChooser(intent,"Send"));
+
+                /* Send it off to the Activity-Chooser */
             }
         });
 

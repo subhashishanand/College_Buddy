@@ -224,7 +224,7 @@ public class stationaryFragment extends Fragment {
             holder.mrp.setText(mrps.get(position));
             holder.discount.setText(discounts.get(position)+"% off");
             holder.orderNo.setText(orderIds.get(position));
-            Picasso.with(context).load(productImages.get(position)).into(holder.productImage);
+            Picasso.with(context).load(productImages.get(position)).placeholder(R.drawable.drawerback).into(holder.productImage);
             Calendar cal = Calendar.getInstance();
             Date today=cal.getTime();
             cal.setTime(returnDate.get(position));
@@ -292,7 +292,7 @@ public class stationaryFragment extends Fragment {
             }
         }
         private void callReplace(String uid,int replaceCount){
-            if(replaceCount<3){
+            if(replaceCount<2){
                 Intent intent=new Intent(getContext(), ReplacementActivity.class);
                 intent.putExtra("uid",uid);
                 startActivity(intent);

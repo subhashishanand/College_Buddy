@@ -161,7 +161,7 @@
                 android:layout_height="match_parent"
                 android:textSize="15sp"
                 android:padding="3dp"
-                android:maxLength="15"
+                android:maxLength="16"
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:layout_weight="1"/>

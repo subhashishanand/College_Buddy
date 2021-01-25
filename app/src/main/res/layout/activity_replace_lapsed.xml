@@ -5,22 +5,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="4"
-    android:gravity="center"
     tools:context=".sidebar.oldOrders.replaceLapsed">
-    <View
+
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbarwrap"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:layout_weight="1"/>
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:titleTextColor="#000"
+            style="@style/CustomTheme"
+            android:background="@color/colorAccent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="Orders"/>
+
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/emptyBox"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="empty_list.json"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="30dp"
+        android:foregroundGravity="center"/>
     <TextView
         android:id="@+id/lapsed"
-        android:layout_width="344dp"
+        android:layout_width="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Oops! It looks like you have reached the limit for replacing this product please try again"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_weight="1"
+        android:layout_margin="20dp"
         android:textSize="20sp"
         tools:layout_editor_absoluteX="189dp" />
 
@@ -30,10 +61,23 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/lapsed"
         android:layout_gravity="center_horizontal"
+        android:background="@drawable/rounded_button"
+        android:padding="10dp"
+        android:textColor="@color/white"
+        android:text="Go back to Your Orders" />
+
+    <Button
+        android:id="@+id/homeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/orderBtn"
+        android:layout_gravity="center_horizontal"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginTop="25dp"
         android:background="@drawable/rounded_button"
-        android:layout_marginBottom="345dp"
-        android:text="Button" />
+        android:padding="10dp"
+        android:textColor="@color/white"
+        android:text="Go back to Home" />
 
 </LinearLayout>
