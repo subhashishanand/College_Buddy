@@ -13,6 +13,7 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -35,6 +36,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
@@ -42,6 +45,7 @@ import com.github.barteksc.pdfviewer.listener.OnPageErrorListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -51,7 +55,11 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.itextpdf.text.pdf.PdfReader;
 import com.printhub.printhub.Cart;
+
+import com.printhub.printhub.HomeScreen.MainnewActivity;
 import com.printhub.printhub.R;
+import com.printhub.printhub.collab.collabActivity;
+import com.printhub.printhub.image.MultipleImages;
 import com.shockwave.pdfium.PdfDocument;
 
 import java.io.IOException;
@@ -60,15 +68,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
-import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
-import static com.printhub.printhub.HomeScreen.MainnewActivity.firebaseUserId;
 
 public class pdfActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener , OnPageChangeListener, OnLoadCompleteListener,
         OnPageErrorListener {
 
     TextView notification,noOfPages,cost;
     Switch switch1,color;
+
+    String collegeName, cityName;
+    SharedPreferences cityNameSharedPref,collegeNameSharedPref;
 
     private double costValue=2;
     Spinner custom;
@@ -79,6 +87,8 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
     FirebaseDatabase database;
     LockableScrollView parentScroll;
     LinearLayout lowerLinearLayout;
+    FirebaseAuth firebaseAuth= FirebaseAuth.getInstance();
+    String firebaseUid;
 
     ProgressDialog progressDialog;
 
@@ -138,6 +148,12 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         custom.setAdapter(adapter);
         custom.setOnItemSelectedListener(this);
+        firebaseUid=firebaseAuth.getUid();
+
+        collegeNameSharedPref = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
+        cityNameSharedPref = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
+        collegeName=collegeNameSharedPref.getString("collegeName","");
+        cityName = cityNameSharedPref.getString("cityName", "");
 
          storage=FirebaseStorage.getInstance();             //Return an object of firebase storage
         database=FirebaseDatabase.getInstance();           //Return an object of firebase database
@@ -381,7 +397,7 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             String type = "."+ getFileExtension(pdfUri);  //type
                             Map<String, Object> pdfDescription = new HashMap<>();
-                            pdfDescription.put("userId", firebaseUserId);
+                            pdfDescription.put("userId", firebaseUid);
                             pdfDescription.put("doubleSided", doubleSided);
                             pdfDescription.put("customString", customString);
                             pdfDescription.put("color", colorPrint);
@@ -392,7 +408,7 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
                             pdfDescription.put("copy", copies+"");
                             pdfDescription.put("type",type);
                             pdfDescription.put("retriveName", fileName1);
-                            db.collection(cityName).document(collegeName).collection("users").document(firebaseUserId)
+                            db.collection(cityName).document(collegeName).collection("users").document(firebaseUid)
                                     .collection("printCart").document(fileName1).set(pdfDescription).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -618,8 +634,82 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
 
     }
 
+    private void tapview() {
+
+        new TapTargetSequence(this)
+                .targets(
+                        TapTarget.forView(findViewById(R.id.tour), "Scroll Pdf", "Use the Scrollbar on the right side to navigate through the pdf")
+                                .targetCircleColor(R.color.colorAccent)
+                                .titleTextColor(R.color.colorAccent)
+                                .titleTextSize(25)
+                                .descriptionTextSize(15)
+                                .descriptionTextColor(R.color.colorAccent2)
+                                .drawShadow(true)                   // Whether to draw a drop shadow or not
+                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
+                                .tintTarget(true)
+                                .transparentTarget(true)
+                                .outerCircleColor(R.color.first),
+                        TapTarget.forView(findViewById(R.id.printFrom), "Print Detail", "Select the part of the pdf that you want to print")
+                                .targetCircleColor(R.color.colorAccent)
+                                .titleTextColor(R.color.colorAccent)
+                                .titleTextSize(25)
+                                .descriptionTextSize(15)
+                                .descriptionTextColor(R.color.colorAccent2)
+                                .drawShadow(true)
+                                .cancelable(true)// Whether tapping outside the outer circle dismisses the view
+                                .tintTarget(true)
+                                .transparentTarget(true)
+                                .outerCircleColor(R.color.second),
+                        TapTarget.forView(findViewById(R.id.noOfPrint), "No of Copies", "Enter the number of copies")
+                                .targetCircleColor(R.color.colorAccent)
+                                .titleTextColor(R.color.colorAccent)
+                                .titleTextSize(25)
+                                .descriptionTextSize(15)
+                                .descriptionTextColor(R.color.colorAccent2)
+                                .drawShadow(true)
+                                .cancelable(true)// Whether tapping outside the outer circle dismisses the view
+                                .tintTarget(true)
+                                .transparentTarget(true)
+                                .outerCircleColor(R.color.third))
+                .listener(new TapTargetSequence.Listener() {
+                    // This listener will tell us when interesting(tm) events happen in regards
+                    // to the sequence
+                    @Override
+                    public void onSequenceFinish() {
+                        Toasty.success(pdfActivity.this, " You are ready to go !", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+
+                    }
+
+                    @Override
+                    public void onSequenceCanceled(TapTarget lastTarget) {
+                        // Boo
+                    }
+                }).start();
+
+    }
+
+
     @Override
     public void onPageError(int page, Throwable t) {
 
     }
+
+    public void viewtour(View view){
+        tapview();
+    }
+
+    public void homeclick(View view){
+        startActivity(new Intent(pdfActivity.this, MainnewActivity.class));
+        finish();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
 }

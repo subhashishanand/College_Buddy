@@ -191,7 +191,7 @@ public class MainnewActivity extends AppCompatActivity {
                                     .tintTarget(true)
                                     .transparentTarget(true)
                                     .outerCircleColor(R.color.third),
-                            TapTarget.forView(findViewById(R.id.bunkmanager),"Bunk Manager" ,"Manage Your Attendance")
+                            TapTarget.forView(findViewById(R.id.printcard),"Printouts" ,"Click here to get the Printout of Images and pdfs that you need on daily basis.")
                                     .targetCircleColor(R.color.colorAccent)
                                     .titleTextColor(R.color.colorAccent)
                                     .titleTextSize(25)
@@ -249,8 +249,8 @@ public class MainnewActivity extends AppCompatActivity {
         SecondaryDrawerItem item8 = new SecondaryDrawerItem().withIdentifier(10).withName(R.string.feedback).withIcon(R.drawable.feedback);
         SecondaryDrawerItem item9 = new SecondaryDrawerItem().withIdentifier(11).withName(R.string.helpcentre).withIcon(R.drawable.helpccenter);
 
-        SecondaryDrawerItem item10 = new SecondaryDrawerItem().withIdentifier(13).withName("App Tour").withIcon(R.drawable.tour);
-        SecondaryDrawerItem item11 = new SecondaryDrawerItem().withIdentifier(14).withName("Explore").withIcon(R.drawable.explore);
+        SecondaryDrawerItem item10 = new SecondaryDrawerItem().withIdentifier(13).withName("App Tour").withIcon(R.drawable.explore);
+        SecondaryDrawerItem item11 = new SecondaryDrawerItem().withIdentifier(14).withName("Explore").withIcon(R.drawable.tour);
 
 
         //creating navbar and adding to the toolbar ------------------------------------------------
@@ -261,7 +261,6 @@ public class MainnewActivity extends AppCompatActivity {
                 .withDrawerLayout(R.layout.crossfade_drawer)
                 .withAccountHeader(headerResult)
                 .withDrawerWidthDp(72)
-                .withGenerateMiniDrawer(true)
                 .withTranslucentStatusBar(true)
                 .withActionBarDrawerToggleAnimated(true)
                 .addDrawerItems(
@@ -315,7 +314,7 @@ public class MainnewActivity extends AppCompatActivity {
                                 break;
                             case 9:
                                 new EasyFeedback.Builder(MainnewActivity.this)
-                                        .withEmail("vaibhavkumar1000@gmail.com")
+                                        .withEmail("collegebuddy.connect@gmail.com")
                                         .withSystemInfo()
                                         .build()
                                         .start();

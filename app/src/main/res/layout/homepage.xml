@@ -8,6 +8,27 @@
     android:fitsSystemWindows="true"
     android:background="@drawable/bunk_manager_back">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="right"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content">
+
+
+
+        <ImageView
+            android:id="@+id/tour"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/tour"
+            android:elevation="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="20dp"
+            android:onClick="viewtour"/>
+
+    </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/scrollableview"

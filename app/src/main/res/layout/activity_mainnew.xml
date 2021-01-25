@@ -212,6 +212,7 @@
 
 
                     <RelativeLayout
+                        android:id="@+id/printcard"
                         style="@style/homegridcard"
                         android:onClick="tshirtActivity"
                         android:background="@drawable/button_back"

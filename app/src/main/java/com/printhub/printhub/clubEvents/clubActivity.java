@@ -33,6 +33,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.printhub.printhub.Cart;
 import com.printhub.printhub.CheckInternetConnection;
+import com.printhub.printhub.HomeScreen.MainnewActivity;
 import com.printhub.printhub.R;
 import com.printhub.printhub.collab.collabActivity;
 
@@ -178,6 +179,15 @@ public class clubActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void viewtour(View view){
+        tapview();
+    }
+
+    public void homeclick(View view){
+        startActivity(new Intent(clubActivity.this, MainnewActivity.class));
+        finish();
     }
 
     @Override

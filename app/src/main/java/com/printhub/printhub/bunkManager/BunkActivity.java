@@ -13,11 +13,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.printhub.printhub.HomeScreen.MainnewActivity;
 import com.printhub.printhub.R;
+import com.printhub.printhub.WebServices.MainActivityWeb;
 
 import java.util.ArrayList;
+
+import es.dmoral.toasty.Toasty;
 
 public class BunkActivity extends AppCompatActivity {
 
@@ -131,5 +136,48 @@ public class BunkActivity extends AppCompatActivity {
         startActivity(intent);
         super.onBackPressed();
     }
+
+
+    private void tapview() {
+
+        new TapTargetSequence(this)
+                .targets(
+                        TapTarget.forView(findViewById(R.id.fab), "Manage Attendance", "Click here to add the Subject detail and long press the Subject Card to Modify the attendance.")
+                                .targetCircleColor(R.color.colorAccent)
+                                .titleTextColor(R.color.colorAccent)
+                                .titleTextSize(25)
+                                .descriptionTextSize(15)
+                                .descriptionTextColor(R.color.colorAccent2)
+                                .drawShadow(true)                   // Whether to draw a drop shadow or not
+                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
+                                .tintTarget(true)
+                                .transparentTarget(true)
+                                .outerCircleColor(R.color.first))
+                .listener(new TapTargetSequence.Listener() {
+                    // This listener will tell us when interesting(tm) events happen in regards
+                    // to the sequence
+                    @Override
+                    public void onSequenceFinish() {
+                        Toasty.success(BunkActivity.this, " You are ready to go !", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+
+                    }
+
+                    @Override
+                    public void onSequenceCanceled(TapTarget lastTarget) {
+                        // Boo
+                    }
+                }).start();
+
+    }
+
+
+    public void viewtour(View view){
+        tapview();
+    }
+
 
 }

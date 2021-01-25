@@ -32,6 +32,7 @@ import com.printhub.printhub.clubEvents.mEventsAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
 
 import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
@@ -170,6 +171,15 @@ public class collabActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void viewtour(View view){
+        tapview();
+    }
+
+    public void homeclick(View view){
+        startActivity(new Intent(collabActivity.this,MainnewActivity.class));
+        finish();
     }
 
     @Override

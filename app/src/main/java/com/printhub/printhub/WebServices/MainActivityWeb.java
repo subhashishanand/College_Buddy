@@ -15,6 +15,7 @@ import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.printhub.printhub.CheckInternetConnection;
 import com.printhub.printhub.HomeScreen.MainnewActivity;
 import com.printhub.printhub.R;
+import com.printhub.printhub.collab.collabActivity;
 
 import es.dmoral.toasty.Toasty;
 
@@ -160,4 +161,15 @@ public class MainActivityWeb extends AppCompatActivity {
                 }).start();
 
     }
+
+
+    public void viewtour(View view){
+        tapview();
+    }
+
+    public void homeclick(View view){
+        startActivity(new Intent(MainActivityWeb.this,MainnewActivity.class));
+        finish();
+    }
+
 }

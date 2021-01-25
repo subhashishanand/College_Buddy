@@ -4,6 +4,7 @@ package com.printhub.printhub.image;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -54,6 +55,7 @@ import com.google.firebase.storage.UploadTask;
 import com.printhub.printhub.Cart;
 import com.printhub.printhub.HomeScreen.MainnewActivity;
 import com.printhub.printhub.R;
+import com.printhub.printhub.collab.collabActivity;
 import com.printhub.printhub.pdf.pdfActivity;
 
 import java.util.ArrayList;
@@ -107,6 +109,11 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiple_images);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         imageIs=findViewById(R.id.imageIs);
         previousBtn=findViewById(R.id.previousBtn);
         nextBtn=findViewById(R.id.nextBtn);
@@ -119,6 +126,7 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
         custom=findViewById(R.id.custom);
         getTotalCost=findViewById(R.id.getTotalCost);
         deleteImages=findViewById(R.id.deleteImages);
+
 
         collegeNameSharedPref = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
         cityNameSharedPref = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
@@ -701,4 +709,24 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                 }).start();
 
     }
+
+    public void viewtour(View view){
+        tapview();
+    }
+
+    public void homeclick(View view){
+        startActivity(new Intent(MultipleImages.this,MainnewActivity.class));
+        finish();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
 }

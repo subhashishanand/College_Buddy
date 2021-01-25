@@ -9,8 +9,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/toolbarwrap"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/fui_transparent">
+        android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -18,7 +17,7 @@
             android:layout_height="?attr/actionBarSize"
             app:titleTextColor="#000"
             style="@style/CustomTheme"
-            android:background="@color/fui_transparent"/>
+            android:background="@color/colorAccent"/>
 
 
     </com.google.android.material.appbar.AppBarLayout>
