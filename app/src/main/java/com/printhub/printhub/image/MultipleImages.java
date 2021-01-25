@@ -136,9 +136,9 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
         db=FirebaseFirestore.getInstance();
         //spinnerConfig=new ArrayList<>();
         Animation in = AnimationUtils.loadAnimation(this,android.R.anim.slide_in_left);
-       // Animation out = AnimationUtils.loadAnimation(this,android.R.anim.slide_out_right);
+        // Animation out = AnimationUtils.loadAnimation(this,android.R.anim.slide_out_right);
         imageIs.setInAnimation(in);
-       // imageIs.setOutAnimation(out);
+        // imageIs.setOutAnimation(out);
         //spinner populate
         ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(this,R.array.Print, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -475,8 +475,8 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
 
     @Override
     public boolean onSupportNavigateUp() {
-       onBackPressed();
-       return true;
+        onBackPressed();
+        return true;
     }    @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -484,24 +484,24 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
 
 
     //Total Cost Calculation
-  void sumTotal() {
-             sum=0;
-             for (int i = 0; i < noOfCopies.size(); i++) {
-                 if(colorPrint.get(i) && posterPrint.get(i)){
-                     eachCost.set(i,noOfCopies.get(i)*colorPosterRate);
-                     sum+=eachCost.get(i);
-                 }else if(colorPrint.get(i)){
-                     eachCost.set(i,noOfCopies.get(i)*colorRate);
-                     sum+=eachCost.get(i);
-                 }else if(posterPrint.get(i)){
-                     eachCost.set(i,noOfCopies.get(i)*blackPosterRate);
-                     sum+=eachCost.get(i);
-                 }else{
-                     eachCost.set(i,noOfCopies.get(i)*singleSidedPrice);
-                     sum+=eachCost.get(i);
-                 }
-             }
-             totalCost.setText(sum+"");
+    void sumTotal() {
+        sum=0;
+        for (int i = 0; i < noOfCopies.size(); i++) {
+            if(colorPrint.get(i) && posterPrint.get(i)){
+                eachCost.set(i,noOfCopies.get(i)*colorPosterRate);
+                sum+=eachCost.get(i);
+            }else if(colorPrint.get(i)){
+                eachCost.set(i,noOfCopies.get(i)*colorRate);
+                sum+=eachCost.get(i);
+            }else if(posterPrint.get(i)){
+                eachCost.set(i,noOfCopies.get(i)*blackPosterRate);
+                sum+=eachCost.get(i);
+            }else{
+                eachCost.set(i,noOfCopies.get(i)*singleSidedPrice);
+                sum+=eachCost.get(i);
+            }
+        }
+        totalCost.setText(sum+"");
     }
 
 
@@ -601,17 +601,17 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                             });
                         }
                     }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    if(finalJ==(imageUris.size()-1)){
-                                        progressDialog.dismiss();
-                                        Toasty.error(MultipleImages.this, finalJ+1+" file not uploaded", Toast.LENGTH_SHORT).show();
-                                    }else{
-                                        Toasty.error(MultipleImages.this, finalJ+1+" file not uploaded", Toast.LENGTH_SHORT).show();
-                                        progressDialog.setTitle("("+finalJ+"/"+imageUris.size()+") Uploading file...");
-                                        progressDialog.setProgress(0);
-                                    }
-                                }
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            if(finalJ==(imageUris.size()-1)){
+                                progressDialog.dismiss();
+                                Toasty.error(MultipleImages.this, finalJ+1+" file not uploaded", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toasty.error(MultipleImages.this, finalJ+1+" file not uploaded", Toast.LENGTH_SHORT).show();
+                                progressDialog.setTitle("("+finalJ+"/"+imageUris.size()+") Uploading file...");
+                                progressDialog.setProgress(0);
+                            }
+                        }
                     }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {

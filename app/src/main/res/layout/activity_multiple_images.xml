@@ -34,219 +34,219 @@
         android:paddingRight="5dp"
         android:scrollbars="none">
 
-   <LinearLayout
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:orientation="vertical">
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:outlineAmbientShadowColor="@color/black"
-        android:padding="5dp" />
-    <ImageSwitcher
-        android:id="@+id/imageIs"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:background="@color/colorPrimaryDark"
-        android:padding="5dp" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:showDividers="middle"
-            android:orientation="horizontal"
-            android:weightSum="7">
-            <View
-                android:layout_width="10dp"
-                android:layout_height="match_parent"
-                android:padding="5dp" />
-            <Button
-                android:id="@+id/previousBtn"
-                android:text="Previous"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_below="@id/imageIs"
-                android:layout_width="wrap_content"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                />
-            <View
-                android:layout_width="10dp"
-                android:layout_weight="2"
-                android:layout_height="match_parent"
-                android:padding="5dp" />
-            <Button
-                android:id="@+id/deleteImages"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Delete"
-                android:layout_weight="1"/>
-            <View
-                android:layout_width="10dp"
-                android:layout_weight="2"
-                android:layout_height="match_parent"
-                android:padding="5dp" />
-            <Button
-                android:text="Next"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:id="@+id/nextBtn"
-                android:layout_weight="1"
-                android:layout_alignParentEnd="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/imageIs"
-                android:layout_alignParentRight="true" />
-            <View
-                android:layout_width="10dp"
-                android:layout_height="match_parent"
-                android:padding="5dp" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:weightSum="5"
-            android:orientation="horizontal">
-            <View
-                android:layout_width="5dp"
-                android:layout_height="match_parent"
-                android:padding="5dp"
-                android:layout_weight="1"/>
-            <Switch
-                android:id="@+id/color_photo"
-                android:layout_width="wrap_content"
-                android:layout_height="44dp"
-                android:padding="10dp"
-                android:layout_weight="1"
-                android:text="Color"
-                android:textOff="No"
-                android:textOn="Yes" />
-            <View
-                android:layout_width="10dp"
-                android:layout_height="match_parent"
-                android:padding="5dp"
-                android:layout_weight="1"/>
-            <Switch
-                android:id="@+id/poster"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Poster "
-                android:textOff="No"
-                android:textOn="Yes" />
-            <View
-                android:layout_width="10dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="5dp" />
-<!--            <EditText-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:id="@+id/editCopies"-->
-<!--                android:layout_height="40dp"-->
-<!--                android:hint="New Copies"-->
-<!--                android:inputType="number"/>-->
-        </LinearLayout>
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="6">
-        <View
-            android:layout_width="5dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"/>
-       <TextView
-           android:layout_width="wrap_content"
-           android:layout_height="40dp"
-           android:textSize="19dp"
-           android:textStyle="bold"
-           android:text="No of Copies"></TextView>
-        <EditText
-           android:layout_width="wrap_content"
-           android:id="@+id/editCopies"
-           android:layout_height="40dp"
-            android:layout_marginLeft="20dp"
-           android:hint="New Copies"
-           android:inputType="number"/>
-        <View
-            android:layout_width="5dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"/>
-       <Spinner
-        android:id="@+id/custom"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:autofillHints="Print" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/pickImagesBtn"
-        android:text="Pick Images"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="4">
-
-        <Button
-            android:id="@+id/getTotalCost"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_weight="1"
-            android:text="Get Total Cost"/>
-        <View
-            android:layout_width="10dp"
-            android:layout_weight="2"
-            android:layout_height="match_parent"
-            android:padding="5dp" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:text="Rs"
+            android:orientation="vertical">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:outlineAmbientShadowColor="@color/black"
+                android:padding="5dp" />
+            <ImageSwitcher
+                android:id="@+id/imageIs"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/colorPrimaryDark"
+                android:padding="5dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:showDividers="middle"
+                    android:orientation="horizontal"
+                    android:weightSum="7">
+                    <View
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent"
+                        android:padding="5dp" />
+                    <Button
+                        android:id="@+id/previousBtn"
+                        android:text="Previous"
+                        style="@style/Widget.AppCompat.Button.Colored"
+                        android:layout_below="@id/imageIs"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        />
+                    <View
+                        android:layout_width="10dp"
+                        android:layout_weight="2"
+                        android:layout_height="match_parent"
+                        android:padding="5dp" />
+                    <Button
+                        android:id="@+id/deleteImages"
+                        style="@style/Widget.AppCompat.Button.Colored"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Delete"
+                        android:layout_weight="1"/>
+                    <View
+                        android:layout_width="10dp"
+                        android:layout_weight="2"
+                        android:layout_height="match_parent"
+                        android:padding="5dp" />
+                    <Button
+                        android:text="Next"
+                        style="@style/Widget.AppCompat.Button.Colored"
+                        android:id="@+id/nextBtn"
+                        android:layout_weight="1"
+                        android:layout_alignParentEnd="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/imageIs"
+                        android:layout_alignParentRight="true" />
+                    <View
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent"
+                        android:padding="5dp" />
 
-            android:textColor="@color/black"
-            android:textSize="25dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:weightSum="5"
+                    android:orientation="horizontal">
+                    <View
+                        android:layout_width="5dp"
+                        android:layout_height="match_parent"
+                        android:padding="5dp"
+                        android:layout_weight="1"/>
+                    <Switch
+                        android:id="@+id/color_photo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="44dp"
+                        android:padding="10dp"
+                        android:layout_weight="1"
+                        android:text="Color"
+                        android:textOff="No"
+                        android:textOn="Yes" />
+                    <View
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent"
+                        android:padding="5dp"
+                        android:layout_weight="1"/>
+                    <Switch
+                        android:id="@+id/poster"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="Poster "
+                        android:textOff="No"
+                        android:textOn="Yes" />
+                    <View
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:padding="5dp" />
+                    <!--            <EditText-->
+                    <!--                android:layout_width="wrap_content"-->
+                    <!--                android:id="@+id/editCopies"-->
+                    <!--                android:layout_height="40dp"-->
+                    <!--                android:hint="New Copies"-->
+                    <!--                android:inputType="number"/>-->
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="6">
+                <View
+                    android:layout_width="5dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:textSize="19dp"
+                    android:textStyle="bold"
+                    android:text="No of Copies"></TextView>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:id="@+id/editCopies"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="20dp"
+                    android:hint="New Copies"
+                    android:inputType="number"/>
+                <View
+                    android:layout_width="5dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"/>
+                <Spinner
+                    android:id="@+id/custom"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:autofillHints="Print" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/pickImagesBtn"
+                android:text="Pick Images"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="4">
+
+                <Button
+                    android:id="@+id/getTotalCost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_weight="1"
+                    android:text="Get Total Cost"/>
+                <View
+                    android:layout_width="10dp"
+                    android:layout_weight="2"
+                    android:layout_height="match_parent"
+                    android:padding="5dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:text="Rs"
+
+                    android:textColor="@color/black"
+                    android:textSize="25dp"/>
 
 
-        <TextView
-            android:layout_width="80dp"
-            android:id="@+id/totalCost"
-            android:layout_height="30dp"
-            android:layout_weight="1"
-            android:paddingStart="5dp"
-            android:text="0"
-            android:textSize="25dp"
-            />
+                <TextView
+                    android:layout_width="80dp"
+                    android:id="@+id/totalCost"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:paddingStart="5dp"
+                    android:text="0"
+                    android:textSize="25dp"
+                    />
 
-    </LinearLayout>
-       <Button
-           android:id="@+id/checkout"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:layout_gravity="bottom"
-           style="@style/Widget.AppCompat.Button.Colored"
-           android:text="CheckOut" />
+            </LinearLayout>
+            <Button
+                android:id="@+id/checkout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:text="CheckOut" />
 
 
-   </LinearLayout>
+        </LinearLayout>
 
-   </ScrollView>
+    </ScrollView>
 
 </LinearLayout>

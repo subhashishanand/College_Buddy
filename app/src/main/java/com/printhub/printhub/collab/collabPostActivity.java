@@ -28,6 +28,7 @@ import com.printhub.printhub.R;
 import com.printhub.printhub.clubEvents.clubActivity;
 import com.printhub.printhub.clubEvents.postEvent;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -82,56 +83,91 @@ public class collabPostActivity extends AppCompatActivity {
         String domain = domainField.getText().toString();
         String description = descField.getText().toString();
         String mobileno = mobileText.getText().toString();
+        boolean isBad=false;
+        ArrayList<String> badWords=new ArrayList<>();
+        badWords.add("sex");
+        badWords.add("choot");
+        badWords.add("chut");
+        badWords.add("porn");
+        badWords.add("boobs");
+        badWords.add("dick");
+        badWords.add("laude");
+        badWords.add("bsdk");
+        badWords.add("chod");
+        badWords.add("pornhub");
+        badWords.add("mia khalifa");
+        badWords.add("bhosdk");
+        badWords.add("fuddi");
+        badWords.add("lode");
+        badWords.add("bhosada");
+        badWords.add("bund");
+        badWords.add("tatte");
+        badWords.add("goote");
+        badWords.add("bitch");
+        badWords.add("cunt");
+        badWords.add("muth");
 
+        for(int i=0;i<badWords.size();i++){
+            if(description.contains(badWords.get(i)) || domain.contains(badWords.get(i))){
+                isBad=true;
+            }
+        }
         String whatsAppno= whatsappText.getText().toString();
         String githubId= githubText.getText().toString();
         String linkedinId=  linkedinText.getText().toString();
-        if(!TextUtils.isEmpty(domain) && !TextUtils.isEmpty(description)){
-            if(!TextUtils.isEmpty(mobileno) || !TextUtils.isEmpty(whatsAppno)){
-                if(mobileno.length()==10 || whatsAppno.length()==10){
-                    Map<String,Object> postMap=new HashMap<>();
-                    postMap.put("domain",domainField.getText().toString());
-                    postMap.put("description",descField.getText().toString());
-                    if(!mobileno.isEmpty()){
-                        postMap.put("mobileNo",mobileno);
-                    }
-                    if(!whatsAppno.isEmpty()){
-                        postMap.put("whatsApp",whatsAppno);
-                    }
-                    if(!githubId.isEmpty()){
-                        if(githubId.contains("github.com/")){
-                            postMap.put("githubId",githubId);
+        if(!TextUtils.isEmpty(domain) && !TextUtils.isEmpty(description) ){
+            if(!isBad) {
+                if (!TextUtils.isEmpty(mobileno) || !TextUtils.isEmpty(whatsAppno)) {
+                    if (mobileno.length() == 10 || whatsAppno.length() == 10) {
+                        Map<String, Object> postMap = new HashMap<>();
+                        postMap.put("domain", domainField.getText().toString());
+                        postMap.put("description", descField.getText().toString());
+                        if (!mobileno.isEmpty()) {
+                            postMap.put("mobileNo", mobileno);
                         }
-                    }
-                    if(!linkedinId.isEmpty()){
-                        postMap.put("linkedinId",linkedinId);
-                    }
-                    postMap.put("status","unverfied");
-                    postMap.put("timestamp", FieldValue.serverTimestamp());
-                    postMap.put("userid", FirebaseAuth.getInstance().getCurrentUser().getUid());
-                    postMap.put("postkey",advKey);
-
-                    firebaseFirestore.collection(cityName).document(collegeName).collection("collab").document(advKey).set(postMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            progressDialog.dismiss();
-                            Toast.makeText(collabPostActivity.this, "Your Post Is Uploaded", Toast.LENGTH_LONG).show();
-                            Intent intent=new Intent(getApplicationContext(), collabActivity.class);
-                            startActivity(intent);
-                            finish();
-
+                        if (!whatsAppno.isEmpty()) {
+                            postMap.put("whatsApp", whatsAppno);
                         }
-                    });
+                        if (!githubId.isEmpty()) {
+                            if (githubId.contains("github.com/")) {
+                                postMap.put("githubId", githubId);
+                            } else {
+                                Toast.makeText(this, "Github Id you added is wrong you can edit it in post section", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        if (!linkedinId.isEmpty()) {
+                            postMap.put("linkedinId", linkedinId);
+                        }
+                        postMap.put("status", "unverfied");
+                        postMap.put("timestamp", FieldValue.serverTimestamp());
+                        postMap.put("userid", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        postMap.put("postkey", advKey);
+
+                        firebaseFirestore.collection(cityName).document(collegeName).collection("collab").document(advKey).set(postMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                progressDialog.dismiss();
+                                Toast.makeText(collabPostActivity.this, "Your Post Is Uploaded", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(getApplicationContext(), collabActivity.class);
+                                startActivity(intent);
+                                finish();
+
+                            }
+                        });
 
 
-                }else{
-                    Toast.makeText(this, "Please enter Correct Mobile Number", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "Please enter Correct Mobile Number", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                    }
+
+
+                } else {
+                    Toast.makeText(this, "Please enter Mobile Number or Whatsapp Number", Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                 }
-
-
             }else{
-                Toast.makeText(this, "Please enter Mobile Number or Whatsapp Number", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"There is profanity in your description please enter the correct description",Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
             }
         }else{
