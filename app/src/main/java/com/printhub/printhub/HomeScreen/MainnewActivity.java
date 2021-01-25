@@ -113,18 +113,6 @@ public class MainnewActivity extends AppCompatActivity {
         appname.setTypeface(typeface);
         setSlider();
 
-        //Push notification customer type subscription
-        FirebaseMessaging.getInstance().subscribeToTopic("hamirpur")
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        String msg = "successful";
-                        if (!task.isSuccessful()) {
-                            msg = "failed";
-                        }
-                        Log.d("notification subscription", msg);
-                    }
-                });
 
         prefs = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
 
@@ -145,6 +133,18 @@ public class MainnewActivity extends AppCompatActivity {
         firebaseUserId = user.getUid();
         if (prefs.getBoolean("firstrun", true)) {
             // Do first run stuff here then set 'firstrun' as false
+            //Push notification customer type subscription
+            FirebaseMessaging.getInstance().subscribeToTopic(cityName+"_"+collegeName)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            String msg = "successful";
+                            if (!task.isSuccessful()) {
+                                msg = "failed";
+                            }
+                            Log.d("notification subscription", msg);
+                        }
+                    });
             tapview();
             // using the following line to edit/commit prefs
             prefs.edit().putBoolean("firstrun", false).commit();
