@@ -62,8 +62,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.printhub.printhub.HomeScreen.MainnewActivity.cityName;
-import static com.printhub.printhub.HomeScreen.MainnewActivity.collegeName;
 import static com.printhub.printhub.HomeScreen.MainnewActivity.firebaseUserId;
 
 public class MultipleImages extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -83,14 +81,17 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
 
     //To Save the config
     private ArrayList<String> config;
+    private ArrayList<Integer> configNo;
     String customString="1 in 1 page";
+    String collegeName, cityName;
+    SharedPreferences cityNameSharedPref,collegeNameSharedPref;
     String[] perPage;
     // private ArrayList<Integer> spinnerConfig;
 
     double colorPosterRate=20,blackPosterRate=12,colorRate=10,singleSidedPrice=2;
 
     private StorageReference mStorageRef;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db;
     private StorageTask mUploadTask;
     double sum=0;
 
@@ -119,6 +120,11 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
         getTotalCost=findViewById(R.id.getTotalCost);
         deleteImages=findViewById(R.id.deleteImages);
 
+        collegeNameSharedPref = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
+        cityNameSharedPref = getSharedPreferences("com.printhub.printhub", MODE_PRIVATE);
+        collegeName=collegeNameSharedPref.getString("collegeName","");
+        cityName = cityNameSharedPref.getString("cityName", "");
+
         //init list
         imageUris=new ArrayList<>();
         noOfCopies=new ArrayList<>();
@@ -126,6 +132,8 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
         posterPrint=new ArrayList<>();
         eachCost=new ArrayList<>();
         config=new ArrayList<>();
+        configNo=new ArrayList<>();
+        db=FirebaseFirestore.getInstance();
         //spinnerConfig=new ArrayList<>();
         Animation in = AnimationUtils.loadAnimation(this,android.R.anim.slide_in_left);
        // Animation out = AnimationUtils.loadAnimation(this,android.R.anim.slide_out_right);
@@ -171,9 +179,6 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                     Log.e("config", config.get(0));
                     sumTotal();
                     uploadImages();
-
-
-
                 }else{
                     Toast.makeText(getApplicationContext(),"Please Add another Item to checkOut Again",Toast.LENGTH_LONG).show();
                 }
@@ -196,6 +201,26 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
 
             }
         });
+
+
+        custom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.e("error 205",i+" "+custom.getSelectedItem().toString());
+                if(position<config.size()){
+                    configNo.set(position,i);
+                    config.set(position,custom.getSelectedItem().toString());
+                }
+
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+
 
         getTotalCost.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -270,6 +295,7 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                     editCopies.setText(noOfCopies.get(position).toString());
                     color.setChecked(colorPrint.get(position));
                     poster.setChecked(posterPrint.get(position));
+                    custom.setSelection(configNo.get(position));
 
                 }
                 else{
@@ -286,7 +312,7 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                     editCopies.setText(noOfCopies.get(position).toString());
                     color.setChecked(colorPrint.get(position));
                     poster.setChecked(posterPrint.get(position));
-
+                    custom.setSelection(configNo.get(position));
                 }
                 else{
                     Toast.makeText(MultipleImages.this, "No More Images... ", Toast.LENGTH_SHORT).show();
@@ -305,6 +331,8 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                     eachCost.remove(position);
                     colorPrint.remove(position);
                     posterPrint.remove(position);
+                    config.remove(position);
+                    configNo.remove(position);
                     pickImagesIntent();
 
 
@@ -315,6 +343,8 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                     eachCost.remove(position);
                     colorPrint.remove(position);
                     posterPrint.remove(position);
+                    config.remove(position);
+                    configNo.remove(position);
                     position--;
                     imageIs.setImageURI(imageUris.get(position));
                     editCopies.setText(noOfCopies.get(position).toString());
@@ -327,6 +357,8 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                     eachCost.remove(position);
                     colorPrint.remove(position);
                     posterPrint.remove(position);
+                    config.remove(position);
+                    configNo.remove(position);
                     imageIs.setImageURI(imageUris.get(position));
                     editCopies.setText(noOfCopies.get(position).toString());
                     color.setChecked(colorPrint.get(position));
@@ -394,7 +426,8 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                         colorPrint.add(false);
                         posterPrint.add(false);
                         eachCost.add(singleSidedPrice);
-                        config.add("Default Config");
+                        config.add(customString);
+                        configNo.add(0);
 
 
                     }
@@ -425,7 +458,8 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                     colorPrint.add(false);
                     posterPrint.add(false);
                     eachCost.add(singleSidedPrice);
-                    config.add("default");
+                    config.add(customString);
+                    configNo.add(0);
 
                     imageIs.setImageURI(imageUris.get(0));
                     editCopies.setText(noOfCopies.get(0).toString());
@@ -521,7 +555,7 @@ public class MultipleImages extends AppCompatActivity implements AdapterView.OnI
                             Map<String, Object> imageDescription = new HashMap<>();
                             imageDescription.put("userId", firebaseUserId);
                             imageDescription.put("doubleSided", "No");
-                            imageDescription.put("custom", customString);
+                            imageDescription.put("custom", config.get(finalJ));
                             if (posterPrint.get(finalJ).equals(1) && colorPrint.get(finalJ).equals(0)) {
                                 imageDescription.put("color", "Color poster");
                             } else if (posterPrint.get(finalJ).equals(1) && colorPrint.get(finalJ).equals(0)) {

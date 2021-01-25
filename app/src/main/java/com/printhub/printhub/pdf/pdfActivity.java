@@ -21,12 +21,15 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -74,6 +77,8 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
     private Boolean isRepeating;
     FirebaseStorage storage;         //used for uploading files .. Ex: pdf
     FirebaseDatabase database;
+    LockableScrollView parentScroll;
+    LinearLayout lowerLinearLayout;
 
     ProgressDialog progressDialog;
 
@@ -127,6 +132,8 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
         add_to_cart = findViewById(R.id.add_to_cart);
         custom = findViewById(R.id.custom);
         pdfView = findViewById(R.id.pdfView);
+        parentScroll=findViewById(R.id.scrollbar);
+        lowerLinearLayout=findViewById(R.id.lowerLinearLayout);
         ArrayAdapter<CharSequence>adapter=ArrayAdapter.createFromResource(this,R.array.Print, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         custom.setAdapter(adapter);
@@ -195,6 +202,24 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
                 }
             }
         });
+
+       pdfView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                parentScroll.setScrollingEnabled(false);
+                pdfView.jumpTo(pdfView.getCurrentPage());
+                return false;
+            }
+        });
+
+        lowerLinearLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                parentScroll.setScrollingEnabled(true);
+                return false;
+            }
+        });
+
 
 //        addFile.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -537,8 +562,7 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
                 costValue = page * colorRate;
             } else {
                 if (doubleSided.equals("No")) {
-                    costValue = page * singleSidedPrice;
-                } else {
+                    costValue = page * singleSidedPrice;                } else {
                     if (page > 1) {
                             costValue = page * doubleSidedPrice;
                     } else {
