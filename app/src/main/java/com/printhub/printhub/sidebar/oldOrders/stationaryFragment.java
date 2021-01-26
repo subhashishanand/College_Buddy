@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Switch;
@@ -57,6 +58,7 @@ public class stationaryFragment extends Fragment {
     private DocumentSnapshot lastDocumentSnapshot;
     Boolean isScrolling = false;
     LottieAnimationView noData;
+    FrameLayout frameLayout;
 
 
     @Override
@@ -67,6 +69,7 @@ public class stationaryFragment extends Fragment {
         mRecyclerView = v.findViewById(R.id.my_recycler_view);
         tv_no_item = v.findViewById(R.id.tv_no_cards);
         noData =  v.findViewById(R.id.no_data);
+        frameLayout =v.findViewById(R.id.frame_container);
         //check Internet Connection
         new CheckInternetConnection(getContext()).checkConnection();
 
@@ -116,7 +119,7 @@ public class stationaryFragment extends Fragment {
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
-                   noData.setVisibility(View.VISIBLE);
+                  // noData.setVisibility(View.VISIBLE);
                 }else {
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                         lastDocumentSnapshot = documentSnapshot;
@@ -127,6 +130,10 @@ public class stationaryFragment extends Fragment {
                             if (noData.getVisibility() == View.VISIBLE) {
                                 noData.setVisibility(View.GONE);
                             }
+                            if (frameLayout.getVisibility() == View.GONE) {
+                                frameLayout.setVisibility(View.VISIBLE);
+                            }
+
                             String productName = documentSnapshot.getString("productName");
                             String quantity = documentSnapshot.getString("quantity");
                             String status = documentSnapshot.getString("status");
@@ -215,6 +222,9 @@ public class stationaryFragment extends Fragment {
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             if (noData.getVisibility() == View.VISIBLE) {
                 noData.setVisibility(View.GONE);
+            }
+            if (frameLayout.getVisibility() == View.GONE) {
+                frameLayout.setVisibility(View.VISIBLE);
             }
             holder.productName.setText(productNames.get(position));
             holder.quantity.setText("Quantity: " + quantities.get(position));

@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -45,6 +46,7 @@ public class printoutFragment extends Fragment {
     private DocumentSnapshot lastDocumentSnapshot;
     Boolean isScrolling = false;
     LottieAnimationView noData;
+    FrameLayout frameLayout;
 
 
     @Override
@@ -55,6 +57,7 @@ public class printoutFragment extends Fragment {
         mRecyclerView = v.findViewById(R.id.my_recycler_view);
         tv_no_item = v.findViewById(R.id.tv_no_cards);
         noData =  v.findViewById(R.id.no_data);
+        frameLayout= v.findViewById(R.id.frame_container);
         //check Internet Connection
         new CheckInternetConnection(getContext()).checkConnection();
 
@@ -141,7 +144,7 @@ public class printoutFragment extends Fragment {
                     if (tv_no_item.getVisibility() == View.VISIBLE) {
                         tv_no_item.setVisibility(View.GONE);
                     }
-                    noData.setVisibility(View.VISIBLE);
+                    //noData.setVisibility(View.VISIBLE);
                 }
 
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
@@ -152,6 +155,9 @@ public class printoutFragment extends Fragment {
                     if (documentSnapshot.getString("userId").equals(firebaseUserId)) {
                         if (noData.getVisibility() == View.VISIBLE) {
                             noData.setVisibility(View.GONE);
+                        }
+                        if (frameLayout.getVisibility() == View.GONE) {
+                            frameLayout.setVisibility(View.VISIBLE);
                         }
                         String fileName = documentSnapshot.getString("fileName");
                         String custom = documentSnapshot.getString("custom");
@@ -169,9 +175,6 @@ public class printoutFragment extends Fragment {
                     }
 
                     //quantity-copies,
-                }
-                if (noData.getVisibility() == View.VISIBLE) {
-                    noData.setVisibility(View.GONE);
                 }
 
              }

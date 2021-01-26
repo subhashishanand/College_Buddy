@@ -141,7 +141,7 @@
                 android:id="@+id/ola"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/uber"
+                android:src="@drawable/ola"
                 android:layout_marginLeft="10dp"
                 android:layout_marginBottom="2dp"
                 android:layout_marginRight="10dp"/>

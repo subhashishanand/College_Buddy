@@ -67,7 +67,7 @@ public class MainActivityWeb extends AppCompatActivity {
         ola.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                link = "https://www.uber.com/in/en/";
+                link = "https://book.olacabs.com/";
                 Intent i = new Intent(getApplicationContext(), WebViewActivity.class);
                 i.putExtra("Link", link);
                 startActivity(i);
