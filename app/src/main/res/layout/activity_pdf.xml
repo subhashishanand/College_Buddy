@@ -230,6 +230,7 @@
                         android:layout_height="wrap_content"
                         android:hint="No of Copies"
                         android:inputType="number"
+                        android:maxLength="3"
                         android:padding="20dp" />
 
                 </LinearLayout>

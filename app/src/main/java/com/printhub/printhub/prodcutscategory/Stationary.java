@@ -97,9 +97,9 @@ public class Stationary extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 com.algolia.search.saas.Query query1 = new com.algolia.search.saas.Query(query);
                 index.searchAsync(query1, new CompletionHandler() {
-                    @Override
-                    public void requestCompleted(@Nullable JSONObject jsonObject, @Nullable AlgoliaException e) {
-                        myAdapter.delete();
+                     @Override
+                        public void requestCompleted(@Nullable JSONObject jsonObject, @Nullable AlgoliaException e) {
+                            myAdapter.delete();
                         lastDocumentSnapshot =null;
                         try {
                             algoliaResult = true;

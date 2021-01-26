@@ -299,7 +299,7 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
 
                 if(!startingPage.getText().toString().equals("")){
                     int pageNo = Integer.valueOf(startingPage.getText().toString().trim());
-                    if(pageNo<= noPages & pageNo!=0){
+                    if(pageNo<= noPages && pageNo!=0){
                         startPageNo = pageNo;
                     }else{
                         startingPage.setText("1");
@@ -329,11 +329,11 @@ public class pdfActivity extends AppCompatActivity implements AdapterView.OnItem
             public void afterTextChanged(Editable editable) {
                 if(!endingPage.getText().toString().equals("")){
                     int pageNo = Integer.valueOf(endingPage.getText().toString().trim());
-                    if(pageNo<= noPages & pageNo!=0){
+                    if(pageNo<= noPages && pageNo!=0){
                         endPageNo = pageNo;
                     }else{
-                        endingPage.setText(pageNo+"");
-                        endPageNo = pageNo;
+                        endingPage.setText(noPages+"");
+                        endPageNo = noPages;
                         Toast.makeText(pdfActivity.this, "Enter correct ending page no",Toast.LENGTH_SHORT).show();
                     }
                 }else{
